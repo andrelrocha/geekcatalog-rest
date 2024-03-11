@@ -1,0 +1,4 @@
+CREATE TABLE console (
+    id VARCHAR(100) PRIMARY KEY,
+    name VARCHAR(200)
+);

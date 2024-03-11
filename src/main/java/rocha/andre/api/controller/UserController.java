@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rocha.andre.api.domain.user.*;
 import rocha.andre.api.domain.user.DTO.UserDTO;
 import rocha.andre.api.domain.user.DTO.UserLoginDTO;
+import rocha.andre.api.domain.user.DTO.UserOnlyLoginDTO;
 import rocha.andre.api.domain.user.DTO.UserResetPassDTO;
-import rocha.andre.api.domain.user.DTO.UserReturnDTO;
 import rocha.andre.api.infra.security.TokenJwtDto;
 import rocha.andre.api.service.UserService;
 
@@ -26,7 +25,7 @@ public class UserController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity performLogin(@RequestBody @Valid UserDTO data) {
+    public ResponseEntity performLogin(@RequestBody @Valid UserLoginDTO data) {
         TokenJwtDto tokenJwt = userService.performLogin(data);
         return ResponseEntity.ok(tokenJwt);
     }
@@ -40,7 +39,7 @@ public class UserController {
 
     @PostMapping("/forgot_password")
     @Transactional
-    public ResponseEntity forgotPassword(@RequestBody UserLoginDTO data) {
+    public ResponseEntity forgotPassword(@RequestBody UserOnlyLoginDTO data) {
         var dtoReturn= userService.forgotPassword(data);
         return ResponseEntity.ok(dtoReturn);
     }

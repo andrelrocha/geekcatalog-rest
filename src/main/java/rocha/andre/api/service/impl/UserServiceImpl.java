@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private ResetPasswordUseCase resetPasswordUseCase;
 
     @Override
-    public TokenJwtDto performLogin(UserDTO data) {
+    public TokenJwtDto performLogin(UserLoginDTO data) {
         var tokenJwt = performLoginUseCase.performLogin(data);
         return tokenJwt;
     }
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserForgotDTO forgotPassword(UserLoginDTO data) {
+    public UserForgotDTO forgotPassword(UserOnlyLoginDTO data) {
         var retorno = forgotPasswordUseCase.forgotPassword(data);
         return retorno;
     }

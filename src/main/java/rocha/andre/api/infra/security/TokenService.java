@@ -26,7 +26,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("andre rocha")
                     .withSubject(user.getLogin())
-                    .withClaim("id", user.getId())
+                    .withClaim("id", user.getId().toString())
                     .withExpiresAt(dateExpires())
                     .sign(algorithm);
 
