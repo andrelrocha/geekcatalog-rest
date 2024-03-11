@@ -1,0 +1,3 @@
+ALTER TABLE opinions
+ADD COLUMN metacritic INTEGER,
+ADD COLUMN genre VARCHAR(255);

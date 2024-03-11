@@ -1,0 +1,66 @@
+em caso de migration com erro: delete from flyway_schema_history where success = 0;
+
+para criar o processo de security:
+1. criar service de autenticação { authenticateService } - ele é quem procurará no db pelo login
+2. criar rota de autenticação { controller }
+3. criar security configurations {
+ - definir authenticationManager
+ - definir metodo de encriptação de senha
+}
+4. implementar UserDetails no model de user
+
+
+Criar Service de Autenticação:
+Criar um serviço de autenticação é fundamental para autenticar os usuários da sua aplicação. Este serviço pode implementar
+a interface UserDetailsService do Spring Security, onde você irá buscar as informações do usuário
+(como nome de usuário, senha e papéis) a partir do seu sistema de armazenamento (banco de dados, API, etc.).
+
+Criar Rota de Autenticação:
+Definir uma rota para a autenticação é necessário para que os usuários possam enviar suas credenciais
+(nome de usuário e senha) para serem autenticados. Geralmente, isso envolve a criação de um endpoint (como /login)
+onde os usuários podem enviar uma solicitação POST com suas credenciais.
+
+Criar Configurações de Segurança:
+As configurações de segurança, definidas geralmente em uma classe de configuração do Spring, são onde você configura detalhes como:
+Definir o AuthenticationManager, que é responsável por autenticar os usuários.
+Configurar o método de encriptação de senhas (usando BCrypt, por exemplo).
+Definir as regras de autorização (quem pode acessar quais partes da aplicação).
+
+Implementar UserDetails no Modelo de User:
+Implementar a interface UserDetails no modelo de usuário é necessário para que o Spring Security possa interagir com
+os detalhes do usuário durante o processo de autenticação e autorização. A implementação da interface UserDetails
+fornece informações como nome de usuário, senha, autorizações e outras informações necessárias para o Spring Security.
+
+No service de autenticação, recebe-se as credenciais do usuário (login e senha) como entrada.
+Cria-se uma instância de UsernamePasswordAuthenticationToken com as credenciais.
+Utiliza-se o AuthenticationManager para autenticar as credenciais usando o método authenticate().
+Se a autenticação for bem-sucedida, o Authentication resultante contém informações do usuário autenticado.
+Gere um token JWT usando o TokenService que você criou. O token pode conter informações relevantes, como o nome de usuário e as permissões do usuário.
+Retorne o token JWT como resposta ao usuário.
+
+para gerar o JWT:
+1. criar o tokenService gerando o JWT
+2. manda para a função generate o user autenticado
+3. passa o token como string para um DTO
+4. retorna o DTO
+
+
+
+
+CONTROLLER
+Ao chamar uma rota, recebe-se um dto com o nome dos parametros recebidos
+pela requisição e retorna outro dto gerado no useCase, nunca movimentando objetos puros
+
+@Activeprofiles
+- para mudar o application.properties a ser aplicado
+
+
+RODANDO PROJETO APÓS O BUILD
+java -jar target/api-0.0.1-SNAPSHOT.jar
+
+-para escolher um application.properties
+java "-Dspring.profiles.active=prod" -jar target/api-0.0.1-SNAPSHOT.jar
+
+
+java "-Dspring.profiles.active=prod" "-DDATASOURCE_URL=jdbc:mysql://localhost/java_database"
+"-DDATASOURCE_USERNAME=andrerocha" "-DDATASOURCE_PASSWORD=senha123" -jar target/api-0.0.1-SNAPSHOT.jar
