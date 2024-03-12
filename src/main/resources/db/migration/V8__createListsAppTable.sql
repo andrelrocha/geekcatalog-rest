@@ -1,4 +1,4 @@
-CREATE TABLE lists (
+CREATE TABLE lists_app (
     id UUID PRIMARY KEY,
     name VARCHAR(200),
     description VARCHAR(300),
