@@ -1,4 +1,4 @@
 CREATE TABLE profile_pic (
-    id VARCHAR(100) PRIMARY KEY,
+    id UUID PRIMARY KEY,
     image BYTEA
 );

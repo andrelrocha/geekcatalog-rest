@@ -1,4 +1,4 @@
 CREATE TABLE genres (
-    id VARCHAR(100) PRIMARY KEY,
+    id UUID PRIMARY KEY,
     name VARCHAR(100)
 );

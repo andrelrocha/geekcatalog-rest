@@ -1,5 +1,6 @@
 CREATE TABLE lists (
-    id VARCHAR(100) PRIMARY KEY,
+    id UUID PRIMARY KEY,
     name VARCHAR(200),
-    user_id VARCHAR REFERENCES users(id)
+    description VARCHAR(300),
+    user_id UUID REFERENCES users(id)
 );

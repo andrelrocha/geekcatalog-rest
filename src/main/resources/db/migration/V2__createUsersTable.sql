@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    id VARCHAR(100) PRIMARY KEY,
+    id UUID PRIMARY KEY,
     login VARCHAR(100) NOT NULL,
     password VARCHAR(255) NOT NULL,
     name VARCHAR(100),
@@ -7,5 +7,5 @@ CREATE TABLE users (
     role VARCHAR(100) NOT NULL,
     token_expiration TIMESTAMP,
     token_mail VARCHAR(255),
-    profile_pic_id VARCHAR(100) REFERENCES profile_pic(id)
+    profile_pic_id UUID REFERENCES profile_pic(id)
 );
