@@ -53,9 +53,6 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime tokenExpiration;
 
-    @Column(name = "profile_pic_id")
-    private UUID profilePicId;
-
     public User(UserDTO data) {
         this.login = data.login();
         this.password = data.password();

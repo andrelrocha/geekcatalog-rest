@@ -6,6 +6,5 @@ CREATE TABLE users (
     cpf VARCHAR(14) UNIQUE,
     role VARCHAR(100) NOT NULL,
     token_expiration TIMESTAMP,
-    token_mail VARCHAR(255),
-    profile_pic_id UUID REFERENCES profile_pic(id)
+    token_mail VARCHAR(255)
 );
