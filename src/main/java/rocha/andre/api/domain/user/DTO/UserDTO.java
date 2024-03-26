@@ -12,5 +12,6 @@ public record UserDTO(@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "O 
                       @NotNull
                       String password,
                       @NotNull String name,
+                      @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve seguir o formato 999.999.999-99")
                       @NotNull String cpf) {
 }

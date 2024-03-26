@@ -33,7 +33,14 @@ public class UserController {
     @PostMapping("/create")
     @Transactional
     public ResponseEntity createUser(@RequestBody @Valid UserDTO data) {
+        System.out.println(data.login());
+        System.out.println(data.cpf());
+        System.out.println(data.name());
+        System.out.println(data.password());
+
         var newUser = userService.createUser(data);
+
+        System.out.println(newUser.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 

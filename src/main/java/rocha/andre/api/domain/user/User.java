@@ -40,7 +40,6 @@ public class User implements UserDetails {
     private String name;
 
     @Column(name = "cpf", length = 14, unique = true)
-    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve seguir o formato 999.999.999-99")
     private String cpf;
 
     @Enumerated(EnumType.STRING)

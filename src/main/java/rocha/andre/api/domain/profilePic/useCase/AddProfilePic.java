@@ -39,7 +39,6 @@ public class AddProfilePic {
 
         var profilePicOnDB = profilePicRepository.save(profilePic);
 
-        //AJEITAR O RETORNO PARA SÓ VOLTAR O USER.NAME
         return new ProfilePicReturnDTO(profilePicOnDB);
     }
 
