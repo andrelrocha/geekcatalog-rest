@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getUserByJWT(String token) {
+    public UserIdDTO getUserIdByJWT(String token) {
         var userId = getUserIdByJWT.getUserByJWT(token);
         return userId;
     }

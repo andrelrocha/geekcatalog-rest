@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
-import rocha.andre.api.domain.user.DTO.UserDTO;
-import rocha.andre.api.domain.user.DTO.UserLoginDTO;
-import rocha.andre.api.domain.user.DTO.UserOnlyLoginDTO;
-import rocha.andre.api.domain.user.DTO.UserResetPassDTO;
+import rocha.andre.api.domain.user.DTO.*;
 import rocha.andre.api.infra.security.TokenJwtDto;
 import rocha.andre.api.service.UserService;
 
@@ -56,8 +53,8 @@ public class UserController {
     }
 
     @GetMapping("/getuserid/{tokenJwt}")
-    public String getUserId(@PathVariable String tokenJwt) {
-        var userId = userService.getUserByJWT(tokenJwt);
-        return userId;
+    public ResponseEntity<UserIdDTO> getUserId(@PathVariable String tokenJwt) {
+        var userId = userService.getUserIdByJWT(tokenJwt);
+        return ResponseEntity.ok(userId);
     }
 }
