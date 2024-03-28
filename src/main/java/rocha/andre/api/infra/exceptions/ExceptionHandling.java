@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,7 +42,7 @@ public class ExceptionHandling {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity handleBadCredentialsException() {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas.");
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -63,6 +64,11 @@ public class ExceptionHandling {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
         return ResponseEntity.badRequest().body("Tamanho máximo de upload excedido, envie um arquivo menor");
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email ou senha errados");
     }
 
 

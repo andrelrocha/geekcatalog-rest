@@ -14,6 +14,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CreateUserUseCase createUserUseCase;
     @Autowired
+    private GetUserByID getUserByID;
+    @Autowired
     private ForgotPasswordUseCase forgotPasswordUseCase;
     @Autowired
     private PerformLoginUseCase performLoginUseCase;
@@ -29,6 +31,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserReturnDTO createUser(UserDTO data) {
         var user = createUserUseCase.createUser(data);
+        return user;
+    }
+
+    @Override
+    public UserReturnDTO getUserByID(String id) {
+        var user = getUserByID.getUserByID(id);
         return user;
     }
 
