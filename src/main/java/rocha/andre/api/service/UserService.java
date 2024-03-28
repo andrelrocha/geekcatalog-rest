@@ -9,4 +9,5 @@ public interface UserService {
     TokenJwtDto performLogin(UserLoginDTO data);
     UserForgotDTO forgotPassword(UserOnlyLoginDTO data);
     String resetPassword(UserResetPassDTO data);
+    String getUserByJWT(String token);
 }

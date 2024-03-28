@@ -16,6 +16,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private GetUserByID getUserByID;
     @Autowired
+    private GetUserIdByJWT getUserIdByJWT;
+    @Autowired
     private ForgotPasswordUseCase forgotPasswordUseCase;
     @Autowired
     private PerformLoginUseCase performLoginUseCase;
@@ -50,5 +52,11 @@ public class UserServiceImpl implements UserService {
     public String resetPassword(UserResetPassDTO data) {
         resetPasswordUseCase.resetPassword(data);
         return "Password successfully updated!";
+    }
+
+    @Override
+    public String getUserByJWT(String token) {
+        var userId = getUserIdByJWT.getUserByJWT(token);
+        return userId;
     }
 }

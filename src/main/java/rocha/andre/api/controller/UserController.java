@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.user.DTO.UserDTO;
 import rocha.andre.api.domain.user.DTO.UserLoginDTO;
@@ -52,5 +53,11 @@ public class UserController {
     public ResponseEntity resetPassword(@RequestBody UserResetPassDTO data) {
         var stringSuccess= userService.resetPassword(data);
         return ResponseEntity.ok(stringSuccess);
+    }
+
+    @GetMapping("/getuserid/{tokenJwt}")
+    public String getUserId(@PathVariable String tokenJwt) {
+        var userId = userService.getUserByJWT(tokenJwt);
+        return userId;
     }
 }
