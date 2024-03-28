@@ -14,7 +14,7 @@ import rocha.andre.api.infra.security.TokenJwtDto;
 import rocha.andre.api.service.UserService;
 
 @RestController
-@RequestMapping()
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -27,14 +27,14 @@ public class UserController {
         return ResponseEntity.ok(tokenJwt);
     }
 
-    @PostMapping("/user/create")
+    @PostMapping("/create")
     @Transactional
     public ResponseEntity createUser(@RequestBody @Valid UserDTO data) {
         var newUser = userService.createUser(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @GetMapping("/user/byid/{id}")
+    @GetMapping("/byid/{id}")
     public ResponseEntity getUserByID(@PathVariable String id) {
         var user = userService.getUserByID(id);
         return ResponseEntity.ok(user);

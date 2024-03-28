@@ -1,6 +1,7 @@
 package rocha.andre.api.infra.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -55,6 +56,12 @@ public class ExceptionHandling {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado");
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return ResponseEntity.badRequest().body("Erro de violação de integridade dos dados. Chave primária duplicada.");
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.status(500).body("Internal Server Error: " + ex.getMessage());
@@ -71,21 +78,14 @@ public class ExceptionHandling {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email ou senha errados");
     }
 
-
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity handleValidationException(ValidationException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity handleException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + ex.getLocalizedMessage());
     }
 
     private record DataValidationError(String field, String message) {
         public DataValidationError(FieldError error) {
             this(error.getField(), error.getDefaultMessage());
         }
-
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity handleException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " + ex.getLocalizedMessage());
     }
 }
