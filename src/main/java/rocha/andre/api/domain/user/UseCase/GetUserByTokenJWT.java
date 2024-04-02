@@ -5,16 +5,22 @@ import org.springframework.stereotype.Component;
 import rocha.andre.api.domain.user.DTO.UserReturnDTO;
 import rocha.andre.api.domain.user.UserRepository;
 import rocha.andre.api.infra.exceptions.ValidationException;
+import rocha.andre.api.infra.security.TokenService;
 
 import java.util.UUID;
 
 @Component
-public class GetUserByID {
+public class GetUserByTokenJWT {
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private TokenService tokenService;
 
-    public UserReturnDTO getUserByID(String id) {
-        var uuid = UUID.fromString(id);
+    public UserReturnDTO getUserByID(String tokenJWT) {
+        var userId = tokenService.getClaim(tokenJWT);
+        userId = userId.replaceAll("\"", "");
+
+        var uuid = UUID.fromString(userId);
 
         var user = repository.findById(uuid)
                 .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado"));

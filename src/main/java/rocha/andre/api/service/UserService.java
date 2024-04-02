@@ -5,10 +5,10 @@ import rocha.andre.api.infra.security.TokenJwtDto;
 
 public interface UserService {
     UserReturnDTO createUser(UserDTO data);
-    UserReturnDTO getUserByID(String id);
+    UserReturnDTO getUserByTokenJWT(String id);
     TokenJwtDto performLogin(UserLoginDTO data);
     UserForgotDTO forgotPassword(UserOnlyLoginDTO data);
     String resetPassword(UserResetPassDTO data);
     UserIdDTO getUserIdByJWT(String token);
-    UserReturnDTO updateUserInfo(UserUpdateDTO data, String uuidString);
+    UserReturnDTO updateUserInfo(UserUpdateDTO data, String tokenJWT);
 }

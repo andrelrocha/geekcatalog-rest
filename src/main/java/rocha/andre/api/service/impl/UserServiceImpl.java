@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CreateUse createUse;
     @Autowired
-    private GetUserByID getUserByID;
+    private GetUserByTokenJWT getUserByTokenJWT;
     @Autowired
     private GetUserIdByJWT getUserIdByJWT;
     @Autowired
@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserReturnDTO getUserByID(String id) {
-        var user = getUserByID.getUserByID(id);
+    public UserReturnDTO getUserByTokenJWT(String id) {
+        var user = getUserByTokenJWT.getUserByID(id);
         return user;
     }
 
@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserReturnDTO updateUserInfo(UserUpdateDTO data, String uuidString) {
-        var updatedUser = updateUser.updateUserInfo(data, uuidString);
+    public UserReturnDTO updateUserInfo(UserUpdateDTO data, String tokenJWT) {
+        var updatedUser = updateUser.updateUserInfo(data, tokenJWT);
         return updatedUser;
     }
 }

@@ -34,9 +34,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @GetMapping("/byid/{id}")
-    public ResponseEntity getUserByID(@PathVariable String id) {
-        var user = userService.getUserByID(id);
+    @GetMapping("/bytokenjwt/{tokenJWT}")
+    public ResponseEntity getUserByTokenJWT(@PathVariable String tokenJWT) {
+        var user = userService.getUserByTokenJWT(tokenJWT);
         return ResponseEntity.ok(user);
     }
 
@@ -60,9 +60,9 @@ public class UserController {
         return ResponseEntity.ok(userId);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity updateUser(@PathVariable String id, @RequestBody UserUpdateDTO data) {
-        var updatedUser = userService.updateUserInfo(data, id);
+    @PutMapping("/update/{tokenJWT}")
+    public ResponseEntity updateUser(@PathVariable String tokenJWT, @RequestBody UserUpdateDTO data) {
+        var updatedUser = userService.updateUserInfo(data, tokenJWT);
         return ResponseEntity.ok(updatedUser);
     }
 }
