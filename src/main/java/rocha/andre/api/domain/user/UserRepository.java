@@ -21,6 +21,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             """)
     User findByLoginToHandle(String login);
 
+    @Query("""
+            SELECT u FROM User u WHERE u.id = :id
+            """)
+    User findByIdToHandle(UUID id);
+
     boolean existsByLogin(String login);
 
 }

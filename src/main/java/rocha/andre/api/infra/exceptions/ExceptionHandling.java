@@ -98,7 +98,7 @@ public class ExceptionHandling {
 
     @ExceptionHandler(InternalAuthenticationServiceException.class)
     public ResponseEntity handleInternalAuthenticationServiceException(InternalAuthenticationServiceException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email ou senha errados");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Login ou senha errados");
     }
 
     @ExceptionHandler(ValidationException.class)

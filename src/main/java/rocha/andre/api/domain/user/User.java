@@ -121,7 +121,15 @@ public class User implements UserDetails {
     }
 
     public void updateUser(UserUpdateDTO data) {
-
+        if (data.name() != null ) {
+            this.name = data.name();
+        }
+        if (data.phone() != null) {
+            this.phone = data.phone();
+        }
+        if (data.birthday() != null) {
+            this.birthday = data.birthday();
+        }
     }
 
     public void setTokenExpiration(LocalDateTime time) {

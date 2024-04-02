@@ -12,27 +12,29 @@ import rocha.andre.api.service.UserService;
 @Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
-    private CreateUserUseCase createUserUseCase;
+    private CreateUse createUse;
     @Autowired
     private GetUserByID getUserByID;
     @Autowired
     private GetUserIdByJWT getUserIdByJWT;
     @Autowired
-    private ForgotPasswordUseCase forgotPasswordUseCase;
+    private ForgotPassword forgotPassword;
     @Autowired
-    private PerformLoginUseCase performLoginUseCase;
+    private PerformLogin performLogin;
     @Autowired
-    private ResetPasswordUseCase resetPasswordUseCase;
+    private UpdateUser updateUser;
+    @Autowired
+    private ResetPassword resetPassword;
 
     @Override
     public TokenJwtDto performLogin(UserLoginDTO data) {
-        var tokenJwt = performLoginUseCase.performLogin(data);
+        var tokenJwt = performLogin.performLogin(data);
         return tokenJwt;
     }
 
     @Override
     public UserReturnDTO createUser(UserDTO data) {
-        var user = createUserUseCase.createUser(data);
+        var user = createUse.createUser(data);
         return user;
     }
 
@@ -44,13 +46,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserForgotDTO forgotPassword(UserOnlyLoginDTO data) {
-        var retorno = forgotPasswordUseCase.forgotPassword(data);
+        var retorno = forgotPassword.forgotPassword(data);
         return retorno;
     }
 
     @Override
     public String resetPassword(UserResetPassDTO data) {
-        resetPasswordUseCase.resetPassword(data);
+        resetPassword.resetPassword(data);
         return "Password successfully updated!";
     }
 
@@ -58,5 +60,11 @@ public class UserServiceImpl implements UserService {
     public UserIdDTO getUserIdByJWT(String token) {
         var userId = getUserIdByJWT.getUserByJWT(token);
         return userId;
+    }
+
+    @Override
+    public UserReturnDTO updateUserInfo(UserUpdateDTO data, String uuidString) {
+        var updatedUser = updateUser.updateUserInfo(data, uuidString);
+        return updatedUser;
     }
 }

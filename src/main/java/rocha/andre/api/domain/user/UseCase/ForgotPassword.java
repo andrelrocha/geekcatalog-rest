@@ -11,7 +11,7 @@ import rocha.andre.api.infra.utils.mail.*;
 import java.time.LocalDateTime;
 
 @Component
-public class ForgotPasswordUseCase {
+public class ForgotPassword {
     @Autowired
     private UserRepository repository;
     @Autowired

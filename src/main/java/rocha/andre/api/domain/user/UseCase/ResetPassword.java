@@ -10,7 +10,7 @@ import rocha.andre.api.domain.user.DTO.UserResetPassDTO;
 import java.time.LocalDateTime;
 
 @Component
-public class ResetPasswordUseCase {
+public class ResetPassword {
     @Autowired
     private UserRepository repository;
 

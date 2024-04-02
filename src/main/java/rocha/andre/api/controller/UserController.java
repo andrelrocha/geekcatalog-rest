@@ -11,6 +11,8 @@ import rocha.andre.api.domain.user.DTO.*;
 import rocha.andre.api.infra.security.TokenJwtDto;
 import rocha.andre.api.service.UserService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -56,5 +58,11 @@ public class UserController {
     public ResponseEntity<UserIdDTO> getUserId(@PathVariable String tokenJwt) {
         var userId = userService.getUserIdByJWT(tokenJwt);
         return ResponseEntity.ok(userId);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity updateUser(@PathVariable String id, @RequestBody UserUpdateDTO data) {
+        var updatedUser = userService.updateUserInfo(data, id);
+        return ResponseEntity.ok(updatedUser);
     }
 }

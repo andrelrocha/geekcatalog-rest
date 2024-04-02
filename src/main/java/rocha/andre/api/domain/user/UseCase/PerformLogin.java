@@ -11,7 +11,7 @@ import rocha.andre.api.infra.security.TokenJwtDto;
 import rocha.andre.api.infra.security.TokenService;
 
 @Component
-public class PerformLoginUseCase {
+public class PerformLogin {
 
     @Autowired
     private AuthenticationManager manager;
