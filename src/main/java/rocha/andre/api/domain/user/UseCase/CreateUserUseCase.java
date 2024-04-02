@@ -29,13 +29,7 @@ public class CreateUserUseCase {
         String encodedPassword = bCryptPasswordEncoder.encode(data.password());
         newUser.setPassword(encodedPassword);
 
-        System.out.println(newUser.getLogin());
-        System.out.println("chamou antes de salvar");
-
         var userOnDb = userRepository.save(newUser);
-
-        System.out.println("chamou depois de salvar");
-        System.out.println(userOnDb.getId());
 
         return new UserReturnDTO(userOnDb);
     }

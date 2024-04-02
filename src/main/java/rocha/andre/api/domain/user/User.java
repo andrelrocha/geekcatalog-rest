@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import rocha.andre.api.domain.user.DTO.UserDTO;
 import rocha.andre.api.domain.user.DTO.UserLoginDTO;
 import rocha.andre.api.domain.user.DTO.UserForgotDTO;
+import rocha.andre.api.domain.user.DTO.UserUpdateDTO;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +35,7 @@ public class User implements UserDetails {
     @Column(name = "id")
     private UUID id;
 
+    @Column(name = "login", unique = true)
     private String login;
 
     private String password;
@@ -41,6 +44,11 @@ public class User implements UserDetails {
 
     @Column(name = "cpf", length = 14, unique = true)
     private String cpf;
+
+    @Column(name = "phone", length = 14)
+    private String phone;
+    @Column
+    private LocalDate birthday;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -57,6 +65,8 @@ public class User implements UserDetails {
         this.password = data.password();
         this.name = data.name();
         this.cpf = data.cpf();
+        this.phone = data.phone();
+        this.birthday = data.birthday();
         this.role = UserRole.USER;
     }
 
@@ -108,6 +118,10 @@ public class User implements UserDetails {
     public void forgotPassword(UserForgotDTO data) {
         this.tokenMail = data.tokenMail();
         this.tokenExpiration = data.tokenExpiration();
+    }
+
+    public void updateUser(UserUpdateDTO data) {
+
     }
 
     public void setTokenExpiration(LocalDateTime time) {
