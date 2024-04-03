@@ -34,8 +34,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @GetMapping("/bytokenjwt/{tokenJWT}")
-    public ResponseEntity getUserByTokenJWT(@PathVariable String tokenJWT) {
+    @GetMapping("/bytokenjwt")
+    public ResponseEntity getUserByTokenJWT(@RequestHeader("Authorization") String authorizationHeader) {
+        var tokenJWT = authorizationHeader.substring(7); // Recupera o tokenJWT a partir do index 7
         var user = userService.getUserByTokenJWT(tokenJWT);
         return ResponseEntity.ok(user);
     }
