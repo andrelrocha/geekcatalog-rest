@@ -1,14 +1,15 @@
 package rocha.andre.api.domain.game;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import rocha.andre.api.domain.game.DTO.GameDTO;
-import rocha.andre.api.domain.game.DTO.GameReadCSVDTO;
-import rocha.andre.api.domain.game.DTO.GameUpdateDTO;
+
+import java.util.UUID;
+
 
 @Table(name = "games")
 @Entity(name = "Game")
@@ -18,61 +19,35 @@ import rocha.andre.api.domain.game.DTO.GameUpdateDTO;
 @EqualsAndHashCode(of = "id")
 public class Game {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String name;
-    private int length;
-    private int metacritic;
-    private int excitement;
-    private String genre;
-    private boolean played;
-    private boolean done;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id")
+    private UUID id;
 
-    public Game(GameDTO gameDTO, boolean played) {
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
+
+    @Column(name = "yr_of_release")
+    private int yearOfRelease;
+
+    @Column(name = "metacritic")
+    private int metacritic;
+
+    public Game(GameDTO gameDTO) {
         this.name = gameDTO.name();
-        this.length = gameDTO.length();
+        this.yearOfRelease = gameDTO.yearOfRelease();
         this.metacritic = gameDTO.metacritic();
-        this.excitement = gameDTO.excitement();
-        this.genre = gameDTO.genre();
-        this.played = played;
-        this.done = false;
     }
 
     public void updateGame(GameDTO dto) {
         if (dto.name() != null) {
             this.name = dto.name();
         }
-        if (dto.length() != 0) {
-            this.length = dto.length();
+        if (dto.yearOfRelease() != 0) {
+            this.yearOfRelease = dto.yearOfRelease();
         }
         if (dto.metacritic() != 0) {
             this.metacritic = dto.metacritic();
         }
-        if (dto.excitement() != 0) {
-            this.excitement = dto.excitement();
-        }
-        if (dto.genre() != null) {
-            this.genre = dto.genre();
-        }
-    }
-
-    public void setPlayed() {
-        this.played = true;
-    }
-
-    public void isDone() {
-        this.done = true;
-    }
-
-    @Override
-    public String toString() {
-        return "Game{" +
-                "name='" + name + '\'' +
-                ", length=" + length +
-                ", metacritic=" + metacritic +
-                ", excitement=" + excitement +
-                ", genre='" + genre + '\'' +
-                ", played=" + played +
-                '}';
     }
 }
