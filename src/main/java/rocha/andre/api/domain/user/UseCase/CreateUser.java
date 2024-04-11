@@ -9,7 +9,7 @@ import rocha.andre.api.infra.exceptions.ValidationException;
 import rocha.andre.api.domain.user.*;
 
 @Component
-public class CreateUse {
+public class CreateUser {
     @Autowired
     private UserRepository userRepository;
 

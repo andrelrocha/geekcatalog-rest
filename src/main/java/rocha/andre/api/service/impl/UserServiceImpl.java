@@ -12,7 +12,7 @@ import rocha.andre.api.service.UserService;
 @Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
-    private CreateUse createUse;
+    private CreateUser createUser;
     @Autowired
     private GetUserByTokenJWT getUserByTokenJWT;
     @Autowired
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserReturnDTO createUser(UserDTO data) {
-        var user = createUse.createUser(data);
+        var user = createUser.createUser(data);
         return user;
     }
 

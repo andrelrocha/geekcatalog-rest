@@ -61,8 +61,9 @@ public class UserController {
         return ResponseEntity.ok(userId);
     }
 
-    @PutMapping("/update/{tokenJWT}")
-    public ResponseEntity updateUser(@PathVariable String tokenJWT, @RequestBody UserUpdateDTO data) {
+    @PutMapping("/update")
+    public ResponseEntity updateUser(@RequestHeader("Authorization") String authorizationHeader, @RequestBody UserUpdateDTO data) {
+        var tokenJWT = authorizationHeader.substring(7);
         var updatedUser = userService.updateUserInfo(data, tokenJWT);
         return ResponseEntity.ok(updatedUser);
     }
