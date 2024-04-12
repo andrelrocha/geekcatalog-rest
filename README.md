@@ -1,9 +1,8 @@
 ## 💻 About
 
-Backlog API that reads XLSX files, logs them into a database, and provides user-friendly output, with a full CRUD scheme, system of recording which games i'm playing, in addition to connect with third person api's for database tools, regarding data analysis and file backups.
-In addition, it also has a full system to post-backlog maintence system for my opinions on these games, with a full life cycle for those entities.
-It has all its endpoints mapped in REST standard, for easy connection with different front-end applications, regardless of the technology used.
-It has an engine fueled by IGDB API, which is used to save some data about the games, just as they are added to the backlog, also for providing images to the front end app.
+GeekCatalog API is designed to manage media and art content not covered by other widely-used market applications like Letterboxd. It offers users the capability to manage various types of media such as series, anime, games, or any other implemented media types, through CRUD operations following the business requirements. The API provides endpoints following REST standards, as well as multimedia communication channels, enabling users to manage storage and media responses such as images in the database for frontend consumption.
+
+The API is built using Spring Boot and incorporates Flyway and Hibernate for database management, adhering to best practices in communication with the database. It manages multiple schemas within a multi-application schema structure, accommodating a legacy application already developed by me in: [https://github.com/andrelrocha/backlog-app-API].
 
 ## Documentation API
 
@@ -25,15 +24,16 @@ Replace your-project-name.jar with the actual name of your generated JAR file.
 - [x] Handling and conversion of information from .csv and .xlsm tables to entities properly mapped in the system, facilitating the control of this information with application-specific algorithms
 - [x] User custom system with different levels of permissions
 - [x] Login system with JWT authentication
-- [x] CRUD for different sort of games entities, categorized as backlog, such as playing and finished, with their er relationships
-- [x] Routine for a Game entity in the system, easily traceable by the user
-- [x] CRUD for finished games, with image storage in the database and return in an ideal format for display on the front-end
-- [x] Manual backup system in the file system (CSV or XLSX)
+- [x] CRUD for different sort of media types, categorized as backlog, such as games, animes, mangas, with their er relationships
+- [x] Routine for all entities in the system, easily traceable by the user
+- [x] Comment system allowing users to add both private and public comments in a social app-like format
+- [x] List management system, with users able to rate, indicate medium which they consumed the entity, and provide personal notes for them
+- [x] Image storage with file compression system, facilitating quick communication with the front-end
+- [x] CRUD for games, with image storage in the database and return in an ideal format for display on the front-end
 - [x] Token validation system to be used by the front-end
-- [x] User access to the backlog game list, generated from a Microsoft Excel table
-- [x] Management of games in the dependent list, allowing the saving of new entities related to the previous game
 - [x] Custom search system with pagination, enabling complete and customized access by the front-end
 - [x] All endpoints mapped in the REST standard
+- [x] Security schema implemented in the backend for requests in different layers
 
 ---
 
@@ -48,8 +48,5 @@ The following technologies were used in the development of the REST API project:
 - **[Hibernate](https://hibernate.org)**
 - **[Flyway](https://flywaydb.org)**
 - **[Lombok](https://projectlombok.org)**
-- **[ConvertAPI](https://www.convertapi.com/)**
 - **[JWT](https://jwt.io/)**
 - **[IGDB-API](https://www.igdb.com/api)**
-- **[Jackson](https://github.com/FasterXML/jackson-core)**
-- **[Apache POI](https://poi.apache.org/)**
