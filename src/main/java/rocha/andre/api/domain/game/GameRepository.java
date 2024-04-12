@@ -12,7 +12,6 @@ public interface GameRepository extends JpaRepository<Game, UUID> {
 
     @Query("""
             SELECT g FROM Game g
-            WHERE g.done = false
             """)
     Page<Game> findAllGames(Pageable pageable);
 
@@ -29,7 +28,6 @@ public interface GameRepository extends JpaRepository<Game, UUID> {
 
     @Query("""
             SELECT g FROM Game g
-            WHERE g.done = false
             ORDER BY RANDOM() LIMIT 1
             """)
     Game findRandomGame();
@@ -40,7 +38,6 @@ public interface GameRepository extends JpaRepository<Game, UUID> {
     @Query("""
             SELECT g FROM Game g
             WHERE LOWER(g.name) LIKE LOWER(CONCAT('%', :nameCompare, '%'))
-            AND g.done = false
             """)
     Page<Game> findGamesByNameContaining(String nameCompare, Pageable pageable);
 }
