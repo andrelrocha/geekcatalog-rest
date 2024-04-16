@@ -28,10 +28,10 @@ public class Game {
     private String name;
 
     @Column(name = "yr_of_release")
-    private int yearOfRelease;
+    private Integer yearOfRelease;
 
     @Column(name = "metacritic")
-    private int metacritic;
+    private Integer metacritic;
 
     public Game(GameDTO gameDTO) {
         this.name = gameDTO.name();
