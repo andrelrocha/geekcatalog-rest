@@ -41,4 +41,9 @@ public class InfraController {
 
         return "success";
     }
+
+    @GetMapping("/ping")
+    public String pingServer() {
+        return "Servidor está online";
+    }
 }
