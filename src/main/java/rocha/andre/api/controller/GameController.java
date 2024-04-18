@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rocha.andre.api.domain.game.DTO.GameDTO;
 import rocha.andre.api.service.GameService;
 
 @RestController
@@ -32,5 +33,11 @@ public class GameController {
         var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
         var gamesPageable = gameService.getAllGames(pageable);
         return ResponseEntity.ok(gamesPageable);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity createGame(@RequestBody GameDTO data) {
+        var newGame = gameService.createGame(data);
+        return ResponseEntity.ok(newGame);
     }
 }

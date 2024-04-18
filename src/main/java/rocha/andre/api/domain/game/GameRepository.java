@@ -8,6 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.UUID;
 
 public interface GameRepository extends JpaRepository<Game, UUID> {
+    @Query("""
+        SELECT CASE WHEN COUNT(g) > 0 THEN true ELSE false END 
+        FROM Game g 
+        WHERE LOWER(TRIM(g.name)) = LOWER(TRIM(:name))
+        """)
     boolean existsByName(String name);
 
     @Query("""
