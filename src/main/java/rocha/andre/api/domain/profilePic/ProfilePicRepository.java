@@ -1,5 +1,6 @@
 package rocha.andre.api.domain.profilePic;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,4 +16,7 @@ public interface ProfilePicRepository extends JpaRepository<ProfilePic, UUID> {
     ProfilePic findProfilePicByUserId(UUID userId);
 
     boolean existsByUserId(UUID userId);
+
+    @Transactional
+    void deleteByUserId(UUID userId);
 }

@@ -1,0 +1,25 @@
+package rocha.andre.api.domain.profilePic.useCase;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import rocha.andre.api.domain.profilePic.DTO.ProfilePicDTO;
+import rocha.andre.api.domain.profilePic.DTO.ProfilePicUserIdDTO;
+import rocha.andre.api.domain.profilePic.ProfilePicRepository;
+
+import java.util.UUID;
+
+@Component
+public class DeleteProfilePic {
+    @Autowired
+    private ProfilePicRepository repository;
+
+    public void deleteProfilePic(UUID userId) {
+        var userHasPhoto = repository.existsByUserId(userId);
+
+        if (!userHasPhoto) {
+            throw new RuntimeException("Não existe foto de perfil para o usuário informado");
+        }
+
+        repository.deleteByUserId(userId);
+    }
+}

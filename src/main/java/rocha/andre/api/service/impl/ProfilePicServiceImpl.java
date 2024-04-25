@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rocha.andre.api.domain.profilePic.DTO.ProfilePicDTO;
 import rocha.andre.api.domain.profilePic.DTO.ProfilePicReturnDTO;
+import rocha.andre.api.domain.profilePic.DTO.ProfilePicUserIdDTO;
 import rocha.andre.api.domain.profilePic.useCase.AddProfilePic;
+import rocha.andre.api.domain.profilePic.useCase.DeleteProfilePic;
 import rocha.andre.api.domain.profilePic.useCase.ReturnProfilePic;
 import rocha.andre.api.service.ProfilePicService;
 
@@ -15,6 +17,8 @@ import java.util.UUID;
 public class ProfilePicServiceImpl implements ProfilePicService {
     @Autowired
     private AddProfilePic addProfilePic;
+    @Autowired
+    private DeleteProfilePic deleteProfilePic;
     @Autowired
     private ReturnProfilePic returnProfilePic;
 
@@ -28,5 +32,10 @@ public class ProfilePicServiceImpl implements ProfilePicService {
     public byte[] returnProfilePic(UUID userId) throws Exception {
         var profilePic = returnProfilePic.returnProfilePic(userId);
         return profilePic;
+    }
+
+    @Override
+    public void deleteProfilePic(UUID userId) {
+        deleteProfilePic.deleteProfilePic(userId);
     }
 }
