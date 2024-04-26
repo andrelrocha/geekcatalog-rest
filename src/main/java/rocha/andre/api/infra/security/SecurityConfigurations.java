@@ -37,6 +37,7 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.POST, "/user/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/infra/verifyjwt/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/infra/ping").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/countries/**").permitAll();
                     //req.requestMatchers(HttpMethod.DELETE, "/users").hasRole("ADMIN");
                     req.anyRequest().authenticated();
                 })
