@@ -36,7 +36,7 @@ public class ProfilePicController {
         return ResponseEntity.ok().headers(headers).body(imageDecompressed);
     }
 
-    @DeleteMapping("/delete/user/{userId}")
+    @DeleteMapping("/delete/byuser/{userId}")
     public ResponseEntity deleteProfilePic(@PathVariable UUID userId) {
         profilePicService.deleteProfilePic(userId);
         return ResponseEntity.noContent().build();

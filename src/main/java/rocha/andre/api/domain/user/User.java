@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import rocha.andre.api.domain.country.Country;
 import rocha.andre.api.domain.user.DTO.UserDTO;
 import rocha.andre.api.domain.user.DTO.UserLoginDTO;
 import rocha.andre.api.domain.user.DTO.UserForgotDTO;
@@ -50,6 +51,10 @@ public class User implements UserDetails {
     @Column
     private LocalDate birthday;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id", referencedColumnName = "id")
+    private Country country;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -60,13 +65,14 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime tokenExpiration;
 
-    public User(UserDTO data) {
+    public User(UserDTO data, Country country) {
         this.login = data.login();
         this.password = data.password();
         this.name = data.name();
         this.cpf = data.cpf();
         this.phone = data.phone();
         this.birthday = data.birthday();
+        this.country = country;
         this.role = UserRole.USER;
     }
 
