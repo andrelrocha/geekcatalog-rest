@@ -4,10 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import rocha.andre.api.domain.country.CountryRepository;
+import rocha.andre.api.domain.user.DTO.UserCreateDTO;
 import rocha.andre.api.domain.user.DTO.UserDTO;
 import rocha.andre.api.domain.user.DTO.UserReturnDTO;
 import rocha.andre.api.infra.exceptions.ValidationException;
 import rocha.andre.api.domain.user.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class CreateUser {
@@ -29,7 +33,12 @@ public class CreateUser {
         var country = countryRepository.findById(data.countryId())
                 .orElseThrow(() -> new ValidationException("Não foi encontrado país com o id informado"));
 
-        User newUser = new User(data, country);
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        var formattedBirthday = LocalDate.parse(data.birthday().format(formatter));
+
+        var createDTO = new UserCreateDTO(data, country, formattedBirthday);
+
+        var newUser = new User(createDTO);
 
         String encodedPassword = bCryptPasswordEncoder.encode(data.password());
         newUser.setPassword(encodedPassword);

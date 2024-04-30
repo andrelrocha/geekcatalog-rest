@@ -11,10 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import rocha.andre.api.domain.country.Country;
-import rocha.andre.api.domain.user.DTO.UserDTO;
-import rocha.andre.api.domain.user.DTO.UserLoginDTO;
-import rocha.andre.api.domain.user.DTO.UserForgotDTO;
-import rocha.andre.api.domain.user.DTO.UserUpdateDTO;
+import rocha.andre.api.domain.user.DTO.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -65,14 +62,14 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime tokenExpiration;
 
-    public User(UserDTO data, Country country) {
-        this.login = data.login();
-        this.password = data.password();
-        this.name = data.name();
-        this.cpf = data.cpf();
-        this.phone = data.phone();
-        this.birthday = data.birthday();
-        this.country = country;
+    public User(UserCreateDTO dto) {
+        this.login = dto.data().login();
+        this.password = dto.data().password();
+        this.name = dto.data().name();
+        this.cpf = dto.data().cpf();
+        this.phone = dto.data().phone();
+        this.birthday = dto.birthday();
+        this.country = dto.country();
         this.role = UserRole.USER;
     }
 

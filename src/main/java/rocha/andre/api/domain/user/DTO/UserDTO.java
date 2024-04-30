@@ -21,8 +21,8 @@ public record UserDTO(@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "O 
                       @NotNull String cpf,
                       @Pattern(regexp = "\\(\\d{2,3}\\)\\d{5}-\\d{4}", message = "O telefone deve seguir o formato (99)99999-9999")
                       String phone,
-                      @JsonFormat(pattern="yyyy-MM-dd")
-                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd")
+                      @JsonFormat(pattern = "dd/MM/yyyy")
+                      @DateTimeFormat(pattern = "dd/MM/yyyy")
                       LocalDate birthday,
                       UUID countryId) {
 }
