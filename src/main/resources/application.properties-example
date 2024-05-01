@@ -1,0 +1,30 @@
+!BANCO PRINCIPAL DA APLICAÇÃO
+spring.datasource.url=jdbc:postgresql:// URL DO BANCO
+spring.datasource.username=USERNAME
+spring.datasource.password=PASSWORD
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+server.port=8080
+
+api.security.token.secret=${JWT_SECRET:PASSWORDSECRET}
+
+spring.servlet.multipart.max-file-size=6MB
+spring.servlet.multipart.max-request-size=6MB
+
+igdb.api.url.covers=https://api.igdb.com/v4/covers
+igdb.api.url.games=https://api.igdb.com/v4/games
+igdb.api.authorization=Bearer TOKENIGDB
+igdb.api.client-id=bzop9nlj40f6s24q3j3hbzyieo27a3
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=LOGINEMAIL
+spring.mail.password=PASSWORDEMAIL
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+#server.error.include-stacktrace=never
+spring.jpa.show-sql=true
+logging.level.org.springframework.security=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+logging.level.org.springframework.transaction=DEBUG
