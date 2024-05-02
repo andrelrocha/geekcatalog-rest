@@ -45,9 +45,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserForgotDTO forgotPassword(UserOnlyLoginDTO data) {
-        var retorno = forgotPassword.forgotPassword(data);
-        return retorno;
+    public String forgotPassword(UserOnlyLoginDTO data) {
+        forgotPassword.forgotPassword(data);
+        return "Email sent with token for password reset";
     }
 
     @Override

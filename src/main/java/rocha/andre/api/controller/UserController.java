@@ -44,8 +44,8 @@ public class UserController {
     @PostMapping("/forgot_password")
     @Transactional
     public ResponseEntity forgotPassword(@RequestBody UserOnlyLoginDTO data) {
-        var dtoReturn= userService.forgotPassword(data);
-        return ResponseEntity.ok(dtoReturn);
+        var stringReturn = userService.forgotPassword(data);
+        return ResponseEntity.ok(stringReturn);
     }
 
     @PostMapping("/reset_password")

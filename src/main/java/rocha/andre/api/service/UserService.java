@@ -7,7 +7,7 @@ public interface UserService {
     UserReturnDTO createUser(UserDTO data);
     UserReturnDTO getUserByTokenJWT(String id);
     TokenJwtDto performLogin(UserLoginDTO data);
-    UserForgotDTO forgotPassword(UserOnlyLoginDTO data);
+    String forgotPassword(UserOnlyLoginDTO data);
     String resetPassword(UserResetPassDTO data);
     UserIdDTO getUserIdByJWT(String token);
     UserReturnDTO updateUserInfo(UserUpdateDTO data, String tokenJWT);

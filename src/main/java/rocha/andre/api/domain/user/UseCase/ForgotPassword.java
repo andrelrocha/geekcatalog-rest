@@ -16,8 +16,10 @@ public class ForgotPassword {
     private UserRepository repository;
     @Autowired
     private GenerateTokenForgetPassword mailToken;
+    @Autowired
+    private MailSenderMime mailSender;
 
-    public UserForgotDTO forgotPassword(UserOnlyLoginDTO data) {
+    public void forgotPassword(UserOnlyLoginDTO data) {
         var login = data.login();
         var userExists = repository.existsByLogin(login);
 
@@ -32,8 +34,10 @@ public class ForgotPassword {
         var user = repository.findByLoginToHandle(login);
         user.forgotPassword(forgotDTO);
 
-        var forgotReturn = new UserForgotDTO(token, inOneHour);
+        var subject = "Forgot Password - Geek Catalog";
 
-        return forgotReturn;
+        var mailDTO = new MailDTO(subject, login, token);
+
+        mailSender.sendMail(mailDTO);
     }
 }
