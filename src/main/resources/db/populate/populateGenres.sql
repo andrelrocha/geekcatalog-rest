@@ -1,0 +1,18 @@
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'RPG');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Metroidvania');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Open World');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Platform');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Puzzle');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Action');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Adventure');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Horror');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Shooting');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'FPS');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Walking Simulator');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Fighting');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Third Person Shooter');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Souls');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Side Scrolling Action');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'First Person Shooter');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Racing');
+INSERT INTO socialapp.genres (id, name) VALUES (uuid_generate_v4(), 'Terror');
