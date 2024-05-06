@@ -9,8 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
-@Table(name = "studios")
-@Entity(name = "Studio")
+@Table(name = "genres")
+@Entity(name = "Genre")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

@@ -22,7 +22,7 @@ public class CountryController {
                                                    @RequestParam(defaultValue = "name") String sortField,
                                                    @RequestParam(defaultValue = "asc") String sortOrder) {
         var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
-        var gamesPageable = countryService.getAllCountries(pageable);
-        return ResponseEntity.ok(gamesPageable);
+        var countriesPageable = countryService.getAllCountries(pageable);
+        return ResponseEntity.ok(countriesPageable);
     }
 }
