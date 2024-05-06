@@ -14,16 +14,6 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
-    @GetMapping("/searchbyname/{nameCompare}")
-    public ResponseEntity getGamesByName(@RequestParam(defaultValue = "0") int page,
-                                                                @RequestParam(defaultValue = "25") int size,
-                                                                @RequestParam(defaultValue = "name") String sortField,
-                                                                @RequestParam(defaultValue = "asc") String sortOrder,
-                                                                @PathVariable String nameCompare) {
-        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
-        var gamesPageable = 0;
-        return ResponseEntity.ok(gamesPageable);
-    }
 
     @GetMapping("/getall")
     public ResponseEntity getAllGamesPageable ( @RequestParam(defaultValue = "0") int page,
@@ -40,4 +30,18 @@ public class GameController {
         var newGame = gameService.createGame(data);
         return ResponseEntity.ok(newGame);
     }
+
+    /*
+    @GetMapping("/searchbyname/{nameCompare}")
+    public ResponseEntity getGamesByName(@RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "25") int size,
+                                                                @RequestParam(defaultValue = "name") String sortField,
+                                                                @RequestParam(defaultValue = "asc") String sortOrder,
+                                                                @PathVariable String nameCompare) {
+        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
+        var gamesPageable = 0;
+        return ResponseEntity.ok(gamesPageable);
+    }
+
+    */
 }
