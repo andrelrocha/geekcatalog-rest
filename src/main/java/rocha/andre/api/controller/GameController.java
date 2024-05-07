@@ -17,7 +17,7 @@ public class GameController {
 
     @GetMapping("/getall")
     public ResponseEntity getAllGamesPageable ( @RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "15") int size,
+                                                @RequestParam(defaultValue = "16") int size,
                                                 @RequestParam(defaultValue = "name") String sortField,
                                                 @RequestParam(defaultValue = "asc") String sortOrder) {
         var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));

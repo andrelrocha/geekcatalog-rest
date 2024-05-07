@@ -11,9 +11,10 @@ public record UserReturnDTO(String id,
                             String cpf,
                             String phone,
                             LocalDate birthday,
-                            String countryName) {
+                            String countryName,
+                            String countryId) {
 
     public UserReturnDTO(User user) {
-        this(user.getId().toString(), user.getLogin(), user.getName(), user.getCpf(), user.getPhone(), user.getBirthday(), user.getCountry().getName());
+        this(user.getId().toString(), user.getLogin(), user.getName(), user.getCpf(), user.getPhone(), user.getBirthday(), user.getCountry().getName(), user.getCountry().toString());
     }
 }
