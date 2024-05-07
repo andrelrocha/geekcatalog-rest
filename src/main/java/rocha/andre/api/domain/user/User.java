@@ -1,7 +1,6 @@
 package rocha.andre.api.domain.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -130,14 +129,21 @@ public class User implements UserDetails {
         if (data.phone() != null) {
             this.phone = data.phone();
         }
+
         if (data.birthday() != null) {
             this.birthday = data.birthday();
+        }
+
+        if (data.country() != null) {
+            this.country = data.country();
         }
     }
 
     public void updateCountry(Country country) {
         this.country = country;
     }
+
+    public void updateBirthday(LocalDate date) { this.birthday = date; }
 
     public void setTokenExpiration(LocalDateTime time) {
         this.tokenExpiration = time;

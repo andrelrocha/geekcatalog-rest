@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserReturnDTO updateUserInfo(UserUpdateDTO data, String tokenJWT) {
+    public UserReturnDTO updateUserInfo(UserGetInfoUpdateDTO data, String tokenJWT) {
         var updatedUser = updateUser.updateUserInfo(data, tokenJWT);
         return updatedUser;
     }

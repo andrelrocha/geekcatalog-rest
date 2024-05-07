@@ -5,13 +5,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.user.DTO.*;
 import rocha.andre.api.infra.security.TokenJwtDto;
 import rocha.andre.api.service.UserService;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -62,7 +59,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity updateUser(@RequestHeader("Authorization") String authorizationHeader, @RequestBody UserUpdateDTO data) {
+    public ResponseEntity updateUser(@RequestHeader("Authorization") String authorizationHeader, @RequestBody UserGetInfoUpdateDTO data) {
         var tokenJWT = authorizationHeader.substring(7);
         var updatedUser = userService.updateUserInfo(data, tokenJWT);
         return ResponseEntity.ok(updatedUser);

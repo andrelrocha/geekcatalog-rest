@@ -10,5 +10,5 @@ public interface UserService {
     String forgotPassword(UserOnlyLoginDTO data);
     String resetPassword(UserResetPassDTO data);
     UserIdDTO getUserIdByJWT(String token);
-    UserReturnDTO updateUserInfo(UserUpdateDTO data, String tokenJWT);
+    UserReturnDTO updateUserInfo(UserGetInfoUpdateDTO data, String tokenJWT);
 }
