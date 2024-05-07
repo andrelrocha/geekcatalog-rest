@@ -135,6 +135,10 @@ public class User implements UserDetails {
         }
     }
 
+    public void updateCountry(Country country) {
+        this.country = country;
+    }
+
     public void setTokenExpiration(LocalDateTime time) {
         this.tokenExpiration = time;
     }

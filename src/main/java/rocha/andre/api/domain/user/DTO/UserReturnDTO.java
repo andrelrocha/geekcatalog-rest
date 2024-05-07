@@ -15,6 +15,6 @@ public record UserReturnDTO(String id,
                             String countryId) {
 
     public UserReturnDTO(User user) {
-        this(user.getId().toString(), user.getLogin(), user.getName(), user.getCpf(), user.getPhone(), user.getBirthday(), user.getCountry().getName(), user.getCountry().toString());
+        this(user.getId().toString(), user.getLogin(), user.getName(), user.getCpf(), user.getPhone(), user.getBirthday(), user.getCountry().getName(), user.getCountry().getId().toString());
     }
 }
