@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.gameConsoles.DTO;
+package rocha.andre.api.domain.gameConsole.DTO;
 
 public record GameConsoleDTO(String gameId, String consoleId) {
 }

@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import rocha.andre.api.domain.gameConsoles.DTO.GameConsoleDTO;
-import rocha.andre.api.domain.gameConsoles.DTO.GameConsoleReturnDTO;
-import rocha.andre.api.domain.gameConsoles.useCase.CreateGameConsole;
-import rocha.andre.api.domain.gameConsoles.useCase.GetAllGameConsolesByGameID;
+import rocha.andre.api.domain.gameConsole.DTO.GameConsoleDTO;
+import rocha.andre.api.domain.gameConsole.DTO.GameConsoleReturnDTO;
+import rocha.andre.api.domain.gameConsole.useCase.CreateGameConsole;
+import rocha.andre.api.domain.gameConsole.useCase.GetAllGameConsolesByGameID;
 import rocha.andre.api.service.GameConsoleService;
 
 @Service

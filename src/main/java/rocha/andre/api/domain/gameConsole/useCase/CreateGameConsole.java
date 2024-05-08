@@ -1,14 +1,14 @@
-package rocha.andre.api.domain.gameConsoles.useCase;
+package rocha.andre.api.domain.gameConsole.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rocha.andre.api.domain.consoles.ConsoleRepository;
 import rocha.andre.api.domain.game.GameRepository;
-import rocha.andre.api.domain.gameConsoles.DTO.CreateGameConsoleDTO;
-import rocha.andre.api.domain.gameConsoles.DTO.GameConsoleDTO;
-import rocha.andre.api.domain.gameConsoles.DTO.GameConsoleReturnDTO;
-import rocha.andre.api.domain.gameConsoles.GameConsole;
-import rocha.andre.api.domain.gameConsoles.GameConsoleRepository;
+import rocha.andre.api.domain.gameConsole.DTO.CreateGameConsoleDTO;
+import rocha.andre.api.domain.gameConsole.DTO.GameConsoleDTO;
+import rocha.andre.api.domain.gameConsole.DTO.GameConsoleReturnDTO;
+import rocha.andre.api.domain.gameConsole.GameConsole;
+import rocha.andre.api.domain.gameConsole.GameConsoleRepository;
 import rocha.andre.api.infra.exceptions.ValidationException;
 
 import java.util.UUID;

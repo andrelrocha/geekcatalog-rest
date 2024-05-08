@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.gameConsoles;
+package rocha.andre.api.domain.gameGenre;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,19 +8,19 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import rocha.andre.api.domain.consoles.Console;
 import rocha.andre.api.domain.game.Game;
-import rocha.andre.api.domain.gameConsoles.DTO.CreateGameConsoleDTO;
+import rocha.andre.api.domain.gameGenre.DTO.CreateGameGenreDTO;
+import rocha.andre.api.domain.genres.Genre;
 
 import java.util.UUID;
 
-@Table(name = "game_console")
-@Entity(name = "GameConsole")
+@Table(name = "game_genre")
+@Entity(name = "GameGenre")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class GameConsole {
+public class GameGenre {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -33,12 +33,12 @@ public class GameConsole {
     private Game game;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "console_id", referencedColumnName = "id")
+    @JoinColumn(name = "genre_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Console console;
+    private Genre genre;
 
-    public GameConsole(CreateGameConsoleDTO data) {
+    public GameGenre(CreateGameGenreDTO data) {
         this.game = data.game();
-        this.console = data.console();
+        this.genre = data.genre();
     }
 }

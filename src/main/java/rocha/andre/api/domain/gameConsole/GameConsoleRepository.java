@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.gameConsoles;
+package rocha.andre.api.domain.gameConsole;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

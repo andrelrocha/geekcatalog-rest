@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.gameStudios;
+package rocha.andre.api.domain.gameStudio;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

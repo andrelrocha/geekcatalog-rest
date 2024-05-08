@@ -6,8 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rocha.andre.api.domain.gameConsoles.DTO.GameConsoleDTO;
-import rocha.andre.api.domain.gameConsoles.DTO.GameConsoleReturnDTO;
+import rocha.andre.api.domain.gameConsole.DTO.GameConsoleDTO;
+import rocha.andre.api.domain.gameConsole.DTO.GameConsoleReturnDTO;
 import rocha.andre.api.service.GameConsoleService;
 
 @RestController
