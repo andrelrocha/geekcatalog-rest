@@ -3,6 +3,8 @@ package rocha.andre.api.domain.imageGame;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import rocha.andre.api.domain.game.Game;
 
 import java.util.UUID;
@@ -23,6 +25,7 @@ public class ImageGame {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Game game;
 
     @Column(name = "image", columnDefinition = "bytea")

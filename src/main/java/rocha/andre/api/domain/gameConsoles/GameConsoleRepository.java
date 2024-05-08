@@ -15,4 +15,11 @@ public interface GameConsoleRepository extends JpaRepository<GameConsole, UUID> 
             ORDER BY c.name ASC
             """)
     Page<GameConsole> findAllGameConsolesByGameId(UUID gameId, Pageable pageable);
+
+    @Query("""
+        SELECT CASE WHEN COUNT(gc) > 0 THEN TRUE ELSE FALSE END 
+        FROM GameConsole gc 
+        WHERE gc.game.id = :gameId AND gc.console.id = :consoleId
+        """)
+    boolean existsByGameIdAndConsoleId(UUID gameId, UUID consoleId);
 }
