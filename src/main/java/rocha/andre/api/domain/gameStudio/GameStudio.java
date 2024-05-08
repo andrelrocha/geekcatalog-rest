@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import rocha.andre.api.domain.game.Game;
+import rocha.andre.api.domain.gameStudio.DTO.CreateGameStudioDTO;
 import rocha.andre.api.domain.studios.Studio;
 
 import java.util.UUID;
@@ -35,4 +36,9 @@ public class GameStudio {
     @JoinColumn(name = "studio_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Studio studio;
+
+    public GameStudio(CreateGameStudioDTO data) {
+        this.game = data.game();
+        this.studio = data.studio();
+    }
 }
