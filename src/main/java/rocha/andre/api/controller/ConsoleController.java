@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import rocha.andre.api.domain.console.DTO.ConsoleReturnDTO;
+import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 import rocha.andre.api.service.ConsoleService;
 
 @RestController

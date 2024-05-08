@@ -1,6 +1,6 @@
-package rocha.andre.api.domain.console.DTO;
+package rocha.andre.api.domain.consoles.DTO;
 
-import rocha.andre.api.domain.console.Console;
+import rocha.andre.api.domain.consoles.Console;
 
 import java.util.UUID;
 

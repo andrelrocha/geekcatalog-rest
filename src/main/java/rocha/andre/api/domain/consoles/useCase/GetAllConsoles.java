@@ -1,11 +1,11 @@
-package rocha.andre.api.domain.console.useCase;
+package rocha.andre.api.domain.consoles.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import rocha.andre.api.domain.console.ConsoleRepository;
-import rocha.andre.api.domain.console.DTO.ConsoleReturnDTO;
+import rocha.andre.api.domain.consoles.ConsoleRepository;
+import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 
 @Component
 public class GetAllConsoles {
