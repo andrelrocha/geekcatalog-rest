@@ -38,7 +38,19 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.GET, "/infra/verifyjwt/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/infra/ping").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/countries/**").permitAll();
-                    //req.requestMatchers(HttpMethod.DELETE, "/users").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.DELETE, "/users").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.DELETE, "/games/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.PUT, "/games/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.POST, "/games/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.DELETE, "/gameconsole/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.PUT, "/gameconsole/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.POST, "/gameconsole/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.DELETE, "/gamestudio/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.PUT, "/gamestudio/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.POST, "/gamestudio/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.DELETE, "/gamegenre/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.PUT, "/gamegenre/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.POST, "/gamegenre/**").hasRole("ADMIN");
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilterApplication, UsernamePasswordAuthenticationFilter.class)
