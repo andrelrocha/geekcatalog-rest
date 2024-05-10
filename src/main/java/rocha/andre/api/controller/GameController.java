@@ -31,17 +31,4 @@ public class GameController {
         return ResponseEntity.ok(newGame);
     }
 
-    /*
-    @GetMapping("/searchbyname/{nameCompare}")
-    public ResponseEntity getGamesByName(@RequestParam(defaultValue = "0") int page,
-                                                                @RequestParam(defaultValue = "25") int size,
-                                                                @RequestParam(defaultValue = "name") String sortField,
-                                                                @RequestParam(defaultValue = "asc") String sortOrder,
-                                                                @PathVariable String nameCompare) {
-        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
-        var gamesPageable = 0;
-        return ResponseEntity.ok(gamesPageable);
-    }
-
-    */
 }

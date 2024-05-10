@@ -42,6 +42,9 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.DELETE, "/games/**").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.PUT, "/games/**").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.POST, "/games/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.DELETE, "/consoles/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.PUT, "/consoles/**").hasRole("ADMIN");
+                    req.requestMatchers(HttpMethod.POST, "/consoles/**").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.DELETE, "/gameconsole/**").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.PUT, "/gameconsole/**").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.POST, "/gameconsole/**").hasRole("ADMIN");
@@ -66,8 +69,6 @@ public class SecurityConfigurations {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 
     @Bean
     public CorsFilter corsFilter() {
