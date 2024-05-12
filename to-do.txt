@@ -6,4 +6,4 @@ GENRES - GET, POST, PUT AND DELETE -> DELETE É ROTA PARA ADMIN
 
 MAPEAR E CRIAR GAMES
 Games - Criar, atualizar e deletar -> deletar e atualizar deve ser rota para admin
-Lista - Criar, ler, atualizar e deletar
+    Lista - Criar, ler, atualizar e deletar
