@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import rocha.andre.api.domain.gameGenre.GameGenre;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public interface GameStudioRepository extends JpaRepository<GameStudio, UUID> {
@@ -23,4 +24,12 @@ public interface GameStudioRepository extends JpaRepository<GameStudio, UUID> {
         WHERE gs.game.id = :gameId AND gs.studio.id = :studioId
         """)
     boolean existsByGameIdAndStudioId(UUID gameId, UUID studioId);
+
+    @Query("""
+            SELECT gs.studio.name
+            FROM GameStudio gs 
+            WHERE gs.game.id = :gameId
+            """)
+    ArrayList<String> findAllStudioNamesByGameId(UUID gameId);
+
 }

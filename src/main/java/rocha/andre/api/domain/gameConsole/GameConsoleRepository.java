@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public interface GameConsoleRepository extends JpaRepository<GameConsole, UUID> {
@@ -22,4 +23,11 @@ public interface GameConsoleRepository extends JpaRepository<GameConsole, UUID> 
         WHERE gc.game.id = :gameId AND gc.console.id = :consoleId
         """)
     boolean existsByGameIdAndConsoleId(UUID gameId, UUID consoleId);
+
+    @Query("""
+        SELECT gc.console.name
+        FROM GameConsole gc
+        WHERE gc.game.id = :gameId
+        """)
+    ArrayList<String> findAllConsolesNamesByGameId(UUID gameId);
 }

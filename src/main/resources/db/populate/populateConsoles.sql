@@ -24,3 +24,4 @@ INSERT INTO socialapp.consoles (id, name) VALUES (uuid_generate_v4(), 'Playstati
 INSERT INTO socialapp.consoles (id, name) VALUES (uuid_generate_v4(), 'Game Boy Color');
 INSERT INTO socialapp.consoles (id, name) VALUES (uuid_generate_v4(), 'Nintendo DS');
 INSERT INTO socialapp.consoles (id, name) VALUES (uuid_generate_v4(), 'Playstation Portable Go');
+INSERT INTO socialapp.consoles (id, name) VALUES (uuid_generate_v4(), 'Mobile');
