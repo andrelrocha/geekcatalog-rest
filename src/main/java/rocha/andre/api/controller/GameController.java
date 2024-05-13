@@ -31,4 +31,9 @@ public class GameController {
         return ResponseEntity.ok(newGame);
     }
 
+    @PutMapping("/update/{gameId}")
+    public ResponseEntity updateGame(@RequestBody GameDTO data, @PathVariable String gameId) {
+        var updatedGame = gameService.updateGame(data, gameId);
+        return ResponseEntity.ok(updatedGame);
+    }
 }

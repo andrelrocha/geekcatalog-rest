@@ -8,6 +8,7 @@ import rocha.andre.api.domain.game.DTO.GameDTO;
 import rocha.andre.api.domain.game.DTO.GameReturnDTO;
 import rocha.andre.api.domain.game.useCase.CreateGame;
 import rocha.andre.api.domain.game.useCase.GetAllGamesPageable;
+import rocha.andre.api.domain.game.useCase.UpdateGame;
 import rocha.andre.api.service.GameService;
 
 @Service
@@ -16,6 +17,8 @@ public class GameServiceImpl implements GameService {
     private GetAllGamesPageable getAllGamesPageable;
     @Autowired
     private CreateGame createGame;
+    @Autowired
+    private UpdateGame updateGame;
 
     @Override
     public Page<GameReturnDTO> getAllGames(Pageable pageable) {
@@ -27,5 +30,11 @@ public class GameServiceImpl implements GameService {
     public GameReturnDTO createGame(GameDTO data) {
         var newGame = createGame.createGame(data);
         return newGame;
+    }
+
+    @Override
+    public GameReturnDTO updateGame(GameDTO data, String gameId) {
+        var updatedGame = updateGame.updateGame(data, gameId);
+        return updatedGame;
     }
 }
