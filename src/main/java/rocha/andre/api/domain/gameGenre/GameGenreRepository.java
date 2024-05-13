@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import rocha.andre.api.domain.gameConsole.GameConsole;
+import rocha.andre.api.domain.genres.DTO.GenreReturnDTO;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -24,6 +24,13 @@ public interface GameGenreRepository extends JpaRepository<GameGenre, UUID> {
         WHERE gg.game.id = :gameId AND gg.genre.id = :genreId
         """)
     boolean existsByGameIdAndGenreId(UUID gameId, UUID genreId);
+
+    @Query("""
+        SELECT NEW rocha.andre.api.domain.genres.DTO.GenreReturnDTO(gg.genre.id, gg.genre.name)
+        FROM GameGenre gg
+        WHERE gg.game.id = :gameId
+        """)
+    ArrayList<GenreReturnDTO> findAllGenresInfoByGameId(UUID gameId);
 
     @Query("""
             SELECT gg.genre.name

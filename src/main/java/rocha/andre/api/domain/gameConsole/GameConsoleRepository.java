@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -30,4 +31,12 @@ public interface GameConsoleRepository extends JpaRepository<GameConsole, UUID> 
         WHERE gc.game.id = :gameId
         """)
     ArrayList<String> findAllConsolesNamesByGameId(UUID gameId);
+
+    @Query("""
+        SELECT NEW rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO(gc.console.id, gc.console.name)
+        FROM GameConsole gc
+        WHERE gc.game.id = :gameId
+        """)
+    ArrayList<ConsoleReturnDTO> findAllConsolesInfoByGameId(UUID gameId);
+
 }

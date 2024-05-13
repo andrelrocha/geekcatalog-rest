@@ -2,7 +2,7 @@ package rocha.andre.api.domain.fullGame_mobile.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rocha.andre.api.domain.fullGame_mobile.DTO.FullGameUserDTO;
+import rocha.andre.api.domain.fullGame_mobile.DTO.FullGameReturnDTO;
 import rocha.andre.api.domain.game.GameRepository;
 import rocha.andre.api.domain.gameConsole.GameConsoleRepository;
 import rocha.andre.api.domain.gameGenre.GameGenreRepository;
@@ -12,7 +12,7 @@ import rocha.andre.api.infra.exceptions.ValidationException;
 import java.util.UUID;
 
 @Service
-public class GetFullGameInfoService {
+public class GetFullGameAdminInfoService {
     @Autowired
     private GameRepository gameRepository;
     @Autowired
@@ -22,18 +22,16 @@ public class GetFullGameInfoService {
     @Autowired
     private GameConsoleRepository gameConsoleRepository;
 
-    public FullGameUserDTO getFullGameInfo(String gameId) {
+    public FullGameReturnDTO getFullGameInfoAdmin(String gameId) {
         var gameIdUUID = UUID.fromString(gameId);
 
         var game = gameRepository.findById(gameIdUUID)
                 .orElseThrow(() -> new ValidationException("Não foi encontrado id de jogo para o id informado no full game service"));
 
-        var gameStudio = gameStudioRepository.findAllStudioNamesByGameId(game.getId());
+        var consoleInfoList = gameConsoleRepository.findAllConsolesInfoByGameId(game.getId());
+        var genreInfoList = gameGenreRepository.findAllGenresInfoByGameId(game.getId());
+        var studioInfoList = gameStudioRepository.findAllStudioByGameId(game.getId());
 
-        var gameGenre = gameGenreRepository.findAllGenresNamesByGameId(game.getId());
-
-        var gameConsole = gameConsoleRepository.findAllConsolesNamesByGameId(game.getId());
-
-        return new FullGameUserDTO(game, gameStudio, gameGenre, gameConsole);
+        return new FullGameReturnDTO(game, consoleInfoList, genreInfoList, studioInfoList);
     }
 }

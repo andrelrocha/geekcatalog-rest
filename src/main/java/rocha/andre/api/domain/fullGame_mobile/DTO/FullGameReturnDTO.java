@@ -1,14 +1,20 @@
 package rocha.andre.api.domain.fullGame_mobile.DTO;
 
+import rocha.andre.api.domain.consoles.Console;
+import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 import rocha.andre.api.domain.game.Game;
+import rocha.andre.api.domain.gameGenre.DTO.GameGenreReturnDTO;
+import rocha.andre.api.domain.gameStudio.DTO.GameStudioReturnDTO;
+import rocha.andre.api.domain.genres.DTO.GenreReturnDTO;
+import rocha.andre.api.domain.genres.Genre;
+import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
+import rocha.andre.api.domain.studios.Studio;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public record FullGameReturnDTO(UUID id, String name, Integer metacritic, Integer yearOfRelease,
-                                ArrayList<String> studios, ArrayList<String> genres, ArrayList<String> consoles) {
-
-    public FullGameReturnDTO(Game game, ArrayList<String> studios, ArrayList<String> genres, ArrayList<String> consoles) {
-        this(game.getId(), game.getName(), game.getMetacritic(), game.getYearOfRelease(), studios, genres, consoles);
+public record FullGameReturnDTO(String name, Integer metacritic, Integer yearOfRelease, ArrayList<ConsoleReturnDTO> consoles, ArrayList<GenreReturnDTO> genres, ArrayList<StudioReturnFullGameInfo> studios) {
+    public FullGameReturnDTO(Game game, ArrayList<ConsoleReturnDTO> consoles, ArrayList<GenreReturnDTO> genres, ArrayList<StudioReturnFullGameInfo> studios) {
+        this(game.getName(), game.getMetacritic(), game.getYearOfRelease(), consoles, genres, studios);
     }
 }
