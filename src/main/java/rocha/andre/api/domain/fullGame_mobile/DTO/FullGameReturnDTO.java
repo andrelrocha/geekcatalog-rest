@@ -13,8 +13,8 @@ import rocha.andre.api.domain.studios.Studio;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public record FullGameReturnDTO(String name, Integer metacritic, Integer yearOfRelease, ArrayList<ConsoleReturnDTO> consoles, ArrayList<GenreReturnDTO> genres, ArrayList<StudioReturnFullGameInfo> studios) {
+public record FullGameReturnDTO(UUID id, String name, Integer metacritic, Integer yearOfRelease, ArrayList<ConsoleReturnDTO> consoles, ArrayList<GenreReturnDTO> genres, ArrayList<StudioReturnFullGameInfo> studios) {
     public FullGameReturnDTO(Game game, ArrayList<ConsoleReturnDTO> consoles, ArrayList<GenreReturnDTO> genres, ArrayList<StudioReturnFullGameInfo> studios) {
-        this(game.getName(), game.getMetacritic(), game.getYearOfRelease(), consoles, genres, studios);
+        this(game.getId(), game.getName(), game.getMetacritic(), game.getYearOfRelease(), consoles, genres, studios);
     }
 }

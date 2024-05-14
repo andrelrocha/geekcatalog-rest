@@ -25,7 +25,7 @@ public class FullGameMobileController {
     private UpdateFullGameAdmin updateFullGameAdmin;
 
     @GetMapping("/admin/info/{gameId}")
-    public ResponseEntity getFullGameInfoByGameId(@PathVariable String gameId) {
+    public ResponseEntity<FullGameReturnDTO> getFullGameInfoByGameId(@PathVariable String gameId) {
         var gameInfo = getFullGameAdminInfoService.getFullGameInfoAdmin(gameId);
         return ResponseEntity.ok(gameInfo);
     }
