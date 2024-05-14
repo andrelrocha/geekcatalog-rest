@@ -22,7 +22,7 @@ public class GameStudioController {
     @GetMapping("/bygameid/{gameId}")
     public ResponseEntity<Page<GameStudioReturnDTO>> getGameGenreByGameId(@PathVariable String gameId,
                                                                           @RequestParam(defaultValue = "0") int page,
-                                                                          @RequestParam(defaultValue = "20") int size) {
+                                                                          @RequestParam(defaultValue = "100") int size) {
         var pageable = PageRequest.of(page, size);
         var gamesPageable = service.getAllGameStudiosByGameId(gameId, pageable);
         return ResponseEntity.ok(gamesPageable);

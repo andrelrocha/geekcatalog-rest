@@ -1,12 +1,15 @@
 package rocha.andre.api.domain.gameGenre;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import rocha.andre.api.domain.genres.DTO.GenreReturnDTO;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public interface GameGenreRepository extends JpaRepository<GameGenre, UUID> {
@@ -38,4 +41,15 @@ public interface GameGenreRepository extends JpaRepository<GameGenre, UUID> {
             WHERE gg.game.id = :gameId
             """)
     ArrayList<String> findAllGenresNamesByGameId(UUID gameId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GameGenre gg WHERE gg.game.id = :gameId AND gg.genre.id NOT IN :genreIds")
+    void deleteGenresByGameIdAndGenreIds(UUID gameId, List<UUID> genreIds);
+
+    @Query("""
+            SELECT gg.genre.id FROM GameGenre gg
+            WHERE gg.game.id = :gameId
+            """)
+    ArrayList<UUID> findAllGenreIdsByGameId(UUID gameId);
 }

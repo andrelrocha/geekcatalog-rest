@@ -19,7 +19,7 @@ public class GameConsoleController {
     @GetMapping("/bygameid/{gameId}")
     public ResponseEntity<Page<GameConsoleReturnDTO>> getGameConsolesByGameId(@PathVariable String gameId,
                                                                               @RequestParam(defaultValue = "0") int page,
-                                                                              @RequestParam(defaultValue = "20") int size) {
+                                                                              @RequestParam(defaultValue = "50") int size) {
         var pageable = PageRequest.of(page, size);
         var gamesPageable = gameConsoleService.getAllGameConsolesByGameId(gameId, pageable);
         return ResponseEntity.ok(gamesPageable);
