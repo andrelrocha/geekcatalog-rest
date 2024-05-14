@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreDTO;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreReturnDTO;
+import rocha.andre.api.domain.gameGenre.DTO.UpdateGameGenreDTO;
 import rocha.andre.api.domain.gameStudio.DTO.GameStudioDTO;
 import rocha.andre.api.domain.gameStudio.DTO.GameStudioReturnDTO;
+import rocha.andre.api.domain.gameStudio.DTO.UpdateGameStudioDTO;
 import rocha.andre.api.service.GameGenreService;
 import rocha.andre.api.service.GameStudioService;
 
@@ -32,5 +34,11 @@ public class GameStudioController {
     public ResponseEntity<GameStudioReturnDTO> createGameGenre(@RequestBody GameStudioDTO data) {
         var newGameStudio = service.createGameStudios(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(newGameStudio);
+    }
+
+    @PutMapping("/update/{gameId}")
+    public ResponseEntity<Page<GameStudioReturnDTO>> updateGameStudio(@RequestBody UpdateGameStudioDTO data, @PathVariable String gameId) {
+        var updatedGameStudio  = service.updateGameStudios(data, gameId);
+        return ResponseEntity.ok(updatedGameStudio);
     }
 }

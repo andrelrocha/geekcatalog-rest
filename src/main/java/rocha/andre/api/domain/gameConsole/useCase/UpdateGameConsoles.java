@@ -42,7 +42,7 @@ public class UpdateGameConsoles {
         }
 
         var game = gameRepository.findById(gameIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado id do jogo no update game genre"));
+                .orElseThrow(() -> new ValidationException("Não foi encontrado id do jogo no update game console"));
 
         if (new HashSet<>(consoles).containsAll(consolesIdDataUUID) && new HashSet<>(consolesIdDataUUID).containsAll(consoles)) {
             return null;
@@ -54,7 +54,7 @@ public class UpdateGameConsoles {
                         continue;
                     }
                     var console = consoleRepository.findById(consoleIdUUID)
-                            .orElseThrow(() -> new ValidationException("Não foi encontrado id do genre no update game genre"));
+                            .orElseThrow(() -> new ValidationException("Não foi encontrado id do console no update game console"));
 
                     var gameConsoleDTO = new CreateGameConsoleDTO(game, console);
                     var gameConsole = new GameConsole(gameConsoleDTO);
