@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import rocha.andre.api.domain.fullGame_mobile.DTO.FullGameUpdateDTO;
 import rocha.andre.api.domain.game.DTO.GameDTO;
 import rocha.andre.api.domain.game.useCase.UpdateGame;
-import rocha.andre.api.domain.gameGenre.DTO.UpdateGameGenreDTO;
 import rocha.andre.api.domain.gameGenre.useCase.UpdateGameGenres;
 
 @Service

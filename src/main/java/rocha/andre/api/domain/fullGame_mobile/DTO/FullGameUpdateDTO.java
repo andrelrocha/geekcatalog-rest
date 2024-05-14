@@ -6,8 +6,8 @@ import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
 
 import java.util.ArrayList;
 
-public record FullGameUpdateDTO(String name, Integer metacritic, Integer yearOfRelease, ArrayList<ConsoleReturnDTO> consoles, ArrayList<String> genres, ArrayList<StudioReturnFullGameInfo> studios) {
-    public FullGameUpdateDTO(Game game, ArrayList<ConsoleReturnDTO> consoles, ArrayList<String> genres, ArrayList<StudioReturnFullGameInfo> studios) {
+public record FullGameUpdateDTO(String name, Integer metacritic, Integer yearOfRelease, ArrayList<String> consoles, ArrayList<String> genres, ArrayList<StudioReturnFullGameInfo> studios) {
+    public FullGameUpdateDTO(Game game, ArrayList<String> consoles, ArrayList<String> genres, ArrayList<StudioReturnFullGameInfo> studios) {
         this(game.getName(), game.getMetacritic(), game.getYearOfRelease(), consoles, genres, studios);
     }
 }

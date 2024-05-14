@@ -1,12 +1,15 @@
 package rocha.andre.api.domain.gameConsole;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public interface GameConsoleRepository extends JpaRepository<GameConsole, UUID> {
@@ -39,4 +42,14 @@ public interface GameConsoleRepository extends JpaRepository<GameConsole, UUID> 
         """)
     ArrayList<ConsoleReturnDTO> findAllConsolesInfoByGameId(UUID gameId);
 
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GameConsole gc WHERE gc.game.id = :gameId AND gc.console.id NOT IN :consoleIds")
+    void deleteConsolesByGameIdAndConsoleIds(UUID gameId, List<UUID> consoleIds);
+
+    @Query("""
+            SELECT gc.console.id FROM GameConsole gc
+            WHERE gc.game.id = :gameId
+            """)
+    ArrayList<UUID> findAllConsoleIdsByGameId(UUID gameId);
 }

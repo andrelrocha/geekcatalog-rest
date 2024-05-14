@@ -6,8 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rocha.andre.api.domain.gameConsole.DTO.GameConsoleDTO;
 import rocha.andre.api.domain.gameConsole.DTO.GameConsoleReturnDTO;
+import rocha.andre.api.domain.gameConsole.DTO.UpdateGameConsoleDTO;
 import rocha.andre.api.domain.gameConsole.useCase.CreateGameConsole;
 import rocha.andre.api.domain.gameConsole.useCase.GetAllGameConsolesByGameID;
+import rocha.andre.api.domain.gameConsole.useCase.UpdateGameConsoles;
 import rocha.andre.api.service.GameConsoleService;
 
 @Service
@@ -16,6 +18,8 @@ public class GameConsoleServiceImpl implements GameConsoleService {
     private CreateGameConsole createGameConsole;
     @Autowired
     private GetAllGameConsolesByGameID getAllGameConsolesByGameID;
+    @Autowired
+    private UpdateGameConsoles updateGameConsoles;
 
     @Override
     public Page<GameConsoleReturnDTO> getAllGameConsolesByGameId(String gameId, Pageable pageable) {
@@ -27,5 +31,11 @@ public class GameConsoleServiceImpl implements GameConsoleService {
     public GameConsoleReturnDTO createGameConsole(GameConsoleDTO data) {
         var newGameConsole = createGameConsole.createGameConsole(data);
         return newGameConsole;
+    }
+
+    @Override
+    public Page<GameConsoleReturnDTO> updateGameConsoles(UpdateGameConsoleDTO data, String gameId) {
+        var updatedGameConsoles = updateGameConsoles.updateGameConsoles(data, gameId);
+        return updatedGameConsoles;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.gameConsole.DTO.GameConsoleDTO;
 import rocha.andre.api.domain.gameConsole.DTO.GameConsoleReturnDTO;
+import rocha.andre.api.domain.gameConsole.DTO.UpdateGameConsoleDTO;
 import rocha.andre.api.service.GameConsoleService;
 
 @RestController
@@ -29,5 +30,11 @@ public class GameConsoleController {
     public ResponseEntity<GameConsoleReturnDTO> createGameConsole(@RequestBody GameConsoleDTO data) {
         var newGameConsole = gameConsoleService.createGameConsole(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(newGameConsole);
+    }
+
+    @PutMapping("/update/{gameId}")
+    public ResponseEntity<Page<GameConsoleReturnDTO>> updateGameConsole(@RequestBody UpdateGameConsoleDTO data, @PathVariable String gameId) {
+        var gameConsoles = gameConsoleService.updateGameConsoles(data, gameId);
+        return ResponseEntity.ok(gameConsoles);
     }
 }
