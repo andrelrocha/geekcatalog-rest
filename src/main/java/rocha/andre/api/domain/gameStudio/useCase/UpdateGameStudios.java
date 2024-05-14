@@ -61,7 +61,9 @@ public class UpdateGameStudios {
                     gameStudioRepository.save(gameStudio);
                 }
             }
-            if (!new HashSet<>(studiosIdDataUUID).containsAll(studios)) {
+            if (studiosIdDataUUID.isEmpty()) {
+                gameStudioRepository.deleteAllByGameId(gameIdUUID);
+            } else if (!new HashSet<>(studiosIdDataUUID).containsAll(studios)) {
                 gameStudioRepository.deleteStudiosByGameIdAndStudioIds(gameIdUUID,studiosIdDataUUID);
             }
         }

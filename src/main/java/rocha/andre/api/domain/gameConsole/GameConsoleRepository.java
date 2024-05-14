@@ -52,4 +52,9 @@ public interface GameConsoleRepository extends JpaRepository<GameConsole, UUID> 
             WHERE gc.game.id = :gameId
             """)
     ArrayList<UUID> findAllConsoleIdsByGameId(UUID gameId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GameConsole gc WHERE gc.game.id = :gameId")
+    void deleteAllByGameId(UUID gameId);
 }

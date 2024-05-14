@@ -62,8 +62,10 @@ public class UpdateGameGenres {
                     gameGenreRepository.save(gameGenre);
                 }
             }
-            if (!new HashSet<>(genresIdDataUUID).containsAll(genres)) {
-                gameGenreRepository.deleteGenresByGameIdAndGenreIds(gameIdUUID,genresIdDataUUID);
+            if (genresIdDataUUID.isEmpty()) {
+                gameGenreRepository.deleteAllByGameId(gameIdUUID);
+            } else if (!new HashSet<>(genresIdDataUUID).containsAll(genres)) {
+                gameGenreRepository.deleteGenresByGameIdAndGenreIds(gameIdUUID, genresIdDataUUID);
             }
         }
 

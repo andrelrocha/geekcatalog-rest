@@ -52,4 +52,9 @@ public interface GameGenreRepository extends JpaRepository<GameGenre, UUID> {
             WHERE gg.game.id = :gameId
             """)
     ArrayList<UUID> findAllGenreIdsByGameId(UUID gameId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GameGenre gg WHERE gg.game.id = :gameId")
+    void deleteAllByGameId(UUID gameId);
 }

@@ -53,4 +53,9 @@ public interface GameStudioRepository extends JpaRepository<GameStudio, UUID> {
             WHERE gs.game.id = :gameId
             """)
     ArrayList<UUID> findAllStudioIdsByGameId(UUID gameId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM GameStudio gs WHERE gs.game.id = :gameId")
+    void deleteAllByGameId(UUID gameId);
 }

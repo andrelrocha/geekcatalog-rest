@@ -61,7 +61,9 @@ public class UpdateGameConsoles {
                     gameConsoleRepository.save(gameConsole);
                 }
             }
-            if (!new HashSet<>(consolesIdDataUUID).containsAll(consoles)) {
+            if (consolesIdDataUUID.isEmpty()) {
+                gameConsoleRepository.deleteAllByGameId(gameIdUUID);
+            }else if (!new HashSet<>(consolesIdDataUUID).containsAll(consoles)) {
                 gameConsoleRepository.deleteConsolesByGameIdAndConsoleIds(gameIdUUID,consolesIdDataUUID);
             }
         }
