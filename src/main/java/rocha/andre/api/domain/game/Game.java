@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import rocha.andre.api.domain.game.DTO.GameDTO;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -33,6 +34,12 @@ public class Game {
     @Column(name = "metacritic")
     private Integer metacritic;
 
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     public Game(GameDTO gameDTO) {
         this.name = gameDTO.name();
         this.yearOfRelease = gameDTO.yearOfRelease();
@@ -49,5 +56,16 @@ public class Game {
         if (dto.metacritic() != 0) {
             this.metacritic = dto.metacritic();
         }
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }
