@@ -61,6 +61,12 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime tokenExpiration;
 
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     public User(UserCreateDTO dto) {
         this.login = dto.data().login();
         this.password = dto.data().password();
@@ -137,6 +143,17 @@ public class User implements UserDetails {
         if (data.country() != null) {
             this.country = data.country();
         }
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
     public void updateCountry(Country country) {
