@@ -1,13 +1,13 @@
-package rocha.andre.api.domain.imageGame.useCase;
+package rocha.andre.api.domain.imageGame_legacy.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import rocha.andre.api.domain.game.GameRepository;
-import rocha.andre.api.domain.imageGame.DTO.ImageGameDTO;
-import rocha.andre.api.domain.imageGame.DTO.ImageGameReturnDTO;
-import rocha.andre.api.domain.imageGame.ImageGame;
-import rocha.andre.api.domain.imageGame.ImageGameRepository;
+import rocha.andre.api.domain.imageGame_legacy.DTO.ImageGameLegacyDTO;
+import rocha.andre.api.domain.imageGame_legacy.DTO.ImageGameReturnLegacyDTO;
+import rocha.andre.api.domain.imageGame_legacy.ImageGameLegacy;
+import rocha.andre.api.domain.imageGame_legacy.ImageGameLegacyRepository;
 import rocha.andre.api.infra.exceptions.ValidationException;
 import rocha.andre.api.infra.utils.imageCompress.ImageUtils;
 
@@ -18,42 +18,42 @@ import java.io.IOException;
 @Component
 public class AddImageGame {
     @Autowired
-    private ImageGameRepository imageGameRepository;
+    private ImageGameLegacyRepository imageGameLegacyRepository;
     @Autowired
     private GameRepository gameRepository;
 
-    public ImageGameReturnDTO addImageGame(ImageGameDTO dto) throws IOException {
+    public ImageGameReturnLegacyDTO addImageGame(ImageGameLegacyDTO dto) throws IOException {
         var game = gameRepository.findById(dto.gameId())
                 .orElseThrow(() -> new ValidationException("Não foi encontrado jogo com o id informado."));
 
-        var existsByGameId = imageGameRepository.existsByGameId(game.getId());
+        var existsByGameId = imageGameLegacyRepository.existsByGameId(game.getId());
 
         if (existsByGameId) {
             var imageUpdated = updateImage(dto);
-            return new ImageGameReturnDTO(imageUpdated);
+            return new ImageGameReturnLegacyDTO(imageUpdated);
         }
 
         var compressedImageBytes = compressImage(dto.imageFile());
 
-        var imageGame = ImageGame.builder()
+        var imageGame = ImageGameLegacy.builder()
                 .game(game)
                 .image(compressedImageBytes)
                 .build();
 
-        var imageGameOnDB = imageGameRepository.save(imageGame);
+        var imageGameOnDB = imageGameLegacyRepository.save(imageGame);
 
-        return new ImageGameReturnDTO(imageGameOnDB);
+        return new ImageGameReturnLegacyDTO(imageGameOnDB);
     }
 
 
-    private ImageGame updateImage(ImageGameDTO dto) throws IOException {
-        var imageGame = imageGameRepository.findImageGameByGameId(dto.gameId());
+    private ImageGameLegacy updateImage(ImageGameLegacyDTO dto) throws IOException {
+        var imageGame = imageGameLegacyRepository.findImageGameByGameId(dto.gameId());
 
         var compressedImageBytes = compressImage(dto.imageFile());
 
         imageGame.updateImage(compressedImageBytes);
 
-        var imageOnDB = imageGameRepository.save(imageGame);
+        var imageOnDB = imageGameLegacyRepository.save(imageGame);
 
         return imageOnDB;
     }

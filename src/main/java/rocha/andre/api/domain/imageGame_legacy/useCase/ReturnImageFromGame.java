@@ -1,8 +1,8 @@
-package rocha.andre.api.domain.imageGame.useCase;
+package rocha.andre.api.domain.imageGame_legacy.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import rocha.andre.api.domain.imageGame.ImageGameRepository;
+import rocha.andre.api.domain.imageGame_legacy.ImageGameLegacyRepository;
 import rocha.andre.api.infra.exceptions.ValidationException;
 import rocha.andre.api.infra.utils.imageCompress.ImageUtils;
 
@@ -12,7 +12,7 @@ import java.util.UUID;
 public class ReturnImageFromGame {
 
     @Autowired
-    private ImageGameRepository repository;
+    private ImageGameLegacyRepository repository;
 
     public byte[] returnImage(UUID gameId) throws Exception {
         var imageGame = repository.findImageGameByGameId(gameId);

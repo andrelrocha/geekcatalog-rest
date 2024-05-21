@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.imageGame;
+package rocha.andre.api.domain.imageGame_legacy;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,14 +9,14 @@ import rocha.andre.api.domain.game.Game;
 
 import java.util.UUID;
 
-@Entity(name = "ImageGame")
-@Table(name = "image_game")
+@Entity(name = "ImageGameLegacy")
+@Table(name = "image_game_legacy")
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class ImageGame {
+public class ImageGameLegacy {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -28,15 +28,15 @@ public class ImageGame {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Game game;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "image", columnDefinition = "bytea")
+    private byte[] image;
 
-    public ImageGame(String imageUrl, Game game) {
-        this.imageUrl = imageUrl;
+    public ImageGameLegacy(byte[] imageFile, Game game) {
+        this.image = imageFile;
         this.game = game;
     }
 
-    public void updateImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void updateImage(byte[] imageFile) {
+        this.image = imageFile;
     }
 }

@@ -4,8 +4,8 @@ import rocha.andre.api.domain.imageGame.ImageGame;
 
 import java.util.UUID;
 
-public record ImageGameReturnDTO(UUID gameId, byte[] imageFile) {
+public record ImageGameReturnDTO(UUID gameId, String imageUrl) {
     public ImageGameReturnDTO(ImageGame imageGame) {
-        this(imageGame.getGame().getId(), imageGame.getImage());
+        this(imageGame.getGame().getId(), imageGame.getImageUrl());
     }
 }

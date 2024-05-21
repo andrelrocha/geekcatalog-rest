@@ -8,7 +8,6 @@ import rocha.andre.api.domain.imageGame.DTO.ImageGameIdDTO;
 import rocha.andre.api.domain.imageGame.ImageGameRepository;
 
 
-
 @Component
 public class ReturnAllImageGamesID {
     @Autowired
