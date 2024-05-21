@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import rocha.andre.api.domain.imageGame_legacy.DTO.ImageGameLegacyDTO;
 import rocha.andre.api.domain.imageGame_legacy.DTO.ImageGameLegacyIdDTO;
 import rocha.andre.api.domain.imageGame_legacy.DTO.ImageGameReturnLegacyDTO;
-import rocha.andre.api.domain.imageGame_legacy.useCase.AddImageGame;
+import rocha.andre.api.domain.imageGame_legacy.useCase.AddImageGameLegacy;
 import rocha.andre.api.domain.imageGame_legacy.useCase.ReturnAllImageGamesLegacyID;
 import rocha.andre.api.domain.imageGame_legacy.useCase.ReturnAllImageGamesPageable;
 import rocha.andre.api.domain.imageGame_legacy.useCase.ReturnImageFromGame;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Service
 public class ImageGameLegacyServiceImpl implements ImageGameLegacyService {
     @Autowired
-    private AddImageGame addImageGame;
+    private AddImageGameLegacy addImageGameLegacy;
     @Autowired
     private ReturnAllImageGamesLegacyID returnAllImageGamesLegacyID;
     @Autowired
@@ -31,7 +31,7 @@ public class ImageGameLegacyServiceImpl implements ImageGameLegacyService {
     @Override
     public ImageGameReturnLegacyDTO addImageGame(MultipartFile file, UUID gameId) throws IOException {
         var ImageGameDTO = new ImageGameLegacyDTO(file, gameId);
-        var imageGame = addImageGame.addImageGame(ImageGameDTO);
+        var imageGame = addImageGameLegacy.addImageGame(ImageGameDTO);
         return imageGame;
     }
 

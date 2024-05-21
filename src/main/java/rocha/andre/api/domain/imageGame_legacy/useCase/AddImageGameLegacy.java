@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 @Component
-public class AddImageGame {
+public class AddImageGameLegacy {
     @Autowired
     private ImageGameLegacyRepository imageGameLegacyRepository;
     @Autowired
