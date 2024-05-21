@@ -1,0 +1,22 @@
+{
+  "Version": "2012-10-17",
+  "Id": "Policy1716296282688",
+  "Statement": [
+    {
+      "Sid": "Stmt1716296269455",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::IDENTIFICADOR12DIGITOS:user/USERNAME"
+      },
+      "Action": "s3:*",
+      "Resource": "arn:aws:s3:::NOMEBUCKET/*"
+    },
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::NOMEBUCKET/*"
+    }
+  ]
+}

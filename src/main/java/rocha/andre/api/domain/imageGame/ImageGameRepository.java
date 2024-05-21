@@ -11,9 +11,7 @@ import java.util.UUID;
 
 public interface ImageGameRepository  extends JpaRepository<ImageGame, UUID> {
 
-    boolean existsByGameId(UUID game_id);
 
-    ImageGame findImageGameByGameId(UUID game_id);
 
     @Query("""
         SELECT ig.game.id FROM ImageGame ig
@@ -23,6 +21,7 @@ public interface ImageGameRepository  extends JpaRepository<ImageGame, UUID> {
 
     @Query("""
             SELECT ig FROM ImageGame ig
+            ORDER BY ig.game.name
             """)
     Page<ImageGame> findAllImageGames(Pageable pageable);
 
