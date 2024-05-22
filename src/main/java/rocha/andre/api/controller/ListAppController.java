@@ -31,13 +31,14 @@ public class ListAppController {
         return ResponseEntity.ok(newList);
     }
 
-    /*
-    @PutMapping("/update/{gameId}")
-    public ResponseEntity updateList(@RequestBody GameDTO data, @PathVariable String gameId) {
-        var updatedGame = gameService.updateGame(data, gameId);
-        return ResponseEntity.ok(updatedGame);
+
+    @PutMapping("/update/{listId}")
+    public ResponseEntity updateList(@RequestBody ListAppDTO data, @PathVariable String listId) {
+        var updatedList = listAppService.updateListApp(data, listId);
+        return ResponseEntity.ok(updatedList);
     }
 
+    /*
     @DeleteMapping("/delete/{gameId}")
     public ResponseEntity deleteList(@PathVariable string gameId) {
 

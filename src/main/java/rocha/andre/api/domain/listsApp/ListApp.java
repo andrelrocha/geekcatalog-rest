@@ -30,10 +30,10 @@ public class ListApp {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 200)
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 300)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

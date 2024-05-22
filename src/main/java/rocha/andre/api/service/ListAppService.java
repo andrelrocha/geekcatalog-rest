@@ -5,4 +5,5 @@ import rocha.andre.api.domain.listsApp.DTO.ListAppReturnDTO;
 
 public interface ListAppService {
     ListAppReturnDTO createListApp(ListAppDTO data);
+    ListAppReturnDTO updateListApp(ListAppDTO data, String listId);
 }
