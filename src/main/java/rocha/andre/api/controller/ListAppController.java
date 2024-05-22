@@ -1,6 +1,8 @@
 package rocha.andre.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.listsApp.DTO.ListAppDTO;
@@ -12,18 +14,16 @@ public class ListAppController {
     @Autowired
     private ListAppService listAppService;
 
-
-    /*
-    @GetMapping("/getall")
-    public ResponseEntity getAllGamesPageable ( @RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "16") int size,
+    @GetMapping("/getall/{userId}")
+    public ResponseEntity getAllListsPageable ( @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "12") int size,
                                                 @RequestParam(defaultValue = "name") String sortField,
-                                                @RequestParam(defaultValue = "asc") String sortOrder) {
+                                                @RequestParam(defaultValue = "asc") String sortOrder,
+                                                @PathVariable String userId) {
         var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
-        var gamesPageable = gameService.getAllGames(pageable);
-        return ResponseEntity.ok(gamesPageable);
+        var listsPageable = listAppService.getAllListsByUserId(userId, pageable);
+        return ResponseEntity.ok(listsPageable);
     }
-    */
 
     @PostMapping("/create")
     public ResponseEntity createList(@RequestBody ListAppDTO data) {
