@@ -38,11 +38,11 @@ public class ListAppController {
         return ResponseEntity.ok(updatedList);
     }
 
-    /*
-    @DeleteMapping("/delete/{gameId}")
-    public ResponseEntity deleteList(@PathVariable string gameId) {
-
-    
+    @DeleteMapping("/delete/{listId}")
+    public ResponseEntity deleteList(@PathVariable String listId, @RequestHeader("Authorization") String authorizationHeader) {
+        var tokenJWT = authorizationHeader.substring(7);
+        listAppService.deleteList(listId, tokenJWT);
+        return ResponseEntity.noContent().build();
     }
-     */
+
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import rocha.andre.api.domain.listsApp.DTO.ListAppDTO;
 import rocha.andre.api.domain.listsApp.DTO.ListAppReturnDTO;
 import rocha.andre.api.domain.listsApp.useCase.CreateList;
+import rocha.andre.api.domain.listsApp.useCase.DeleteList;
 import rocha.andre.api.domain.listsApp.useCase.UpdateList;
 import rocha.andre.api.service.ListAppService;
 
@@ -12,6 +13,8 @@ import rocha.andre.api.service.ListAppService;
 public class ListAppServiceImpl implements ListAppService {
     @Autowired
     private CreateList createList;
+    @Autowired
+    private DeleteList deleteList;
     @Autowired
     private UpdateList updateList;
 
@@ -25,5 +28,10 @@ public class ListAppServiceImpl implements ListAppService {
     public ListAppReturnDTO updateListApp(ListAppDTO data, String listId) {
         var updatedList = updateList.updateListApp(data, listId);
         return updatedList;
+    }
+
+    @Override
+    public void deleteList(String listId, String tokenJWT) {
+        deleteList.deleteList(listId, tokenJWT);
     }
 }
