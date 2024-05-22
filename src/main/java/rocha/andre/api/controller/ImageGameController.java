@@ -2,11 +2,9 @@ package rocha.andre.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import rocha.andre.api.domain.imageGame.useCase.AddImageGame;
 import rocha.andre.api.service.ImageGameService;
 
 import java.io.IOException;
