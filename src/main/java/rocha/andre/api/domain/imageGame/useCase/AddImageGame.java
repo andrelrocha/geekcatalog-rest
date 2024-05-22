@@ -46,9 +46,15 @@ public class AddImageGame {
                 .imageUrl(imageUrl)
                 .build();
 
-        var imageGameOnDB = imageGameRepository.save(imageGame);
+        var existsByGameId = imageGameRepository.existsByGameId(imageGame.getGame().getId());
 
-        return new ImageGameReturnDTO(imageGameOnDB);
+        if (!existsByGameId) {
+            var imageGameOnDB = imageGameRepository.save(imageGame);
+
+            return new ImageGameReturnDTO(imageGameOnDB);
+        }
+
+        return new ImageGameReturnDTO(imageGame);
     }
 
     private String uploadImageToS3(S3Client s3Client, MultipartFile imageBytes, UUID gameId) throws IOException {

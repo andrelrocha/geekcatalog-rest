@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface ImageGameRepository  extends JpaRepository<ImageGame, UUID> {
 
-
+    boolean existsByGameId(UUID gameId);
 
     @Query("""
         SELECT ig.game.id FROM ImageGame ig
