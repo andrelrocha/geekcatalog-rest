@@ -18,4 +18,10 @@ public class ListPermissionUserController {
         var newListPermissionUser = listPermissionUserService.addPermissionToUserOnList(data);
         return ResponseEntity.ok(newListPermissionUser);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteListPermissionUser(@RequestBody ListPermissionUserDTO data) {
+        listPermissionUserService.deleteListPermission(data);
+        return ResponseEntity.noContent().build();
+    }
 }

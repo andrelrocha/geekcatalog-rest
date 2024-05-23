@@ -5,4 +5,5 @@ import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserReturnDTO
 
 public interface ListPermissionUserService {
     ListPermissionUserReturnDTO addPermissionToUserOnList(ListPermissionUserDTO data);
+    void deleteListPermission(ListPermissionUserDTO data);
 }

@@ -14,4 +14,13 @@ public interface ListPermissionUserRepository extends JpaRepository<ListPermissi
             AND lpu.permission.id = :permissionId
             """)
     boolean existsByParticipantIdAndListIdAndPermissionId(UUID participantId, UUID listId, UUID permissionId);
+
+    @Query("""
+            SELECT lpu
+            FROM ListPermissionUser lpu
+            WHERE lpu.participant.id = :participantId
+            AND lpu.list.id = :listId
+            AND lpu.permission.id = :permissionId
+            """)
+    ListPermissionUser findByParticipantIdAndListIdAndPermissionId(UUID participantId, UUID listId, UUID permissionId);
 }
