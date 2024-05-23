@@ -33,7 +33,7 @@ public class CreateList {
             throw new ValidationException("Não foi encontrado usuário com o id informado no processo de criação de lista");
         }
 
-        var listCreateDTO = new ListAppCreateDTO(data.name(), data.description(), user);
+        var listCreateDTO = new ListAppCreateDTO(data.name(), data.description(), data.visibility(), user);
 
         var listApp = new ListApp(listCreateDTO);
 

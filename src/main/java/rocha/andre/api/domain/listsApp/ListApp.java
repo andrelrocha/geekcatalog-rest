@@ -47,10 +47,14 @@ public class ListApp {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "visibility")
+    private boolean visibility;
+
     public ListApp(ListAppCreateDTO dto) {
         this.name = dto.name();
         this.description = dto.description();
         this.user = dto.user();
+        this.visibility = dto.visibility();
     }
 
     public void updateList(ListAppDTO dto) {
@@ -60,6 +64,7 @@ public class ListApp {
         if (dto.description() != null) {
             this.description = dto.description();
         }
+        this.visibility = dto.visibility();
     }
 
     @PrePersist
