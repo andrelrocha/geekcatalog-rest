@@ -34,4 +34,7 @@ public interface ListPermissionUserRepository extends JpaRepository<ListPermissi
             AND lpu.list.id = :listId
             """)
     List<ListPermissionUser> findAllByParticipantIdAndListId(UUID participantId, UUID listId);
+
+    @Query("SELECT lpu FROM ListPermissionUser lpu WHERE lpu.list.id = :listId")
+    List<ListPermissionUser> findAllByListId(UUID listId);
 }

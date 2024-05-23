@@ -82,7 +82,7 @@ public class ExceptionHandling {
             }
         }
 
-        return ResponseEntity.badRequest().body("Erro de violação de integridade dos dados. Chave primária duplicada.");
+        return ResponseEntity.badRequest().body("Erro de violação de integridade dos dados.");
     }
 
     @ExceptionHandler(RuntimeException.class)

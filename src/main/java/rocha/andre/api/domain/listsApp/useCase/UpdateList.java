@@ -37,6 +37,9 @@ public class UpdateList {
                 var permission = getPermissionByNameENUM.getPermissionByNameOnENUM(updatedEnum);
                 var userPermissionList = listPermissionUserRepository.findByParticipantIdAndListIdAndPermissionId(userIdUUID, listApp.getId(), permission.id());
 
+                if (userPermissionList == null) {
+                    throw new ValidationException(errorMessagePermission);
+                }
                 if (!listApp.getUser().getId().equals(userPermissionList.getOwner().getId())) {
                     throw new ValidationException(errorMessagePermission);
                 }
