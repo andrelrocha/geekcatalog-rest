@@ -26,13 +26,15 @@ public class AddListPermissionUser {
     private PermissionRepository permissionRepository;
 
     public ListPermissionUserReturnDTO addPermissionToUserOnList(ListPermissionUserDTO data) {
-        if (data.participantId() == null || data.ownerId() == null || data.listId() == null || data.permissionId() == null) {
+        if (data.participantLogin() == null || data.ownerId() == null || data.listId() == null || data.permissionId() == null) {
             throw new ValidationException("Todos os campos são obrigatórios no processo de adição de permissões a um usuário sobre uma lista.");
         }
 
-        var participantIdUUID = UUID.fromString(data.participantId());
-        var participantInvited = userRepository.findById(participantIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado como participant no processo de adição de permissões a um usuário sobre uma lista"));
+        var participantInvited = userRepository.findByLoginToHandle(data.participantLogin());
+        if (participantInvited == null) {
+            throw new ValidationException("Não foi encontrado usuário com o login informado como participant no processo de adição de permissões a um usuário sobre uma lista");
+        }
+
         var ownerIdUUID = UUID.fromString(data.ownerId());
         var ownerList = userRepository.findById(ownerIdUUID)
                 .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado como owner no processo de adição de permissões a um usuário sobre uma lista"));
@@ -45,7 +47,7 @@ public class AddListPermissionUser {
         var permission = permissionRepository.findById(permissionIdUUID)
                 .orElseThrow(() -> new ValidationException("Não foi encontrada permissão com o id informado no processo de adição de permissões a um usuário sobre uma lista"));
 
-        var permissionAlreadyExists = listPermissionUserRepository.existsByParticipantIdAndListIdAndPermissionId(participantIdUUID, listAppIdUUID, permissionIdUUID);
+        var permissionAlreadyExists = listPermissionUserRepository.existsByParticipantIdAndListIdAndPermissionId(participantInvited.getId(), listAppIdUUID, permissionIdUUID);
 
         if (permissionAlreadyExists) {
             throw new ValidationException("Já existe uma permissão para a lista e o usuário informados");

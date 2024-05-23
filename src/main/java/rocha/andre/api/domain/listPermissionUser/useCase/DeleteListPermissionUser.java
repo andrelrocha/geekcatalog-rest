@@ -17,7 +17,11 @@ public class DeleteListPermissionUser {
     private UserRepository userRepository;
 
     public void deleteListPermission(ListPermissionUserDTO data) {
-        var participantIdUUID = UUID.fromString(data.participantId());
+        var participantInvited = userRepository.findByLoginToHandle(data.participantLogin());
+        if (participantInvited == null) {
+            throw new ValidationException("Não foi encontrado usuário com o login informado como participant no processo de adição de permissões a um usuário sobre uma lista");
+        }
+
         var listIdUUID = UUID.fromString(data.listId());
         var permissionIdUUID = UUID.fromString(data.permissionId());
 
@@ -25,7 +29,7 @@ public class DeleteListPermissionUser {
         var owner = userRepository.findById(ownerIdUUID)
                 .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado como owner no processo de delete de uma permissao de lista"));
 
-        var listPermissionUser = repository.findByParticipantIdAndListIdAndPermissionId(participantIdUUID, listIdUUID, permissionIdUUID);
+        var listPermissionUser = repository.findByParticipantIdAndListIdAndPermissionId(participantInvited.getId(), listIdUUID, permissionIdUUID);
 
         if (!listPermissionUser.getOwner().equals(owner)) {
             throw new ValidationException("O usuário que está tentando apagar uma permissão não é o dono da lista e não tem permissão para a operação realizada.");
