@@ -22,7 +22,8 @@ public class UpdateList {
                 .orElseThrow(() -> new ValidationException("Não foi encontrada lista com o id informado no processo de update da lista"));
 
         if (!listApp.getUser().getId().equals(userIdUUID)) {
-            throw new ValidationException("O usuário que está tentando editar a lista não é o proprietário da mesma.");
+            //se o usuário nao é o mesmo da solicitação, faz a query para lists_permission_user para recuperar o ownerId, e então se não tiver, ele estoura o erro
+            throw new ValidationException("O usuário que está tentando editar a lista não é o proprietário da mesma e nem tem permissão para a operação.");
         }
 
         listApp.updateList(data);
