@@ -6,10 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rocha.andre.api.domain.listsApp.DTO.ListAppDTO;
 import rocha.andre.api.domain.listsApp.DTO.ListAppReturnDTO;
-import rocha.andre.api.domain.listsApp.useCase.CreateList;
-import rocha.andre.api.domain.listsApp.useCase.DeleteList;
-import rocha.andre.api.domain.listsApp.useCase.GetListPageable;
-import rocha.andre.api.domain.listsApp.useCase.UpdateList;
+import rocha.andre.api.domain.listsApp.useCase.*;
 import rocha.andre.api.service.ListAppService;
 
 @Service
@@ -20,6 +17,8 @@ public class ListAppServiceImpl implements ListAppService {
     private DeleteList deleteList;
     @Autowired
     private GetListPageable getListPageable;
+    @Autowired
+    private GetListPublicPageable getListPublicPageable;
     @Autowired
     private UpdateList updateList;
 
@@ -44,5 +43,11 @@ public class ListAppServiceImpl implements ListAppService {
     public Page<ListAppReturnDTO> getAllListsByUserId(String userId, Pageable pageable) {
         var listPageable = getListPageable.getAllListsByUserId(userId, pageable);
         return listPageable;
+    }
+
+    @Override
+    public Page<ListAppReturnDTO> getAllPublicListsByUserId(String userId, Pageable pageable) {
+        var publicLists = getListPublicPageable.getAllPublicListsByUserId(userId, pageable);
+        return publicLists;
     }
 }

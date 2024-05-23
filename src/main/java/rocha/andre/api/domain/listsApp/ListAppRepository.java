@@ -21,6 +21,13 @@ public interface ListAppRepository extends JpaRepository<ListApp, UUID> {
             """)
     Page<ListApp> findAllListsByUserId(Pageable pageable, UUID userId);
 
+    @Query("""
+            SELECT la FROM ListApp la
+            WHERE la.user.id = :userId
+            AND la.visibility = true
+            """)
+    Page<ListApp> findAllListsPublicByUserId(Pageable pageable, UUID userId);
+
 
     @Query("""
             SELECT la FROM ListApp la
