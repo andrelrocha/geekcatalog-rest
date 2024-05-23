@@ -21,4 +21,10 @@ public interface PermissionRepository extends JpaRepository<Permission, UUID> {
 
     @Query("SELECT p FROM Permission p ORDER BY p.permission ASC")
     Page<Permission> findAllPermissionOrderedByName(Pageable pageable);
+
+    @Query("""
+            SELECT p FROM Permission p
+            WHERE p.permission = :permissionEnum
+            """)
+    Permission findByPermissionName(String permissionEnum);
 }

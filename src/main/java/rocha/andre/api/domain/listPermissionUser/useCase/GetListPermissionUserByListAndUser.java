@@ -1,7 +1,6 @@
 package rocha.andre.api.domain.listPermissionUser.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserReturnDTO;
 import rocha.andre.api.domain.listPermissionUser.ListPermissionUserRepository;
