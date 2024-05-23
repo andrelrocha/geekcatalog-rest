@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface PermissionRepository extends JpaRepository<Permission, UUID> {
     @Query("""
-            SELECT p.name FROM Permission p
+            SELECT p.permission FROM Permission p
             """)
     List<String> findAllPermissionsNames(Pageable pageable);
     @Query("""

@@ -22,6 +22,6 @@ public class Permission {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "name", nullable = false, length = 20)
-    private String name;
+    @Column(name = "permission", nullable = false, length = 20)
+    private String permission;
 }
