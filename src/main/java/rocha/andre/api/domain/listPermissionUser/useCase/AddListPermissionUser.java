@@ -2,13 +2,17 @@ package rocha.andre.api.domain.listPermissionUser.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserCreateDTO;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserDTO;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserReturnDTO;
 import rocha.andre.api.domain.listPermissionUser.ListPermissionUser;
 import rocha.andre.api.domain.listPermissionUser.ListPermissionUserRepository;
+import rocha.andre.api.domain.listsApp.ListApp;
 import rocha.andre.api.domain.listsApp.ListAppRepository;
+import rocha.andre.api.domain.permission.PermissionEnum;
 import rocha.andre.api.domain.permission.PermissionRepository;
+import rocha.andre.api.domain.user.User;
 import rocha.andre.api.domain.user.UserRepository;
 import rocha.andre.api.infra.exceptions.ValidationException;
 
@@ -24,6 +28,8 @@ public class AddListPermissionUser {
     private UserRepository userRepository;
     @Autowired
     private PermissionRepository permissionRepository;
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
     public ListPermissionUserReturnDTO addPermissionToUserOnList(ListPermissionUserDTO data) {
         if (data.participantLogin() == null || data.ownerId() == null || data.listId() == null || data.permissionId() == null) {
@@ -57,8 +63,31 @@ public class AddListPermissionUser {
 
         var listPermissionUser = new ListPermissionUser(createDTO);
 
-        var listPermissionUserOnDB = listPermissionUserRepository.save(listPermissionUser);
+        final ListPermissionUser[] listPermissionUserOnDB = new ListPermissionUser[1];
+        transactionTemplate.execute(status -> {
+            try {
+                listPermissionUserOnDB[0] = listPermissionUserRepository.save(listPermissionUser);
+                createReadPermissionIfNotExists(participantInvited, listApp, ownerList);
+            } catch (Exception e) {
+                status.setRollbackOnly();
+                throw new RuntimeException("Ocorreu um erro na transação de adição de uma permissão para um usuário sobre uma lista", e);
+            }
+            return null;
+        });
 
-        return new ListPermissionUserReturnDTO(listPermissionUserOnDB);
+        return new ListPermissionUserReturnDTO(listPermissionUserOnDB[0]);
+    }
+
+    public void createReadPermissionIfNotExists(User participantInvited, ListApp listApp, User owner) {
+        var readEnum = (PermissionEnum.READ).toString();
+        var permission = permissionRepository.findByPermissionName(readEnum);
+
+        var existsReadPermission = listPermissionUserRepository.existsByParticipantIdAndListIdAndPermissionId(participantInvited.getId(), listApp.getId(), permission.getId());
+
+        if (!existsReadPermission) {
+            var createDTO = new ListPermissionUserCreateDTO(listApp, permission, participantInvited, owner);
+            var listPermissionUserRead = new ListPermissionUser(createDTO);
+            listPermissionUserRepository.save(listPermissionUserRead);
+        }
     }
 }
