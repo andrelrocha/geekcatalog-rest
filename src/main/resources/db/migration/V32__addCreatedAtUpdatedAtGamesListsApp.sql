@@ -1,0 +1,3 @@
+ALTER TABLE games_list
+ADD COLUMN created_at TIMESTAMP,
+ADD COLUMN updated_at TIMESTAMP;
