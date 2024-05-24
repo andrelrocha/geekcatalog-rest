@@ -27,6 +27,12 @@ public class ListPermissionUserController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/deleteall")
+    public ResponseEntity deleteAllListPermissionUser(@RequestBody ListPermissionUserDTO data) {
+        listPermissionUserService.deleteAllListPermission(data);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/getall/{listId}")
     public ResponseEntity getAllListsPermissionPageable (@PathVariable String listId,
                                                          @RequestHeader("Authorization") String authorizationHeader) {

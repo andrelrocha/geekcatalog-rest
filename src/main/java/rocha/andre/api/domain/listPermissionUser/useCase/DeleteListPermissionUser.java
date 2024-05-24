@@ -31,7 +31,9 @@ public class DeleteListPermissionUser {
 
         var listPermissionUser = repository.findByParticipantIdAndListIdAndPermissionId(participantInvited.getId(), listIdUUID, permissionIdUUID);
 
-        if (!listPermissionUser.getOwner().equals(owner)) {
+        if (listPermissionUser == null) {
+            throw new ValidationException("Não foram encontrados registros de permissão do usuário sobre a lista informada.");
+        } else if (!listPermissionUser.getOwner().equals(owner)) {
             throw new ValidationException("O usuário que está tentando apagar uma permissão não é o dono da lista e não tem permissão para a operação realizada.");
         }
 
