@@ -14,4 +14,6 @@ public interface ListAppService {
     Page<ListAppReturnDTO> getAllPublicListsByUserId(String userId, Pageable pageable);
     Page<ListAppReturnDTO> getAllListsWithReadPermission(String userId, Pageable pageable);
     Page<ListAppReturnWithGameIdsDTO> getAllListsByUserIdWithLatestGamesID(String userId, Pageable pageable);
+    Page<ListAppReturnWithGameIdsDTO> getAllPublicListsByUserIdWithLatestGamesID(String userId, Pageable pageable);
+    Page<ListAppReturnWithGameIdsDTO> getAllListsWithReadPermissionWithGamesID(String userId, Pageable pageable);
 }

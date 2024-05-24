@@ -25,6 +25,10 @@ public class ListAppServiceImpl implements ListAppService {
     @Autowired
     private GetListPageableWithLatestGamesId getListPageableWithLatestGamesId;
     @Autowired
+    private GetListPublicPageableWithLatestGameID getListPublicPageableWithLatestGameID;
+    @Autowired
+    private GetListWithReadPermissionPageableWithLatestGameID getListWithReadPermissionPageableWithLatestGameID;
+    @Autowired
     private UpdateList updateList;
 
     @Override
@@ -65,6 +69,18 @@ public class ListAppServiceImpl implements ListAppService {
     @Override
     public Page<ListAppReturnWithGameIdsDTO> getAllListsByUserIdWithLatestGamesID(String userId, Pageable pageable) {
         var pageableLists = getListPageableWithLatestGamesId.getAllListsByUserIdWithLatestGamesID(userId, pageable);
+        return pageableLists;
+    }
+
+    @Override
+    public Page<ListAppReturnWithGameIdsDTO> getAllPublicListsByUserIdWithLatestGamesID(String userId, Pageable pageable) {
+        var pageableLists = getListPublicPageableWithLatestGameID.getAllPublicListsByUserIdWithLatestGamesID(userId, pageable);
+        return pageableLists;
+    }
+
+    @Override
+    public Page<ListAppReturnWithGameIdsDTO> getAllListsWithReadPermissionWithGamesID(String userId, Pageable pageable) {
+        var pageableLists = getListWithReadPermissionPageableWithLatestGameID.getAllListsWithReadPermissionWithGamesID(userId, pageable);
         return pageableLists;
     }
 }
