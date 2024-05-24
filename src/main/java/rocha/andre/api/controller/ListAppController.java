@@ -36,6 +36,17 @@ public class ListAppController {
         return ResponseEntity.ok(publicListsPageable);
     }
 
+    @GetMapping("/readpermission/{userId}")
+    public ResponseEntity getAllListsWithReadPermissionPageable (   @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "12") int size,
+                                                                    @RequestParam(defaultValue = "name") String sortField,
+                                                                    @RequestParam(defaultValue = "asc") String sortOrder,
+                                                                    @PathVariable String userId) {
+        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
+        var publicListsPageable = listAppService.getAllListsWithReadPermission(userId, pageable);
+        return ResponseEntity.ok(publicListsPageable);
+    }
+
     @PostMapping("/create")
     public ResponseEntity createList(@RequestBody ListAppDTO data) {
         var newList = listAppService.createListApp(data);

@@ -11,4 +11,5 @@ public interface ListAppService {
     void deleteList(String listId, String tokenJWT);
     Page<ListAppReturnDTO> getAllListsByUserId(String userId, Pageable pageable);
     Page<ListAppReturnDTO> getAllPublicListsByUserId(String userId, Pageable pageable);
+    Page<ListAppReturnDTO> getAllListsWithReadPermission(String userId, Pageable pageable);
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ListAppRepository extends JpaRepository<ListApp, UUID> {
@@ -48,4 +49,10 @@ public interface ListAppRepository extends JpaRepository<ListApp, UUID> {
         AND LOWER(la.name) LIKE LOWER(CONCAT('%', :nameCompare, '%'))
         """)
     Page<ListApp> findListsByUserIdAndByNameContaining(String nameCompare, Pageable pageable, UUID userId);
+
+    @Query("""
+        SELECT la FROM ListApp la
+        WHERE la.id IN :ids
+        """)
+    Page<ListApp> findAllListsAppById(List<UUID> ids, Pageable pageable);
 }

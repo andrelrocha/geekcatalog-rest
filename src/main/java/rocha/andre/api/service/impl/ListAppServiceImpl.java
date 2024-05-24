@@ -18,6 +18,8 @@ public class ListAppServiceImpl implements ListAppService {
     @Autowired
     private GetListPageable getListPageable;
     @Autowired
+    private GetListWithReadPermissionPageable getListWithReadPermissionPageable;
+    @Autowired
     private GetListPublicPageable getListPublicPageable;
     @Autowired
     private UpdateList updateList;
@@ -49,5 +51,11 @@ public class ListAppServiceImpl implements ListAppService {
     public Page<ListAppReturnDTO> getAllPublicListsByUserId(String userId, Pageable pageable) {
         var publicLists = getListPublicPageable.getAllPublicListsByUserId(userId, pageable);
         return publicLists;
+    }
+
+    @Override
+    public Page<ListAppReturnDTO> getAllListsWithReadPermission(String userId, Pageable pageable) {
+        var listsWithReadPermission = getListWithReadPermissionPageable.getAllListsWithReadPermission(userId, pageable);
+        return listsWithReadPermission;
     }
 }
