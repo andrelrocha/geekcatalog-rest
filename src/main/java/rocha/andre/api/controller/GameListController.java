@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreDTO;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreReturnDTO;
 import rocha.andre.api.domain.gameGenre.DTO.UpdateGameGenreDTO;
+import rocha.andre.api.domain.gameList.DTO.GameListFullReturnDTO;
 import rocha.andre.api.domain.gameList.DTO.GameListReturnDTO;
 import rocha.andre.api.service.GameGenreService;
 import rocha.andre.api.service.GameListService;
@@ -26,6 +27,12 @@ public class GameListController {
         var pageable = PageRequest.of(page, size);
         var gameListPageable = service.getGamesByListID(pageable, listId);
         return ResponseEntity.ok(gameListPageable);
+    }
+
+    @GetMapping("/byid/{id}")
+    public ResponseEntity<GameListFullReturnDTO> getGameListById(@PathVariable String id) {
+        var gameList = service.getGameListByID(id);
+        return ResponseEntity.ok(gameList);
     }
 
     /*
