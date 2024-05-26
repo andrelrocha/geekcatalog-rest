@@ -37,4 +37,10 @@ public interface GameListRepository extends JpaRepository<GameList, UUID> {
             ORDER BY g.createdAt DESC
             """)
     Page<GameList> findAllGameListByListIdOrderByLatest(UUID listId, Pageable pageable);
+
+    @Query("""
+            SELECT COUNT(g) FROM GameList g
+            WHERE g.list.id = :listId
+            """)
+    int countGameListsByListId(UUID listId);
 }

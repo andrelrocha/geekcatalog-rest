@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreDTO;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreReturnDTO;
 import rocha.andre.api.domain.gameGenre.DTO.UpdateGameGenreDTO;
+import rocha.andre.api.domain.gameList.DTO.CountGameListReturnDTO;
 import rocha.andre.api.domain.gameList.DTO.GameListFullReturnDTO;
 import rocha.andre.api.domain.gameList.DTO.GameListReturnDTO;
 import rocha.andre.api.service.GameGenreService;
@@ -30,6 +31,18 @@ public class GameListController {
         return ResponseEntity.ok(gameListPageable);
     }
 
+    @GetMapping("/byid/{id}")
+    public ResponseEntity<GameListFullReturnDTO> getGameListById(@PathVariable String id) {
+        var gameList = service.getGameListByID(id);
+        return ResponseEntity.ok(gameList);
+    }
+
+    @GetMapping("/count/{listId}")
+    public ResponseEntity<CountGameListReturnDTO> countGameListByListID(@PathVariable String listId) {
+        var count = service.countGamesByListID(listId);
+        return ResponseEntity.ok(count);
+    }
+
     /*
     @GetMapping("/latest")
     public ResponseEntity getAllGamesPageable ( @RequestParam(defaultValue = "0") int page,
@@ -41,13 +54,6 @@ public class GameListController {
         return ResponseEntity.ok(gamesPageable);
     }
     */
-
-
-    @GetMapping("/byid/{id}")
-    public ResponseEntity<GameListFullReturnDTO> getGameListById(@PathVariable String id) {
-        var gameList = service.getGameListByID(id);
-        return ResponseEntity.ok(gameList);
-    }
 
     /*
     @PostMapping("/create")

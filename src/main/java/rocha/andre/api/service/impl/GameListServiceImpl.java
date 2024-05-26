@@ -4,14 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rocha.andre.api.domain.gameList.DTO.CountGameListReturnDTO;
 import rocha.andre.api.domain.gameList.DTO.GameListFullReturnDTO;
 import rocha.andre.api.domain.gameList.DTO.GameListReturnDTO;
+import rocha.andre.api.domain.gameList.useCase.CountGameListByListID;
 import rocha.andre.api.domain.gameList.useCase.GetGameListByID;
 import rocha.andre.api.domain.gameList.useCase.GetGameListByListID;
 import rocha.andre.api.service.GameListService;
 
 @Service
 public class GameListServiceImpl implements GameListService {
+    @Autowired
+    private CountGameListByListID countGameListByListID;
     @Autowired
     private GetGameListByListID getGameListByListID;
     @Autowired
@@ -25,5 +29,10 @@ public class GameListServiceImpl implements GameListService {
     @Override
     public GameListFullReturnDTO getGameListByID(String gameListID) {
         return getGameListByID.getGameListByID(gameListID);
+    }
+
+    @Override
+    public CountGameListReturnDTO countGamesByListID(String listId) {
+        return countGameListByListID.countGamesByListID(listId);
     }
 }
