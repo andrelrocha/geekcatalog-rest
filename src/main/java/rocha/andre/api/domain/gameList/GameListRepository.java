@@ -12,13 +12,6 @@ import java.util.UUID;
 
 public interface GameListRepository extends JpaRepository<GameList, UUID> {
     @Query("""
-            SELECT g.game.id FROM GameList g
-            WHERE g.list.id = :listId
-            ORDER BY g.createdAt DESC
-            """)
-    Page<GameList> findLatestGameListByListID(UUID listId, Pageable pageable);
-
-    @Query("""
             SELECT g FROM GameList g
             WHERE g.list.id = :listId
             ORDER BY g.game.name ASC

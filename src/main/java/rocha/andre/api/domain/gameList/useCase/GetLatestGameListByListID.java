@@ -15,9 +15,9 @@ public class GetLatestGameListByListID {
     private GameListRepository gameListRepository;
 
     public Page<GameListReturnDTO> getLatestGamesByListID(Pageable pageable, String listId) {
-        var listIdUUID = UUID.fromString(listId);
+        UUID listIdUUID = UUID.fromString(listId);
 
-        var gameListPageable = gameListRepository.findLatestGameListByListID(listIdUUID, pageable).map(GameListReturnDTO::new);
+        var gameListPageable = gameListRepository.findAllGameListByListIdOrderByLatest(listIdUUID, pageable).map(GameListReturnDTO::new);
 
         return gameListPageable;
     }

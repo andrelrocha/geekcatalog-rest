@@ -9,5 +9,6 @@ import rocha.andre.api.domain.gameList.DTO.GameListReturnDTO;
 public interface GameListService {
     Page<GameListReturnDTO> getGamesByListID(Pageable pageable, String listId);
     GameListFullReturnDTO getGameListByID(String gameListID);
+    Page<GameListReturnDTO> getLatestGamesByListID(Pageable pageable, String listId);
     CountGameListReturnDTO countGamesByListID(String listId);
 }

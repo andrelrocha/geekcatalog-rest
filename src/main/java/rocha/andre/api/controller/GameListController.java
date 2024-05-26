@@ -31,6 +31,15 @@ public class GameListController {
         return ResponseEntity.ok(gameListPageable);
     }
 
+    @GetMapping("/latest/{listId}")
+    public ResponseEntity getLatestGamesPageable (  @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "4") int size,
+                                                    @PathVariable String listId) {
+        var pageable = PageRequest.of(page, size);
+        var gamesPageable = service.getLatestGamesByListID(pageable, listId);
+        return ResponseEntity.ok(gamesPageable);
+    }
+
     @GetMapping("/byid/{id}")
     public ResponseEntity<GameListFullReturnDTO> getGameListById(@PathVariable String id) {
         var gameList = service.getGameListByID(id);
@@ -42,18 +51,6 @@ public class GameListController {
         var count = service.countGamesByListID(listId);
         return ResponseEntity.ok(count);
     }
-
-    /*
-    @GetMapping("/latest")
-    public ResponseEntity getAllGamesPageable ( @RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "16") int size,
-                                                @RequestParam(defaultValue = "name") String sortField,
-                                                @RequestParam(defaultValue = "asc") String sortOrder) {
-        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
-        var gamesPageable = service.getAllGames(pageable);
-        return ResponseEntity.ok(gamesPageable);
-    }
-    */
 
     /*
     @PostMapping("/create")

@@ -17,7 +17,7 @@ public class GetGameListByListID {
     public Page<GameListReturnDTO> getGamesByListID(Pageable pageable, String listId) {
         var listIdUUID = UUID.fromString(listId);
 
-        var gameListPageable = gameListRepository.findAllGameListByListId(listIdUUID, pageable).map(GameListReturnDTO::new);
+        var gameListPageable = gameListRepository.pageableGameListByListId(listIdUUID, pageable).map(GameListReturnDTO::new);
 
         return gameListPageable;
     }
