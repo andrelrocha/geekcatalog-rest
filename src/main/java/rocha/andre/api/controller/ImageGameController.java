@@ -23,7 +23,7 @@ public class ImageGameController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/all")
     public ResponseEntity getAllImageGamesPageable ( @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "10") int size) {
         var pageable = PageRequest.of(page, size);

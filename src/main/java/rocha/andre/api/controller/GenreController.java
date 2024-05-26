@@ -19,7 +19,7 @@ public class GenreController {
     @Autowired
     private GenreService genreService;
 
-    @GetMapping("/getall")
+    @GetMapping("/all")
     public ResponseEntity<Page<GenreReturnDTO>> getAllGenres(@RequestParam(defaultValue = "0") int page,
                                                                @RequestParam(defaultValue = "100") int size,
                                                                @RequestParam(defaultValue = "name") String sortField,

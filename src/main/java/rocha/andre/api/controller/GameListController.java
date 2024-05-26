@@ -3,6 +3,7 @@ package rocha.andre.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class GameListController {
     @Autowired
     private GameListService service;
 
-    @GetMapping("/getall/{listId}")
+    @GetMapping("/all/{listId}")
     public ResponseEntity<Page<GameListReturnDTO>> getGameGenreByGameId(@PathVariable String listId,
                                                                         @RequestParam(defaultValue = "0") int page,
                                                                         @RequestParam(defaultValue = "12") int size) {
@@ -28,6 +29,19 @@ public class GameListController {
         var gameListPageable = service.getGamesByListID(pageable, listId);
         return ResponseEntity.ok(gameListPageable);
     }
+
+    /*
+    @GetMapping("/latest")
+    public ResponseEntity getAllGamesPageable ( @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "16") int size,
+                                                @RequestParam(defaultValue = "name") String sortField,
+                                                @RequestParam(defaultValue = "asc") String sortOrder) {
+        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
+        var gamesPageable = service.getAllGames(pageable);
+        return ResponseEntity.ok(gamesPageable);
+    }
+    */
+
 
     @GetMapping("/byid/{id}")
     public ResponseEntity<GameListFullReturnDTO> getGameListById(@PathVariable String id) {

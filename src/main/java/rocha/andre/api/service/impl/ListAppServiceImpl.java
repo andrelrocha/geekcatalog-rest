@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rocha.andre.api.domain.listsApp.DTO.ListAppDTO;
 import rocha.andre.api.domain.listsApp.DTO.ListAppReturnDTO;
-import rocha.andre.api.domain.listsApp.DTO.ListAppReturnWithGameIdsDTO;
 import rocha.andre.api.domain.listsApp.useCase.*;
 import rocha.andre.api.service.ListAppService;
 
@@ -22,12 +21,6 @@ public class ListAppServiceImpl implements ListAppService {
     private GetListWithReadPermissionPageable getListWithReadPermissionPageable;
     @Autowired
     private GetListPublicPageable getListPublicPageable;
-    @Autowired
-    private GetListPageableWithLatestGamesId getListPageableWithLatestGamesId;
-    @Autowired
-    private GetListPublicPageableWithLatestGameID getListPublicPageableWithLatestGameID;
-    @Autowired
-    private GetListWithReadPermissionPageableWithLatestGameID getListWithReadPermissionPageableWithLatestGameID;
     @Autowired
     private UpdateList updateList;
 
@@ -64,23 +57,5 @@ public class ListAppServiceImpl implements ListAppService {
     public Page<ListAppReturnDTO> getAllListsWithReadPermission(String userId, Pageable pageable) {
         var listsWithReadPermission = getListWithReadPermissionPageable.getAllListsWithReadPermission(userId, pageable);
         return listsWithReadPermission;
-    }
-
-    @Override
-    public Page<ListAppReturnWithGameIdsDTO> getAllListsByUserIdWithLatestGamesID(String userId, Pageable pageable) {
-        var pageableLists = getListPageableWithLatestGamesId.getAllListsByUserIdWithLatestGamesID(userId, pageable);
-        return pageableLists;
-    }
-
-    @Override
-    public Page<ListAppReturnWithGameIdsDTO> getAllPublicListsByUserIdWithLatestGamesID(String userId, Pageable pageable) {
-        var pageableLists = getListPublicPageableWithLatestGameID.getAllPublicListsByUserIdWithLatestGamesID(userId, pageable);
-        return pageableLists;
-    }
-
-    @Override
-    public Page<ListAppReturnWithGameIdsDTO> getAllListsWithReadPermissionWithGamesID(String userId, Pageable pageable) {
-        var pageableLists = getListWithReadPermissionPageableWithLatestGameID.getAllListsWithReadPermissionWithGamesID(userId, pageable);
-        return pageableLists;
     }
 }

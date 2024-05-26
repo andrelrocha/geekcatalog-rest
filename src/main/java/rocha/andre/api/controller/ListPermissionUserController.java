@@ -33,7 +33,7 @@ public class ListPermissionUserController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/getall/{listId}")
+    @GetMapping("/all/{listId}")
     public ResponseEntity getAllListsPermissionPageable (@PathVariable String listId,
                                                          @RequestHeader("Authorization") String authorizationHeader) {
         var tokenJWT = authorizationHeader.substring(7);

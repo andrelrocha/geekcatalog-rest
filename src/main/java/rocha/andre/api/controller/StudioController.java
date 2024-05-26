@@ -17,7 +17,7 @@ public class StudioController {
     @Autowired
     private StudioService studioService;
 
-    @GetMapping("/getall")
+    @GetMapping("/all")
     public ResponseEntity<Page<StudioReturnDTO>> getAllStudios(@RequestParam(defaultValue = "0") int page,
                                                                @RequestParam(defaultValue = "100") int size,
                                                                @RequestParam(defaultValue = "name") String sortField,

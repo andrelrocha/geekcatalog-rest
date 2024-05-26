@@ -15,7 +15,7 @@ public class GameController {
     private GameService gameService;
 
 
-    @GetMapping("/getall")
+    @GetMapping("/all")
     public ResponseEntity getAllGamesPageable ( @RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "16") int size,
                                                 @RequestParam(defaultValue = "name") String sortField,

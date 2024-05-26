@@ -18,7 +18,7 @@ public class ConsoleController {
     @Autowired
     private ConsoleService consoleService;
 
-    @GetMapping("/getall")
+    @GetMapping("/all")
     public ResponseEntity<Page<ConsoleReturnDTO>> getAllConsoles( @RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "100") int size,
                                                                   @RequestParam(defaultValue = "name") String sortField,

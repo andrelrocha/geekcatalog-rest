@@ -16,7 +16,7 @@ public interface GameListRepository extends JpaRepository<GameList, UUID> {
             WHERE g.list.id = :listId
             ORDER BY g.createdAt DESC
             """)
-    List<UUID> findTop4ByListIdOrderByCreatedAtDesc(UUID listId);
+    Page<GameList> findLatestGameListByListID(UUID listId, Pageable pageable);
 
     @Query("""
             SELECT g FROM GameList g

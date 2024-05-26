@@ -16,7 +16,7 @@ public class CountryController {
     @Autowired
     private CountryService countryService;
 
-    @GetMapping("/getall")
+    @GetMapping("/all")
     public ResponseEntity getAllCountriesPageable (@RequestParam(defaultValue = "0") int page,
                                                    @RequestParam(defaultValue = "240") int size,
                                                    @RequestParam(defaultValue = "name") String sortField,

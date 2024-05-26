@@ -17,7 +17,7 @@ public class PermissionController {
     @Autowired
     private GetAllPermissions getAllPermissions;
 
-    @GetMapping("/getall")
+    @GetMapping("/all")
     public ResponseEntity getAllPermissionsPageable (@RequestParam(defaultValue = "0") int page,
                                                    @RequestParam(defaultValue = "20") int size,
                                                    @RequestParam(defaultValue = "permission") String sortField,

@@ -25,17 +25,6 @@ public class ListAppController {
         return ResponseEntity.ok(listsPageable);
     }
 
-    @GetMapping("/getall/gamesid/{userId}")
-    public ResponseEntity getAllListsWithGameIdPageable (   @RequestParam(defaultValue = "0") int page,
-                                                            @RequestParam(defaultValue = "12") int size,
-                                                            @RequestParam(defaultValue = "name") String sortField,
-                                                            @RequestParam(defaultValue = "asc") String sortOrder,
-                                                            @PathVariable String userId) {
-        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
-        var listsPageable = listAppService.getAllListsByUserIdWithLatestGamesID(userId, pageable);
-        return ResponseEntity.ok(listsPageable);
-    }
-
     @GetMapping("/public/{userId}")
     public ResponseEntity getAllPublicListsPageable (   @RequestParam(defaultValue = "0") int page,
                                                         @RequestParam(defaultValue = "12") int size,
@@ -47,17 +36,6 @@ public class ListAppController {
         return ResponseEntity.ok(publicListsPageable);
     }
 
-    @GetMapping("/public/gamesid/{userId}")
-    public ResponseEntity getAllPublicListsWithGameIdPageable (   @RequestParam(defaultValue = "0") int page,
-                                                        @RequestParam(defaultValue = "12") int size,
-                                                        @RequestParam(defaultValue = "name") String sortField,
-                                                        @RequestParam(defaultValue = "asc") String sortOrder,
-                                                        @PathVariable String userId) {
-        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
-        var publicListsPageable = listAppService.getAllPublicListsByUserIdWithLatestGamesID(userId, pageable);
-        return ResponseEntity.ok(publicListsPageable);
-    }
-
     @GetMapping("/readpermission/{userId}")
     public ResponseEntity getAllListsWithReadPermissionPageable (   @RequestParam(defaultValue = "0") int page,
                                                                     @RequestParam(defaultValue = "12") int size,
@@ -66,17 +44,6 @@ public class ListAppController {
                                                                     @PathVariable String userId) {
         var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
         var publicListsPageable = listAppService.getAllListsWithReadPermission(userId, pageable);
-        return ResponseEntity.ok(publicListsPageable);
-    }
-
-    @GetMapping("/readpermission/gamesid/{userId}")
-    public ResponseEntity getAllListsWithReadPermissionWithGameIdPageable (   @RequestParam(defaultValue = "0") int page,
-                                                                    @RequestParam(defaultValue = "12") int size,
-                                                                    @RequestParam(defaultValue = "name") String sortField,
-                                                                    @RequestParam(defaultValue = "asc") String sortOrder,
-                                                                    @PathVariable String userId) {
-        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
-        var publicListsPageable = listAppService.getAllListsWithReadPermissionWithGamesID(userId, pageable);
         return ResponseEntity.ok(publicListsPageable);
     }
 
