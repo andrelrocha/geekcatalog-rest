@@ -30,4 +30,10 @@ public class ImageGameController {
         var imageGames = imageGameService.getImageGames(pageable);
         return ResponseEntity.ok(imageGames);
     }
+
+    @GetMapping("/bygameid/{gameId}")
+    public ResponseEntity getImageGameByGameId (@PathVariable String gameId) {
+        var imageGame = imageGameService.getImageGamesByGameID(gameId);
+        return ResponseEntity.ok(imageGame);
+    }
 }

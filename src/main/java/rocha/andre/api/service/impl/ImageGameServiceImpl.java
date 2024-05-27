@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import rocha.andre.api.domain.imageGame.DTO.ImageGameReturnDTO;
 import rocha.andre.api.domain.imageGame.useCase.AddImageGame;
+import rocha.andre.api.domain.imageGame.useCase.GetImageGameByGameID;
 import rocha.andre.api.domain.imageGame.useCase.GetImageGamePageable;
 import rocha.andre.api.service.ImageGameService;
 
@@ -17,9 +18,10 @@ import java.util.UUID;
 public class ImageGameServiceImpl implements ImageGameService  {
     @Autowired
     private AddImageGame addImageGame;
-
     @Autowired
     private GetImageGamePageable getImageGamePageable;
+    @Autowired
+    private GetImageGameByGameID getImageGameByGameID;
 
     @Override
     public ImageGameReturnDTO addImageGame(MultipartFile file, UUID gameId) throws IOException {
@@ -31,5 +33,11 @@ public class ImageGameServiceImpl implements ImageGameService  {
     public Page<ImageGameReturnDTO> getImageGames(Pageable pageable) {
         var imageGames = getImageGamePageable.getImageGames(pageable);
         return imageGames;
+    }
+
+    @Override
+    public ImageGameReturnDTO getImageGamesByGameID(String gameId) {
+        var imageGame = getImageGameByGameID.getImageGamesByGameID(gameId);
+        return imageGame;
     }
 }

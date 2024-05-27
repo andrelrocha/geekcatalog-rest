@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface ImageGameService {
     ImageGameReturnDTO addImageGame(MultipartFile file, UUID gameId) throws IOException;
     Page<ImageGameReturnDTO> getImageGames(Pageable pageable);
+    ImageGameReturnDTO getImageGamesByGameID(String gameId);
 }

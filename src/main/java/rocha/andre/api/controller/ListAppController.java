@@ -14,7 +14,7 @@ public class ListAppController {
     @Autowired
     private ListAppService listAppService;
 
-    @GetMapping("/getall/{userId}")
+    @GetMapping("/all/{userId}")
     public ResponseEntity getAllListsPageable ( @RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "12") int size,
                                                 @RequestParam(defaultValue = "name") String sortField,

@@ -25,6 +25,12 @@ public interface ImageGameRepository  extends JpaRepository<ImageGame, UUID> {
             """)
     Page<ImageGame> findAllImageGames(Pageable pageable);
 
+    @Query("""
+            SELECT ig FROM ImageGame ig
+            WHERE ig.game.id = :gameId
+            """)
+    ImageGame findImageGameByGameID(UUID gameId);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM ImageGame ig WHERE ig.game.id = :gameId")
