@@ -9,7 +9,10 @@ import rocha.andre.api.domain.gameList.DTO.GameListCreateDTO;
 import rocha.andre.api.domain.gameList.DTO.GameListReturnDTO;
 import rocha.andre.api.domain.gameList.GameList;
 import rocha.andre.api.domain.gameList.GameListRepository;
+import rocha.andre.api.domain.listPermissionUser.ListPermissionUserRepository;
 import rocha.andre.api.domain.listsApp.ListAppRepository;
+import rocha.andre.api.domain.permission.PermissionEnum;
+import rocha.andre.api.domain.permission.useCase.GetPermissionByNameENUM;
 import rocha.andre.api.domain.user.UserRepository;
 import rocha.andre.api.infra.exceptions.ValidationException;
 
@@ -27,6 +30,10 @@ public class AddBulkGameList {
     private GameRepository gameRepository;
     @Autowired
     private ListAppRepository listAppRepository;
+    @Autowired
+    private ListPermissionUserRepository listPermissionUserRepository;
+    @Autowired
+    private GetPermissionByNameENUM getPermissionByNameENUM;
 
     public ArrayList<GameListBulkReturnDTO> addBulkGamesToList(GameListBulkCreateDTO data) {
         var userIdUUID = UUID.fromString(data.userId());
@@ -37,9 +44,29 @@ public class AddBulkGameList {
         var list = listAppRepository.findById(listIdUUID)
                 .orElseThrow(()-> new ValidationException("Não foi encontrada lista com o id informado na adição de bulk game list"));
 
+        var errorMessagePermission = "O usuário que está tentando adicionar jogos não é o dono da lista ou não tem permissão para tanto";
+
         if (!user.getId().equals(list.getUser().getId())) {
-            //VALIDAÇÃO SE O USUÁRIO TEM PERMISSÃO NA LISTS_PERMISSION
-            throw new ValidationException("O usuário que está adicionando jogos não é o dono da lista ou não tem permissão");
+            var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, list.getId());
+            System.out.println("lists permission: "+ listsPermission);
+            if (!listsPermission.isEmpty()) {
+                var addGameEnum = PermissionEnum.ADD_GAME;
+                var permission = getPermissionByNameENUM.getPermissionByNameOnENUM(addGameEnum);
+                var userPermissionList = listPermissionUserRepository.findByParticipantIdAndListIdAndPermissionId(user.getId(), list.getId(), permission.id());
+
+                System.out.println("userpermissionlist with add game: "+ userPermissionList);
+                if (userPermissionList == null) {
+                    System.out.println("Nao foi encontrado user permission");
+                    throw new ValidationException(errorMessagePermission);
+                }
+                if (!list.getUser().getId().equals(userPermissionList.getOwner().getId())) {
+                    System.out.println("o dono tem id:"+userPermissionList.getOwner().getId());
+                    System.out.println("o owner da llista é:"+list.getUser().getId());
+                    throw new ValidationException(errorMessagePermission);
+                }
+            } else {
+                throw new ValidationException(errorMessagePermission);
+            }
         }
 
         var gameListCreate = new ArrayList<GameList>();
