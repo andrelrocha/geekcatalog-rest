@@ -36,4 +36,6 @@ public interface GameListRepository extends JpaRepository<GameList, UUID> {
             WHERE g.list.id = :listId
             """)
     int countGameListsByListId(UUID listId);
+
+    boolean existsByGameId(UUID gameId);
 }

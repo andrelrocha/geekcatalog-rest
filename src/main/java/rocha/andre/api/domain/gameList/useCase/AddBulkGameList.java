@@ -48,20 +48,15 @@ public class AddBulkGameList {
 
         if (!user.getId().equals(list.getUser().getId())) {
             var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, list.getId());
-            System.out.println("lists permission: "+ listsPermission);
             if (!listsPermission.isEmpty()) {
                 var addGameEnum = PermissionEnum.ADD_GAME;
                 var permission = getPermissionByNameENUM.getPermissionByNameOnENUM(addGameEnum);
                 var userPermissionList = listPermissionUserRepository.findByParticipantIdAndListIdAndPermissionId(user.getId(), list.getId(), permission.id());
 
-                System.out.println("userpermissionlist with add game: "+ userPermissionList);
                 if (userPermissionList == null) {
-                    System.out.println("Nao foi encontrado user permission");
                     throw new ValidationException(errorMessagePermission);
                 }
                 if (!list.getUser().getId().equals(userPermissionList.getOwner().getId())) {
-                    System.out.println("o dono tem id:"+userPermissionList.getOwner().getId());
-                    System.out.println("o owner da llista é:"+list.getUser().getId());
                     throw new ValidationException(errorMessagePermission);
                 }
             } else {
@@ -74,6 +69,12 @@ public class AddBulkGameList {
             var gameIdUUID = UUID.fromString(gameId);
             var game = gameRepository.findById(gameIdUUID)
                     .orElseThrow(()-> new ValidationException("Não foi encontrado jogo com o id informado na adição de bulk game list"));
+
+            var gameAlreadyExists = gameListRepository.existsByGameId(game.getId());
+
+            if (gameAlreadyExists) {
+                continue;
+            }
 
             var gameListCreateDTO = new GameListCreateDTO(user, game, list, null, null);
             var gameList = new GameList(gameListCreateDTO);
