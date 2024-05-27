@@ -25,6 +25,16 @@ public class GameController {
         return ResponseEntity.ok(gamesPageable);
     }
 
+    @GetMapping("/all/id")
+    public ResponseEntity getAllGamesWithIDPageable (   @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "100") int size,
+                                                        @RequestParam(defaultValue = "name") String sortField,
+                                                        @RequestParam(defaultValue = "asc") String sortOrder) {
+        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
+        var gamesPageable = gameService.getAllGamesWithID(pageable);
+        return ResponseEntity.ok(gamesPageable);
+    }
+
     @PostMapping("/create")
     public ResponseEntity createGame(@RequestBody GameDTO data) {
         var newGame = gameService.createGame(data);

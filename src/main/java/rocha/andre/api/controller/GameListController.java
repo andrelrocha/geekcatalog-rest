@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreDTO;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreReturnDTO;
 import rocha.andre.api.domain.gameGenre.DTO.UpdateGameGenreDTO;
-import rocha.andre.api.domain.gameList.DTO.CountGameListReturnDTO;
-import rocha.andre.api.domain.gameList.DTO.GameListFullReturnDTO;
-import rocha.andre.api.domain.gameList.DTO.GameListReturnDTO;
+import rocha.andre.api.domain.gameList.DTO.*;
 import rocha.andre.api.service.GameGenreService;
 import rocha.andre.api.service.GameListService;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/gamelist")
@@ -52,13 +52,15 @@ public class GameListController {
         return ResponseEntity.ok(count);
     }
 
-    /*
-    @PostMapping("/create")
-    public ResponseEntity<GameGenreReturnDTO> createGameGenre(@RequestBody GameGenreDTO data) {
-        var newGameConsole = service.createGameGenre(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newGameConsole);
+
+    @PostMapping("/add/bulk")
+    public ResponseEntity<ArrayList<GameListBulkReturnDTO>> addBulkGameList(@RequestBody GameListBulkCreateDTO data) {
+        var newGamesList = service.addBulkGamesToList(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newGamesList);
     }
 
+
+    /*
     @PutMapping("/update/{gameId}")
     public ResponseEntity<Page<GameGenreReturnDTO>> updateGameGenre(@RequestBody UpdateGameGenreDTO data, @PathVariable String gameId) {
         var gameGenres = service.updateGameGenres(data, gameId);

@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import rocha.andre.api.domain.consoles.Console;
 import rocha.andre.api.domain.game.Game;
+import rocha.andre.api.domain.gameList.DTO.GameListCreateDTO;
 import rocha.andre.api.domain.listsApp.DTO.ListAppCreateDTO;
 import rocha.andre.api.domain.listsApp.DTO.ListAppDTO;
 import rocha.andre.api.domain.listsApp.ListApp;
@@ -61,7 +62,13 @@ public class GameList {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
+    public GameList(GameListCreateDTO data) {
+        this.user = data.user();
+        this.game = data.game();
+        this.list = data.listApp();
+        this.console = data.consolePlayed();
+        this.note = data.note();
+    }
 
     @PrePersist
     protected void onCreate() {

@@ -31,7 +31,7 @@ public class ImageGameController {
         return ResponseEntity.ok(imageGames);
     }
 
-    @GetMapping("/bygameid/{gameId}")
+    @GetMapping("/game/{gameId}")
     public ResponseEntity getImageGameByGameId (@PathVariable String gameId) {
         var imageGame = imageGameService.getImageGamesByGameID(gameId);
         return ResponseEntity.ok(imageGame);

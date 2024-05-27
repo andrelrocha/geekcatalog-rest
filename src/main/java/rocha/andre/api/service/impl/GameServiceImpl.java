@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rocha.andre.api.domain.game.DTO.GameAndIdDTO;
 import rocha.andre.api.domain.game.DTO.GameDTO;
 import rocha.andre.api.domain.game.DTO.GameReturnDTO;
 import rocha.andre.api.domain.game.useCase.CreateGame;
 import rocha.andre.api.domain.game.useCase.GetAllGamesPageable;
+import rocha.andre.api.domain.game.useCase.GetAllGamesWithID;
 import rocha.andre.api.domain.game.useCase.UpdateGame;
 import rocha.andre.api.service.GameService;
 
@@ -15,6 +17,8 @@ import rocha.andre.api.service.GameService;
 public class GameServiceImpl implements GameService {
     @Autowired
     private GetAllGamesPageable getAllGamesPageable;
+    @Autowired
+    private GetAllGamesWithID getAllGamesWithID;
     @Autowired
     private CreateGame createGame;
     @Autowired
@@ -36,5 +40,11 @@ public class GameServiceImpl implements GameService {
     public GameReturnDTO updateGame(GameDTO data, String gameId) {
         var updatedGame = updateGame.updateGame(data, gameId);
         return updatedGame;
+    }
+
+    @Override
+    public Page<GameAndIdDTO> getAllGamesWithID(Pageable pageable) {
+        var gamesWithId = getAllGamesWithID.getAllGamesWithID(pageable);
+        return gamesWithId;
     }
 }

@@ -2,13 +2,14 @@ package rocha.andre.api.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import rocha.andre.api.domain.gameList.DTO.CountGameListReturnDTO;
-import rocha.andre.api.domain.gameList.DTO.GameListFullReturnDTO;
-import rocha.andre.api.domain.gameList.DTO.GameListReturnDTO;
+import rocha.andre.api.domain.gameList.DTO.*;
+
+import java.util.ArrayList;
 
 public interface GameListService {
     Page<GameListReturnDTO> getGamesByListID(Pageable pageable, String listId);
     GameListFullReturnDTO getGameListByID(String gameListID);
     Page<GameListReturnDTO> getLatestGamesByListID(Pageable pageable, String listId);
     CountGameListReturnDTO countGamesByListID(String listId);
+    ArrayList<GameListBulkReturnDTO> addBulkGamesToList(GameListBulkCreateDTO data);
 }
