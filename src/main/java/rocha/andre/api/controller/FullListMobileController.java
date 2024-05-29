@@ -6,12 +6,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.fullList_mobile.useCase.GetListFullInfoService;
+import rocha.andre.api.domain.fullList_mobile.useCase.GetPublicListFullService;
 
 @RestController
 @RequestMapping("/listfull")
 public class FullListMobileController {
     @Autowired
     private GetListFullInfoService getListFullInfoService;
+    @Autowired
+    private GetPublicListFullService getPublicListFullService;
 
     @GetMapping("/all/{userId}")
     public ResponseEntity getAllListsPageable ( @RequestParam(defaultValue = "0") int page,
@@ -21,6 +24,17 @@ public class FullListMobileController {
                                                 @PathVariable String userId) {
         var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
         var listsPageable = getListFullInfoService.getAllListsByUserId(userId, pageable);
+        return ResponseEntity.ok(listsPageable);
+    }
+
+    @GetMapping("/public/{userId}")
+    public ResponseEntity getPublicListsPageable (  @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "12") int size,
+                                                    @RequestParam(defaultValue = "name") String sortField,
+                                                    @RequestParam(defaultValue = "asc") String sortOrder,
+                                                    @PathVariable String userId) {
+        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
+        var listsPageable = getPublicListFullService.getAllListsByUserId(userId, pageable);
         return ResponseEntity.ok(listsPageable);
     }
 }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
-public class GetListFullInfoService {
+public class GetPublicListFullService {
     @Autowired
     private ListAppRepository repository;
     @Autowired
@@ -29,7 +29,7 @@ public class GetListFullInfoService {
     public Page<FullListReturnDTO> getAllListsByUserId(String userId, Pageable pageable) {
         var userIdUUID = UUID.fromString(userId);
 
-        var pageableListsByUserId = repository.findAllListsByUserId(pageable, userIdUUID).map(list -> {
+        var pageableListsByUserId = repository.findAllListsPublicByUserId(pageable, userIdUUID).map(list -> {
            var listIdString = (list.getId()).toString();
             var gameCount = countGameListByListID.countGamesByListID(listIdString);
 
