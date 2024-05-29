@@ -25,7 +25,7 @@ public class ImageGameController {
 
     @GetMapping("/all")
     public ResponseEntity getAllImageGamesPageable ( @RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "10") int size) {
+                                                    @RequestParam(defaultValue = "2") int size) {
         var pageable = PageRequest.of(page, size);
         var imageGames = imageGameService.getImageGames(pageable);
         return ResponseEntity.ok(imageGames);

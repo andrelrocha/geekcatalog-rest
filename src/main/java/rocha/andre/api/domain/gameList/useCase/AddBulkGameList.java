@@ -70,7 +70,7 @@ public class AddBulkGameList {
             var game = gameRepository.findById(gameIdUUID)
                     .orElseThrow(()-> new ValidationException("Não foi encontrado jogo com o id informado na adição de bulk game list"));
 
-            var gameAlreadyExists = gameListRepository.existsByGameId(game.getId());
+            var gameAlreadyExists = gameListRepository.existsByGameIdAndListId(game.getId(), list.getId());
 
             if (gameAlreadyExists) {
                 continue;
