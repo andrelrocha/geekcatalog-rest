@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import rocha.andre.api.domain.gameGenre.GameGenre;
+import rocha.andre.api.domain.listPermissionUser.ListPermissionUser;
 import rocha.andre.api.domain.listsApp.ListApp;
 
 import java.util.List;
@@ -38,4 +39,16 @@ public interface GameListRepository extends JpaRepository<GameList, UUID> {
     int countGameListsByListId(UUID listId);
 
     boolean existsByGameIdAndListId(UUID gameId, UUID listId);
+
+    @Query("""
+            SELECT g FROM GameList g
+            WHERE g.list.id = :listId
+            """)
+    List<GameList> findAllByListId(UUID listId);
+
+    @Query("""
+            SELECT g FROM GameList g
+            WHERE g.game.id = :gameId
+            """)
+    List<GameList> findAllByGameId(UUID gameId);
 }

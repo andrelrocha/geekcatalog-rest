@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import rocha.andre.api.domain.gameConsole.GameConsole;
 import rocha.andre.api.domain.gameGenre.GameGenre;
 import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
 
@@ -58,4 +59,10 @@ public interface GameStudioRepository extends JpaRepository<GameStudio, UUID> {
     @Transactional
     @Query("DELETE FROM GameStudio gs WHERE gs.game.id = :gameId")
     void deleteAllByGameId(UUID gameId);
+
+    @Query("""
+            SELECT gs FROM GameStudio gs
+            WHERE gs.game.id = :gameId
+            """)
+    List<GameStudio> findAllByGameId(UUID gameId);
 }

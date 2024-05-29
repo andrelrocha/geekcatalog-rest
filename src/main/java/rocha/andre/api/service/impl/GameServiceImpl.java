@@ -7,20 +7,19 @@ import org.springframework.stereotype.Service;
 import rocha.andre.api.domain.game.DTO.GameAndIdDTO;
 import rocha.andre.api.domain.game.DTO.GameDTO;
 import rocha.andre.api.domain.game.DTO.GameReturnDTO;
-import rocha.andre.api.domain.game.useCase.CreateGame;
-import rocha.andre.api.domain.game.useCase.GetAllGamesPageable;
-import rocha.andre.api.domain.game.useCase.GetAllGamesWithID;
-import rocha.andre.api.domain.game.useCase.UpdateGame;
+import rocha.andre.api.domain.game.useCase.*;
 import rocha.andre.api.service.GameService;
 
 @Service
 public class GameServiceImpl implements GameService {
     @Autowired
+    private CreateGame createGame;
+    @Autowired
+    private DeleteGame deleteGame;
+    @Autowired
     private GetAllGamesPageable getAllGamesPageable;
     @Autowired
     private GetAllGamesWithID getAllGamesWithID;
-    @Autowired
-    private CreateGame createGame;
     @Autowired
     private UpdateGame updateGame;
 
@@ -46,5 +45,10 @@ public class GameServiceImpl implements GameService {
     public Page<GameAndIdDTO> getAllGamesWithID(Pageable pageable) {
         var gamesWithId = getAllGamesWithID.getAllGamesWithID(pageable);
         return gamesWithId;
+    }
+
+    @Override
+    public void deleteGame(String gameId) {
+        deleteGame.deleteGame(gameId);
     }
 }

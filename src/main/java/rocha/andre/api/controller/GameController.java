@@ -46,4 +46,10 @@ public class GameController {
         var updatedGame = gameService.updateGame(data, gameId);
         return ResponseEntity.ok(updatedGame);
     }
+
+    @DeleteMapping("/delete/{gameId}")
+    public ResponseEntity deleteGame(@PathVariable String gameId) {
+        gameService.deleteGame(gameId);
+        return ResponseEntity.noContent().build();
+    }
 }

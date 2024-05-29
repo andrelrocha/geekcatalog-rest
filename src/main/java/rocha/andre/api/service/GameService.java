@@ -11,4 +11,5 @@ public interface GameService {
     GameReturnDTO createGame(GameDTO data);
     GameReturnDTO updateGame(GameDTO data, String gameId);
     Page<GameAndIdDTO> getAllGamesWithID(Pageable pageable);
+    void deleteGame(String gameId);
 }

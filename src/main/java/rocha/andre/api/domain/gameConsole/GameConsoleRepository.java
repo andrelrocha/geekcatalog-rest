@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
+import rocha.andre.api.domain.gameList.GameList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,4 +58,10 @@ public interface GameConsoleRepository extends JpaRepository<GameConsole, UUID> 
     @Transactional
     @Query("DELETE FROM GameConsole gc WHERE gc.game.id = :gameId")
     void deleteAllByGameId(UUID gameId);
+
+    @Query("""
+            SELECT gc FROM GameConsole gc
+            WHERE gc.game.id = :gameId
+            """)
+    List<GameConsole> findAllByGameId(UUID gameId);
 }

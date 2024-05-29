@@ -3,6 +3,7 @@ package rocha.andre.api.domain.listsApp.useCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
+import rocha.andre.api.domain.gameList.GameListRepository;
 import rocha.andre.api.domain.listPermissionUser.ListPermissionUserRepository;
 import rocha.andre.api.domain.listsApp.ListAppRepository;
 import rocha.andre.api.domain.permission.PermissionEnum;
@@ -16,6 +17,8 @@ import java.util.UUID;
 public class DeleteList {
     @Autowired
     private ListAppRepository repository;
+    @Autowired
+    private GameListRepository gameListRepository;
     @Autowired
     private GetUserByTokenJWT getUserByTokenJWT;
     @Autowired
@@ -57,6 +60,8 @@ public class DeleteList {
             try {
                 var permissionsToDelete = listPermissionUserRepository.findAllByListId(listIdUUID);
                 listPermissionUserRepository.deleteAll(permissionsToDelete);
+                var gameListToDelete = gameListRepository.findAllByListId(listIdUUID);
+                gameListRepository.deleteAll(gameListToDelete);
                 repository.delete(listApp);
             } catch (Exception e) {
                 status.setRollbackOnly();
