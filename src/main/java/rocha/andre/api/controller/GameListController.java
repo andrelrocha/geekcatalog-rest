@@ -23,7 +23,7 @@ public class GameListController {
     private GameListService service;
 
     @GetMapping("/all/{listId}")
-    public ResponseEntity<Page<GameListReturnDTO>> getGameGenreByGameId(@PathVariable String listId,
+    public ResponseEntity<Page<GameListUriReturnDTO>> getGameListByGameId(@PathVariable String listId,
                                                                         @RequestParam(defaultValue = "0") int page,
                                                                         @RequestParam(defaultValue = "12") int size) {
         var pageable = PageRequest.of(page, size);

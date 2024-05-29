@@ -30,7 +30,7 @@ public class GetListFullInfoService {
         var userIdUUID = UUID.fromString(userId);
 
         var pageableListsByUserId = repository.findAllListsByUserId(pageable, userIdUUID).map(list -> {
-           var listIdString = (list.getId()).toString();
+            var listIdString = (list.getId()).toString();
             var gameCount = countGameListByListID.countGamesByListID(listIdString);
 
             var pageableGameList = PageRequest.of(0, 4);

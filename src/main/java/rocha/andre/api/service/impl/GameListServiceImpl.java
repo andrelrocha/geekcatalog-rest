@@ -24,7 +24,7 @@ public class GameListServiceImpl implements GameListService {
     private GetLatestGameListByListID getLatestGameListByListID;
 
     @Override
-    public Page<GameListReturnDTO> getGamesByListID(Pageable pageable, String listId) {
+    public Page<GameListUriReturnDTO> getGamesByListID(Pageable pageable, String listId) {
         return getGameListByListID.getGamesByListID(pageable, listId);
     }
 
