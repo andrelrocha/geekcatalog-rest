@@ -16,6 +16,8 @@ public class ListAppServiceImpl implements ListAppService {
     @Autowired
     private DeleteList deleteList;
     @Autowired
+    private GetListByID getListByID;
+    @Autowired
     private GetListPageable getListPageable;
     @Autowired
     private GetListWithReadPermissionPageable getListWithReadPermissionPageable;
@@ -39,6 +41,12 @@ public class ListAppServiceImpl implements ListAppService {
     @Override
     public void deleteList(String listId, String tokenJWT) {
         deleteList.deleteList(listId, tokenJWT);
+    }
+
+    @Override
+    public ListAppReturnDTO getList(String listId) {
+        var list = getListByID.getList(listId);
+        return list;
     }
 
     @Override

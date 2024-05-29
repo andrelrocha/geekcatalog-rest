@@ -14,6 +14,12 @@ public class ListAppController {
     @Autowired
     private ListAppService listAppService;
 
+    @GetMapping("/id/{listId}")
+    public ResponseEntity getListById ( @PathVariable String listId) {
+        var list= listAppService.getList(listId);
+        return ResponseEntity.ok(list);
+    }
+
     @GetMapping("/all/{userId}")
     public ResponseEntity getAllListsPageable ( @RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "12") int size,
