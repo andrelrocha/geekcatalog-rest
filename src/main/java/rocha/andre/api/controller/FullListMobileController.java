@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.fullList_mobile.useCase.GetListFullInfoService;
+import rocha.andre.api.domain.fullList_mobile.useCase.GetPermissionedListFullService;
 import rocha.andre.api.domain.fullList_mobile.useCase.GetPublicListFullService;
 
 @RestController
@@ -15,6 +16,8 @@ public class FullListMobileController {
     private GetListFullInfoService getListFullInfoService;
     @Autowired
     private GetPublicListFullService getPublicListFullService;
+    @Autowired
+    private GetPermissionedListFullService getPermissionedListFullService;
 
     @GetMapping("/all/{userId}")
     public ResponseEntity getAllListsPageable ( @RequestParam(defaultValue = "0") int page,
@@ -34,7 +37,18 @@ public class FullListMobileController {
                                                     @RequestParam(defaultValue = "asc") String sortOrder,
                                                     @PathVariable String userId) {
         var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
-        var listsPageable = getPublicListFullService.getAllListsByUserId(userId, pageable);
+        var listsPageable = getPublicListFullService.getPublicListsByUserId(userId, pageable);
+        return ResponseEntity.ok(listsPageable);
+    }
+
+    @GetMapping("/permissioned/{userId}")
+    public ResponseEntity getPermissionedListsPageable (    @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "12") int size,
+                                                            @RequestParam(defaultValue = "name") String sortField,
+                                                            @RequestParam(defaultValue = "asc") String sortOrder,
+                                                            @PathVariable String userId) {
+        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
+        var listsPageable = getPermissionedListFullService.getPermissionedListsByUserId(userId, pageable);
         return ResponseEntity.ok(listsPageable);
     }
 }

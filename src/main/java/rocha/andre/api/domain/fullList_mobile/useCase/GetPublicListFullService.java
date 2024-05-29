@@ -26,7 +26,7 @@ public class GetPublicListFullService {
     @Autowired
     private GetImageGameByGameID getImageGameByGameID;
 
-    public Page<FullListReturnDTO> getAllListsByUserId(String userId, Pageable pageable) {
+    public Page<FullListReturnDTO> getPublicListsByUserId(String userId, Pageable pageable) {
         var userIdUUID = UUID.fromString(userId);
 
         var pageableListsByUserId = repository.findAllListsPublicByUserId(pageable, userIdUUID).map(list -> {
