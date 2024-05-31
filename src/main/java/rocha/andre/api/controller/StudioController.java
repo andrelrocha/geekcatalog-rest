@@ -19,7 +19,7 @@ public class StudioController {
 
     @GetMapping("/all")
     public ResponseEntity<Page<StudioReturnDTO>> getAllStudios(@RequestParam(defaultValue = "0") int page,
-                                                               @RequestParam(defaultValue = "100") int size,
+                                                               @RequestParam(defaultValue = "" + Integer.MAX_VALUE) int size,
                                                                @RequestParam(defaultValue = "name") String sortField,
                                                                @RequestParam(defaultValue = "asc") String sortOrder) {
         var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));

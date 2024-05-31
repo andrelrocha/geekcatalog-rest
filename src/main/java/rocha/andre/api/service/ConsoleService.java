@@ -6,4 +6,5 @@ import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 
 public interface ConsoleService {
     Page<ConsoleReturnDTO> getAllConsoles(Pageable pageable);
+    Page<ConsoleReturnDTO> getAllConsolesByGameId(Pageable pageable, String gameId);
 }
