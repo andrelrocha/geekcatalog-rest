@@ -15,6 +15,8 @@ public class GameListServiceImpl implements GameListService {
     @Autowired
     private AddBulkGameList addBulkGameList;
     @Autowired
+    private AddGameList addGameList;
+    @Autowired
     private CountGameListByListID countGameListByListID;
     @Autowired
     private GetGameListByListID getGameListByListID;
@@ -46,5 +48,10 @@ public class GameListServiceImpl implements GameListService {
     @Override
     public ArrayList<GameListBulkReturnDTO> addBulkGamesToList(GameListBulkCreateDTO data) {
         return addBulkGameList.addBulkGamesToList(data);
+    }
+
+    @Override
+    public GameListFullReturnDTO addGameList(GameListDTO data) {
+        return addGameList.addGameList(data);
     }
 }

@@ -59,12 +59,9 @@ public class GameListController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newGamesList);
     }
 
-
-    /*
-    @PutMapping("/update/{gameId}")
-    public ResponseEntity<Page<GameGenreReturnDTO>> updateGameGenre(@RequestBody UpdateGameGenreDTO data, @PathVariable String gameId) {
-        var gameGenres = service.updateGameGenres(data, gameId);
-        return ResponseEntity.ok(gameGenres);
+    @PostMapping("/add")
+    public ResponseEntity<GameListFullReturnDTO> addGameList(@RequestBody GameListDTO data) {
+        var newGameList = service.addGameList(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newGameList);
     }
-    */
 }

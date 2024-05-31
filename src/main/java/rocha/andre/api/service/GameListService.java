@@ -12,4 +12,5 @@ public interface GameListService {
     Page<GameListReturnDTO> getLatestGamesByListID(Pageable pageable, String listId);
     CountGameListReturnDTO countGamesByListID(String listId);
     ArrayList<GameListBulkReturnDTO> addBulkGamesToList(GameListBulkCreateDTO data);
+    GameListFullReturnDTO addGameList(GameListDTO data);
 }
