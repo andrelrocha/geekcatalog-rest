@@ -3,7 +3,11 @@ package rocha.andre.api.domain.gameList.useCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rocha.andre.api.domain.consoles.ConsoleRepository;
+import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
+import rocha.andre.api.domain.consoles.useCase.GetAllConsolesByGameId;
 import rocha.andre.api.domain.game.GameRepository;
+import rocha.andre.api.domain.gameConsole.DTO.GameConsoleReturnDTO;
+import rocha.andre.api.domain.gameConsole.useCase.GetAllGameConsolesByGameID;
 import rocha.andre.api.domain.gameList.DTO.*;
 import rocha.andre.api.domain.gameList.GameList;
 import rocha.andre.api.domain.gameList.GameListRepository;
@@ -14,7 +18,6 @@ import rocha.andre.api.domain.permission.useCase.GetPermissionByNameENUM;
 import rocha.andre.api.domain.user.UserRepository;
 import rocha.andre.api.infra.exceptions.ValidationException;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 @Component
@@ -31,6 +34,8 @@ public class AddGameList {
     private ConsoleRepository consoleRepository;
     @Autowired
     private ListPermissionUserRepository listPermissionUserRepository;
+    @Autowired
+    private GetAllConsolesByGameId getAllConsolesByGameId;
     @Autowired
     private GetPermissionByNameENUM getPermissionByNameENUM;
 
@@ -75,6 +80,13 @@ public class AddGameList {
         var consoleIdUUID = UUID.fromString(data.consoleId());
         var console = consoleRepository.findById(consoleIdUUID)
                 .orElseThrow(() -> new ValidationException("Não foi encontrado console com o id informado na adição de game list"));
+
+        var gameConsoles = getAllConsolesByGameId.getAllConsolesByGameId(null, data.gameId());
+        var consoleIds = gameConsoles.getContent().stream().map(ConsoleReturnDTO::id).toList();
+
+        if (!consoleIds.contains(console.getId())) {
+            throw new ValidationException("O console selecionado não está associado ao jogo.");
+        }
 
         var gameListCreateDTO = new GameListCreateDTO(user, game, list, console, data.note());
         var gameList = new GameList(gameListCreateDTO);
