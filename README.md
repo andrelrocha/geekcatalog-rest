@@ -53,4 +53,6 @@ The following technologies were used in the development of the REST API project:
 - **[Flyway](https://flywaydb.org)**
 - **[Lombok](https://projectlombok.org)**
 - **[JWT](https://jwt.io/)**
+- **[AWS](https://aws.amazon.com/sdk-for-java/)**
+- **[S3](https://aws.amazon.com/pt/pm/serv-s3/)**
 - **[IGDB-API](https://www.igdb.com/api)**
