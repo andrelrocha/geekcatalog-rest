@@ -19,6 +19,8 @@ public class GameListServiceImpl implements GameListService {
     @Autowired
     private CountGameListByListID countGameListByListID;
     @Autowired
+    private DeleteGameList deleteGameList;
+    @Autowired
     private GetGameListByListID getGameListByListID;
     @Autowired
     private GetGameListByID getGameListByID;
@@ -53,5 +55,10 @@ public class GameListServiceImpl implements GameListService {
     @Override
     public GameListFullReturnDTO addGameList(GameListDTO data) {
         return addGameList.addGameList(data);
+    }
+
+    @Override
+    public void deleteGameList(DeleteGameListDTO data) {
+        deleteGameList.deleteGameList(data);
     }
 }

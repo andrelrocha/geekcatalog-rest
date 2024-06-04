@@ -52,7 +52,6 @@ public class GameListController {
         return ResponseEntity.ok(count);
     }
 
-
     @PostMapping("/add/bulk")
     public ResponseEntity<ArrayList<GameListBulkReturnDTO>> addBulkGameList(@RequestBody GameListBulkCreateDTO data) {
         var newGamesList = service.addBulkGamesToList(data);
@@ -63,5 +62,13 @@ public class GameListController {
     public ResponseEntity<GameListFullReturnDTO> addGameList(@RequestBody GameListDTO data) {
         var newGameList = service.addGameList(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(newGameList);
+    }
+
+    @DeleteMapping("/delete/{gameListId}")
+    public ResponseEntity deleteGameList(@PathVariable String gameListId, @RequestHeader("Authorization") String authorizationHeader) {
+        var tokenJWT = authorizationHeader.substring(7);
+        var deleteDTO = new DeleteGameListDTO(gameListId, tokenJWT);
+        service.deleteGameList(deleteDTO);
+        return ResponseEntity.noContent().build();
     }
 }
