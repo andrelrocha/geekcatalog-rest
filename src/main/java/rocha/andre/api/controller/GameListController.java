@@ -25,7 +25,7 @@ public class GameListController {
     @GetMapping("/all/{listId}")
     public ResponseEntity<Page<GameListUriReturnDTO>> getGameListByListId(@PathVariable String listId,
                                                                         @RequestParam(defaultValue = "0") int page,
-                                                                        @RequestParam(defaultValue = "16") int size) {
+                                                                        @RequestParam(defaultValue = "12") int size) {
         var pageable = PageRequest.of(page, size);
         var gameListPageable = service.getGamesByListID(pageable, listId);
         return ResponseEntity.ok(gameListPageable);

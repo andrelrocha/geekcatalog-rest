@@ -8,6 +8,8 @@ import rocha.andre.api.domain.gameConsole.GameConsoleRepository;
 import rocha.andre.api.domain.gameGenre.GameGenreRepository;
 import rocha.andre.api.domain.gameList.GameListRepository;
 import rocha.andre.api.domain.gameStudio.GameStudioRepository;
+import rocha.andre.api.domain.imageGame.ImageGameRepository;
+import rocha.andre.api.domain.imageGame.useCase.DeleteImageGame;
 import rocha.andre.api.infra.exceptions.ValidationException;
 
 import java.util.UUID;
@@ -24,6 +26,8 @@ public class DeleteGame {
     private GameStudioRepository gameStudioRepository;
     @Autowired
     private GameListRepository gameListRepository;
+    @Autowired
+    private DeleteImageGame deleteImageGame;
     @Autowired
     private TransactionTemplate transactionTemplate;
 
@@ -42,6 +46,7 @@ public class DeleteGame {
                 gameConsoleRepository.deleteAll(gameConsolesToDelete);
                 var gameStudiosToDelete = gameStudioRepository.findAllByGameId(game.getId());
                 gameStudioRepository.deleteAll(gameStudiosToDelete);
+                deleteImageGame.deleteImageGameByGameId(gameId);
                 gameRepository.delete(game);
             } catch (Exception e) {
                 status.setRollbackOnly();

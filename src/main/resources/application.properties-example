@@ -8,8 +8,13 @@ server.port=8080
 
 api.security.token.secret=${JWT_SECRET:PASSWORDSECRET}
 
-spring.servlet.multipart.max-file-size=6MB
-spring.servlet.multipart.max-request-size=6MB
+spring.servlet.multipart.max-file-size=20MB
+spring.servlet.multipart.max-request-size=20MB
+
+amazon.s3.bucket-name=BUCKET-NAME
+amazon.s3.endpoint=BUCKET-ENDPOINT
+amazon.s3.access-key=${ACCESS_KEY}
+amazon.s3.secret-key=${SECRET_KEY}
 
 igdb.api.url.covers=https://api.igdb.com/v4/covers
 igdb.api.url.games=https://api.igdb.com/v4/games
