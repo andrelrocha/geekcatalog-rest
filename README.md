@@ -26,12 +26,16 @@ Replace your-project-name.jar with the actual name of your generated JAR file.
 - [x] Login system with JWT authentication
 - [x] CRUD for different sort of media types, categorized as backlog, such as games, animes, mangas, with their er relationships
 - [x] Routine for all entities in the system, easily traceable by the user
-- [x] Comment system allowing users to add both private and public comments in a social app-like format
 - [x] List management system, with users able to rate, indicate medium which they consumed the entity, and provide personal notes for them
 - [x] Image storage with file compression system, facilitating quick communication with the front-end
 - [x] CRUD for games, with image storage in the database and return in an ideal format for display on the front-end
 - [x] Token validation system to be used by the front-end
 - [x] Custom search system with pagination, enabling complete and customized access by the front-end
+- [x] CRUD for lists, with user permission system
+- [x] User invites for lists colaboration
+- [x] List management system, with CRUD for games in a list
+- [x] Public lists search system, with user search for others public list, for social media interaction
+- [x] Games relationships in a social media format, with user comments and rating, for social interaction
 - [x] All endpoints mapped in the REST standard
 - [x] Security schema implemented in the backend for requests in different layers
 
@@ -49,4 +53,6 @@ The following technologies were used in the development of the REST API project:
 - **[Flyway](https://flywaydb.org)**
 - **[Lombok](https://projectlombok.org)**
 - **[JWT](https://jwt.io/)**
+- **[AWS](https://aws.amazon.com/sdk-for-java/)**
+- **[S3](https://aws.amazon.com/pt/pm/serv-s3/)**
 - **[IGDB-API](https://www.igdb.com/api)**
