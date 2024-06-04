@@ -2,6 +2,7 @@ package rocha.andre.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rocha.andre.api.domain.listPermissionUser.DTO.DeleteListPermissionUserDTO;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserDTO;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserReturnDTO;
 import rocha.andre.api.domain.listPermissionUser.useCase.AddListPermissionUser;
@@ -35,7 +36,7 @@ public class ListPermissionUserServiceImpl implements ListPermissionUserService 
     }
 
     @Override
-    public void deleteAllListPermission(ListPermissionUserDTO data) {
+    public void deleteAllListPermission(DeleteListPermissionUserDTO data) {
         deleteAllListPermissionUser.deleteAllListPermission(data);
     }
 

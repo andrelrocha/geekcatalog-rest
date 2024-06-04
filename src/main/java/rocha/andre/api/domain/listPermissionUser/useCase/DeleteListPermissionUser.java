@@ -2,6 +2,7 @@ package rocha.andre.api.domain.listPermissionUser.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import rocha.andre.api.domain.listPermissionUser.DTO.DeleteListPermissionUserDTO;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserDTO;
 import rocha.andre.api.domain.listPermissionUser.ListPermissionUserRepository;
 import rocha.andre.api.domain.permission.PermissionEnum;
@@ -35,7 +36,8 @@ public class DeleteListPermissionUser {
             var readEnum = PermissionEnum.READ.toString();
             var permissionRead = permissionRepository.findByPermissionName(readEnum);
             if (permissionRead.getId().equals(permissionIdUUID)) {
-                deleteAllListPermissionUser.deleteAllListPermission(data);
+                var deleteDTO = new DeleteListPermissionUserDTO(data.listId(), participantInvited.getLogin(), data.ownerId());
+                deleteAllListPermissionUser.deleteAllListPermission(deleteDTO);
                 return;
             }
         } catch (Exception e) {

@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rocha.andre.api.domain.listPermissionUser.DTO.DeleteListPermissionUserDTO;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserDTO;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserReturnDTO;
 import rocha.andre.api.service.ListPermissionUserService;
@@ -27,8 +28,11 @@ public class ListPermissionUserController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/deleteall")
-    public ResponseEntity deleteAllListPermissionUser(@RequestBody ListPermissionUserDTO data) {
+    @DeleteMapping("/deleteall/list/{listId}/login/{participantLogin}")
+    public ResponseEntity deleteAllListPermissionUser(@PathVariable String listId, @PathVariable String participantLogin,
+                                                      @RequestHeader("Authorization") String authorizationHeader) {
+        var tokenJWT = authorizationHeader.substring(7);
+        var data = new DeleteListPermissionUserDTO(listId, participantLogin, tokenJWT);
         listPermissionUserService.deleteAllListPermission(data);
         return ResponseEntity.noContent().build();
     }
