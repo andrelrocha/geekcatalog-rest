@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.listPermissionUser.DTO.DeleteListPermissionUserDTO;
+import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionBulkAddDTO;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserDTO;
 import rocha.andre.api.domain.listPermissionUser.DTO.ListPermissionUserReturnDTO;
 import rocha.andre.api.service.ListPermissionUserService;
@@ -20,6 +21,12 @@ public class ListPermissionUserController {
     public ResponseEntity<ListPermissionUserReturnDTO> addListPermissionUser(@RequestBody ListPermissionUserDTO data) {
         var newListPermissionUser = listPermissionUserService.addPermissionToUserOnList(data);
         return ResponseEntity.ok(newListPermissionUser);
+    }
+
+    @PostMapping("/add/bulk")
+    public ResponseEntity addBulkListPermissionUser(@RequestBody ListPermissionBulkAddDTO data) {
+        var newListsPermissionUser = listPermissionUserService.addBulkPermissionToUserOnList(data);
+        return ResponseEntity.ok(newListsPermissionUser);
     }
 
     @DeleteMapping("/delete")
