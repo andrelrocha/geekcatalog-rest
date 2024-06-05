@@ -26,6 +26,8 @@ public class GameListServiceImpl implements GameListService {
     private GetGameListByID getGameListByID;
     @Autowired
     private GetLatestGameListByListID getLatestGameListByListID;
+    @Autowired
+    private UpdateGameList updateGameList;
 
     @Override
     public Page<GameListUriReturnDTO> getGamesByListID(Pageable pageable, String listId) {
@@ -55,6 +57,11 @@ public class GameListServiceImpl implements GameListService {
     @Override
     public GameListFullReturnDTO addGameList(GameListDTO data) {
         return addGameList.addGameList(data);
+    }
+
+    @Override
+    public GameListFullReturnDTO updateGameList(GameListUpdateRequestDTO data, String gameListId) {
+        return updateGameList.updateGameList(data, gameListId);
     }
 
     @Override

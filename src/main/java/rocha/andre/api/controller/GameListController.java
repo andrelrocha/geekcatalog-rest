@@ -64,6 +64,13 @@ public class GameListController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newGameList);
     }
 
+    @PutMapping("/update/{gameListId}")
+    public ResponseEntity<GameListFullReturnDTO> updateGameList(@PathVariable String gameListId,
+                                                                @RequestBody GameListUpdateRequestDTO data) {
+        var updatedGameList = service.updateGameList(data, gameListId);
+        return ResponseEntity.ok(updatedGameList);
+    }
+
     @DeleteMapping("/delete/{gameListId}")
     public ResponseEntity deleteGameList(@PathVariable String gameListId, @RequestHeader("Authorization") String authorizationHeader) {
         var tokenJWT = authorizationHeader.substring(7);

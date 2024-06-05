@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import rocha.andre.api.domain.consoles.Console;
 import rocha.andre.api.domain.game.Game;
 import rocha.andre.api.domain.gameList.DTO.GameListCreateDTO;
+import rocha.andre.api.domain.gameList.DTO.GameListUpdateDTO;
 import rocha.andre.api.domain.listsApp.DTO.ListAppCreateDTO;
 import rocha.andre.api.domain.listsApp.DTO.ListAppDTO;
 import rocha.andre.api.domain.listsApp.ListApp;
@@ -68,6 +69,15 @@ public class GameList {
         this.list = data.listApp();
         this.console = data.consolePlayed();
         this.note = data.note();
+    }
+
+    public void updateGameList(GameListUpdateDTO data) {
+        if (data.console() != null) {
+            this.console = data.console();
+        }
+        if (data.note() != null) {
+            this.note = data.note();
+        }
     }
 
     @PrePersist

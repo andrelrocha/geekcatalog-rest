@@ -13,5 +13,6 @@ public interface GameListService {
     CountGameListReturnDTO countGamesByListID(String listId);
     ArrayList<GameListBulkReturnDTO> addBulkGamesToList(GameListBulkCreateDTO data);
     GameListFullReturnDTO addGameList(GameListDTO data);
+    GameListFullReturnDTO updateGameList(GameListUpdateRequestDTO data, String gameListId);
     void deleteGameList(DeleteGameListDTO data);
 }
