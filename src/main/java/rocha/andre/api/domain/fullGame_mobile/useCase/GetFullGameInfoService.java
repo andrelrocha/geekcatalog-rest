@@ -7,6 +7,7 @@ import rocha.andre.api.domain.game.GameRepository;
 import rocha.andre.api.domain.gameConsole.GameConsoleRepository;
 import rocha.andre.api.domain.gameGenre.GameGenreRepository;
 import rocha.andre.api.domain.gameStudio.GameStudioRepository;
+import rocha.andre.api.domain.imageGame.useCase.GetImageGameByGameID;
 import rocha.andre.api.infra.exceptions.ValidationException;
 
 import java.util.UUID;
@@ -21,6 +22,8 @@ public class GetFullGameInfoService {
     private GameGenreRepository gameGenreRepository;
     @Autowired
     private GameConsoleRepository gameConsoleRepository;
+    @Autowired
+    private GetImageGameByGameID getImageGameByGameID;
 
     public FullGameUserDTO getFullGameInfo(String gameId) {
         var gameIdUUID = UUID.fromString(gameId);
@@ -34,6 +37,8 @@ public class GetFullGameInfoService {
 
         var gameConsole = gameConsoleRepository.findAllConsolesNamesByGameId(game.getId());
 
-        return new FullGameUserDTO(game, gameStudio, gameGenre, gameConsole);
+        var gameImageUrl = getImageGameByGameID.getImageGamesByGameID(gameId).imageUrl();
+
+        return new FullGameUserDTO(game, gameStudio, gameGenre, gameConsole, gameImageUrl);
     }
 }
