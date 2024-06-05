@@ -46,6 +46,12 @@ public class GameListController {
         return ResponseEntity.ok(gameList);
     }
 
+    @GetMapping("/gameinfo/{gameListId}")
+    public ResponseEntity<GameListGameAndConsolesDTO> getGameInfoByGameListID(@PathVariable String gameListId) {
+        var gameList = service.getGameInfoByGameListID(gameListId);
+        return ResponseEntity.ok(gameList);
+    }
+
     @GetMapping("/count/{listId}")
     public ResponseEntity<CountGameListReturnDTO> countGameListByListID(@PathVariable String listId) {
         var count = service.countGamesByListID(listId);

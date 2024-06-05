@@ -10,6 +10,7 @@ public interface GameListService {
     Page<GameListUriReturnDTO> getGamesByListID(Pageable pageable, String listId);
     GameListFullReturnDTO getGameListByID(String gameListID);
     Page<GameListReturnDTO> getLatestGamesByListID(Pageable pageable, String listId);
+    GameListGameAndConsolesDTO getGameInfoByGameListID(String gameListId);
     CountGameListReturnDTO countGamesByListID(String listId);
     ArrayList<GameListBulkReturnDTO> addBulkGamesToList(GameListBulkCreateDTO data);
     GameListFullReturnDTO addGameList(GameListDTO data);
