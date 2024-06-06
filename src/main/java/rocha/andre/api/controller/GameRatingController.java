@@ -2,10 +2,7 @@ package rocha.andre.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.gameRating.DTO.GameRatingDTO;
 import rocha.andre.api.service.GameRatingService;
 
@@ -19,5 +16,11 @@ public class GameRatingController {
     public ResponseEntity addGameRating(@RequestBody GameRatingDTO data) {
         var gameRating = service.addGameRating(data);
         return ResponseEntity.ok(gameRating);
+    }
+
+    @GetMapping("/average/{gameId}")
+    public ResponseEntity getAverageGameRating(@PathVariable String gameId) {
+        var averageRating = service.getAllRatingsByGameID(gameId);
+        return ResponseEntity.ok(averageRating);
     }
 }
