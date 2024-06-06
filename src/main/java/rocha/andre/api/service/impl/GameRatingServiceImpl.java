@@ -3,9 +3,11 @@ package rocha.andre.api.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rocha.andre.api.domain.gameRating.DTO.AllRatingsGameDTO;
+import rocha.andre.api.domain.gameRating.DTO.GameRatingByGameAndUserDTO;
 import rocha.andre.api.domain.gameRating.DTO.GameRatingDTO;
 import rocha.andre.api.domain.gameRating.DTO.GameRatingReturnDTO;
 import rocha.andre.api.domain.gameRating.useCase.AddGameRating;
+import rocha.andre.api.domain.gameRating.useCase.GetRatingByGameAndUser;
 import rocha.andre.api.domain.gameRating.useCase.GetRatingByGameId;
 import rocha.andre.api.service.GameRatingService;
 
@@ -15,6 +17,8 @@ public class GameRatingServiceImpl implements GameRatingService {
     private AddGameRating addGameRating;
     @Autowired
     private GetRatingByGameId getRatingByGameId;
+    @Autowired
+    private GetRatingByGameAndUser getRatingByGameAndUser;
 
     @Override
     public GameRatingReturnDTO addGameRating(GameRatingDTO data) {
@@ -24,5 +28,10 @@ public class GameRatingServiceImpl implements GameRatingService {
     @Override
     public AllRatingsGameDTO getAllRatingsByGameID(String gameId) {
         return getRatingByGameId.getAllRatingsByGameID(gameId);
+    }
+
+    @Override
+    public GameRatingReturnDTO getRatingByGameAndUser(GameRatingByGameAndUserDTO data) {
+        return getRatingByGameAndUser.getRatingByGameAndUser(data);
     }
 }
