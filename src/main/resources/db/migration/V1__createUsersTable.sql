@@ -5,6 +5,10 @@ CREATE TABLE users (
     name VARCHAR(100),
     cpf VARCHAR(14) UNIQUE,
     role VARCHAR(100) NOT NULL,
+    phone VARCHAR(14),
+    birthday DATE,
     token_expiration TIMESTAMP,
-    token_mail VARCHAR(255)
+    token_mail VARCHAR(255),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
 );

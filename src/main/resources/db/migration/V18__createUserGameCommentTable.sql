@@ -1,6 +1,6 @@
-CREATE TABLE users_game_rating (
-    id UUID,
-    rating INT,
+CREATE TABLE user_game_comment (
+    id UUID PRIMARY KEY,
+    comment VARCHAR(300),
     user_id UUID REFERENCES users(id),
     game_id UUID REFERENCES games(id),
     created_at TIMESTAMP,

@@ -1,3 +1,0 @@
-ALTER TABLE lists_app
-ADD COLUMN created_at TIMESTAMP,
-ADD COLUMN updated_at TIMESTAMP;
