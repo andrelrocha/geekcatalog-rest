@@ -25,7 +25,7 @@ public class GetRatingByGameId {
             totalRatings += rating.getRating();
         }
 
-        int averageRating = totalReviews > 0 ? totalRatings / totalReviews : 0;
+        double averageRating = totalReviews > 0 ? (double) totalRatings / totalReviews : 0;
 
         return new AllRatingsGameDTO(totalReviews, averageRating);
     }
