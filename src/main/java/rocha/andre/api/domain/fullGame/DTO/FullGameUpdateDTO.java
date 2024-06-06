@@ -1,8 +1,6 @@
-package rocha.andre.api.domain.fullGame_mobile.DTO;
+package rocha.andre.api.domain.fullGame.DTO;
 
-import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 import rocha.andre.api.domain.game.Game;
-import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
 
 import java.util.ArrayList;
 

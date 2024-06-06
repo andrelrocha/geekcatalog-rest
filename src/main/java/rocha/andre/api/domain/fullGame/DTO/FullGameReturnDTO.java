@@ -1,14 +1,9 @@
-package rocha.andre.api.domain.fullGame_mobile.DTO;
+package rocha.andre.api.domain.fullGame.DTO;
 
-import rocha.andre.api.domain.consoles.Console;
 import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 import rocha.andre.api.domain.game.Game;
-import rocha.andre.api.domain.gameGenre.DTO.GameGenreReturnDTO;
-import rocha.andre.api.domain.gameStudio.DTO.GameStudioReturnDTO;
 import rocha.andre.api.domain.genres.DTO.GenreReturnDTO;
-import rocha.andre.api.domain.genres.Genre;
 import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
-import rocha.andre.api.domain.studios.Studio;
 
 import java.util.ArrayList;
 import java.util.UUID;

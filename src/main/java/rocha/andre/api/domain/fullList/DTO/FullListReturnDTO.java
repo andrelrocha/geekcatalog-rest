@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.fullList_mobile.DTO;
+package rocha.andre.api.domain.fullList.DTO;
 
 import java.util.ArrayList;
 import java.util.UUID;

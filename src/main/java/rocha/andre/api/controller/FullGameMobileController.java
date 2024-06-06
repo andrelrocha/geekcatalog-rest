@@ -3,16 +3,12 @@ package rocha.andre.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rocha.andre.api.domain.fullGame_mobile.DTO.FullGameReturnDTO;
-import rocha.andre.api.domain.fullGame_mobile.DTO.FullGameUpdateDTO;
-import rocha.andre.api.domain.fullGame_mobile.DTO.FullGameUserDTO;
-import rocha.andre.api.domain.fullGame_mobile.useCase.GetFullGameAdminInfoService;
-import rocha.andre.api.domain.fullGame_mobile.useCase.GetFullGameInfoService;
-import rocha.andre.api.domain.fullGame_mobile.useCase.UpdateFullGameAdmin;
-import rocha.andre.api.domain.gameGenre.DTO.UpdateGameGenreDTO;
-import rocha.andre.api.domain.gameGenre.useCase.UpdateGameGenres;
-
-import java.util.ArrayList;
+import rocha.andre.api.domain.fullGame.DTO.FullGameReturnDTO;
+import rocha.andre.api.domain.fullGame.DTO.FullGameUpdateDTO;
+import rocha.andre.api.domain.fullGame.DTO.FullGameUserDTO;
+import rocha.andre.api.domain.fullGame.useCase.GetFullGameAdminInfoService;
+import rocha.andre.api.domain.fullGame.useCase.GetFullGameInfoService;
+import rocha.andre.api.domain.fullGame.useCase.UpdateFullGameAdmin;
 
 @RestController
 @RequestMapping("/fullgame")

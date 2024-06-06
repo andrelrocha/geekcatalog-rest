@@ -5,9 +5,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rocha.andre.api.domain.fullList_mobile.useCase.GetListFullInfoService;
-import rocha.andre.api.domain.fullList_mobile.useCase.GetPermissionedListFullService;
-import rocha.andre.api.domain.fullList_mobile.useCase.GetPublicListFullService;
+import rocha.andre.api.domain.fullList.useCase.GetListFullInfoService;
+import rocha.andre.api.domain.fullList.useCase.GetPermissionedListFullService;
+import rocha.andre.api.domain.fullList.useCase.GetPublicListFullService;
 
 @RestController
 @RequestMapping("/listfull")

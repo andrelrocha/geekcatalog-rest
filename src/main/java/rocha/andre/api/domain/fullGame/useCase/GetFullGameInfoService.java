@@ -1,11 +1,12 @@
-package rocha.andre.api.domain.fullGame_mobile.useCase;
+package rocha.andre.api.domain.fullGame.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rocha.andre.api.domain.fullGame_mobile.DTO.FullGameUserDTO;
+import rocha.andre.api.domain.fullGame.DTO.FullGameUserDTO;
 import rocha.andre.api.domain.game.GameRepository;
 import rocha.andre.api.domain.gameConsole.GameConsoleRepository;
 import rocha.andre.api.domain.gameGenre.GameGenreRepository;
+import rocha.andre.api.domain.gameRating.useCase.GetRatingByGameId;
 import rocha.andre.api.domain.gameStudio.GameStudioRepository;
 import rocha.andre.api.domain.imageGame.useCase.GetImageGameByGameID;
 import rocha.andre.api.infra.exceptions.ValidationException;
@@ -24,6 +25,8 @@ public class GetFullGameInfoService {
     private GameConsoleRepository gameConsoleRepository;
     @Autowired
     private GetImageGameByGameID getImageGameByGameID;
+    @Autowired
+    private GetRatingByGameId getRatingByGameId;
 
     public FullGameUserDTO getFullGameInfo(String gameId) {
         var gameIdUUID = UUID.fromString(gameId);
@@ -39,6 +42,8 @@ public class GetFullGameInfoService {
 
         var gameImageUrl = getImageGameByGameID.getImageGamesByGameID(gameId).imageUrl();
 
-        return new FullGameUserDTO(game, gameStudio, gameGenre, gameConsole, gameImageUrl);
+        var gameRating = getRatingByGameId.getAllRatingsByGameID(gameId);
+
+        return new FullGameUserDTO(game, gameStudio, gameGenre, gameConsole, gameImageUrl, gameRating.totalReviews(), gameRating.averageRating());
     }
 }
