@@ -27,6 +27,8 @@ public class DeleteGame {
     @Autowired
     private GameListRepository gameListRepository;
     @Autowired
+    private ImageGameRepository imageGameRepository;
+    @Autowired
     private DeleteImageGame deleteImageGame;
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -39,14 +41,27 @@ public class DeleteGame {
         transactionTemplate.execute(status -> {
             try {
                 var gameListToDelete = gameListRepository.findAllByGameId(game.getId());
-                gameListRepository.deleteAll(gameListToDelete);
                 var gameGenresToDelete = gameGenreRepository.findAllByGameId(game.getId());
-                gameGenreRepository.deleteAll(gameGenresToDelete);
                 var gameConsolesToDelete = gameConsoleRepository.findAllByGameId(game.getId());
-                gameConsoleRepository.deleteAll(gameConsolesToDelete);
                 var gameStudiosToDelete = gameStudioRepository.findAllByGameId(game.getId());
-                gameStudioRepository.deleteAll(gameStudiosToDelete);
-                deleteImageGame.deleteImageGameByGameId(gameId);
+                var imageGameToDelete = imageGameRepository.findImageGameByGameID(game.getId());
+
+                if (!gameListToDelete.isEmpty()) {
+                    gameListRepository.deleteAll(gameListToDelete);
+                }
+                if (!gameGenresToDelete.isEmpty()) {
+                    gameGenreRepository.deleteAll(gameGenresToDelete);
+                }
+                if (!gameConsolesToDelete.isEmpty()) {
+                    gameConsoleRepository.deleteAll(gameConsolesToDelete);
+                }
+                if (!gameStudiosToDelete.isEmpty()) {
+                    gameStudioRepository.deleteAll(gameStudiosToDelete);
+                }
+                if (imageGameToDelete != null) {
+                    deleteImageGame.deleteImageGameByGameId(gameId);
+                }
+
                 gameRepository.delete(game);
             } catch (Exception e) {
                 status.setRollbackOnly();
