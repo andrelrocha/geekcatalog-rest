@@ -27,4 +27,10 @@ public interface GameRatingRepository extends JpaRepository<GameRating, UUID> {
                 WHERE gr.game.id = :gameId
             """)
     List<GameRating> findAllByGameId(UUID gameId);
+
+    @Query("""
+                SELECT gr FROM GameRating gr
+                WHERE gr.user.id = :userId
+            """)
+    List<GameRating> findAllByUserId(UUID userId);
 }

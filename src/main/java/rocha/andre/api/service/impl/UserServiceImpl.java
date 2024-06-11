@@ -14,6 +14,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CreateUser createUser;
     @Autowired
+    private DeleteUser deleteUser;
+    @Autowired
     private GetUserByTokenJWT getUserByTokenJWT;
     @Autowired
     private GetUserIdByJWT getUserIdByJWT;
@@ -66,5 +68,10 @@ public class UserServiceImpl implements UserService {
     public UserReturnDTO updateUserInfo(UserGetInfoUpdateDTO data, String tokenJWT) {
         var updatedUser = updateUser.updateUserInfo(data, tokenJWT);
         return updatedUser;
+    }
+
+    @Override
+    public void deleteUser(String tokenJWT) {
+        deleteUser.deleteUser(tokenJWT);
     }
 }

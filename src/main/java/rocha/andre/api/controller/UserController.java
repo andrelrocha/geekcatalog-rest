@@ -64,4 +64,11 @@ public class UserController {
         var updatedUser = userService.updateUserInfo(data, tokenJWT);
         return ResponseEntity.ok(updatedUser);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteUser(@RequestHeader("Authorization") String authorizationHeader) {
+        var tokenJWT = authorizationHeader.substring(7);
+        userService.deleteUser(tokenJWT);
+        return ResponseEntity.noContent().build();
+    }
 }

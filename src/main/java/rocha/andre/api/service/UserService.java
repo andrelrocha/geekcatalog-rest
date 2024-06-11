@@ -11,4 +11,5 @@ public interface UserService {
     String resetPassword(UserResetPassDTO data);
     UserIdDTO getUserIdByJWT(String token);
     UserReturnDTO updateUserInfo(UserGetInfoUpdateDTO data, String tokenJWT);
+    void deleteUser(String tokenJWT);
 }

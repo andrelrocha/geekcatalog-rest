@@ -40,7 +40,6 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.GET, "/countries/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "fullgame/admin/**").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.PUT, "fullgame/admin/**").hasRole("ADMIN");
-                    req.requestMatchers(HttpMethod.DELETE, "/users").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.DELETE, "/games/**").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.PUT, "/games/**").hasRole("ADMIN");
                     req.requestMatchers(HttpMethod.POST, "/games/**").hasRole("ADMIN");
