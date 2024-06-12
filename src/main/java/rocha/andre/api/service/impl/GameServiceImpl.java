@@ -21,12 +21,20 @@ public class GameServiceImpl implements GameService {
     @Autowired
     private GetAllGamesWithID getAllGamesWithID;
     @Autowired
+    private SearchByName searchByName;
+    @Autowired
     private UpdateGame updateGame;
 
     @Override
     public Page<GameReturnDTO> getAllGames(Pageable pageable) {
         var games = getAllGamesPageable.getAllGames(pageable);
         return games;
+    }
+
+    @Override
+    public Page<GameReturnDTO> getAllGamesByName(Pageable pageable, String nameCompare) {
+        var gamesComparable = searchByName.getAllGamesByName(pageable, nameCompare);
+        return gamesComparable;
     }
 
     @Override
