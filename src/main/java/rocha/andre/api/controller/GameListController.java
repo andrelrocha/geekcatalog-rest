@@ -11,6 +11,7 @@ import rocha.andre.api.domain.gameGenre.DTO.GameGenreDTO;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreReturnDTO;
 import rocha.andre.api.domain.gameGenre.DTO.UpdateGameGenreDTO;
 import rocha.andre.api.domain.gameList.DTO.*;
+import rocha.andre.api.domain.genres.DTO.GenreCountDTO;
 import rocha.andre.api.service.GameGenreService;
 import rocha.andre.api.service.GameListService;
 
@@ -56,6 +57,18 @@ public class GameListController {
     public ResponseEntity<CountGameListReturnDTO> countGameListByListID(@PathVariable String listId) {
         var count = service.countGamesByListID(listId);
         return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/genres/ranked")
+    public ResponseEntity<Page<GenreCountDTO>> getGameListGenresRankedByUser(@RequestParam(defaultValue = "0") int page,
+                                                                             @RequestParam(defaultValue = "" + Integer.MAX_VALUE) int size,
+                                                                             @RequestParam(defaultValue = "count") String sortField,
+                                                                             @RequestParam(defaultValue = "desc") String sortOrder,
+                                                                             @RequestHeader("Authorization") String authorizationHeader) {
+        var tokenJWT = authorizationHeader.substring(7);
+        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
+        var gameListGenres = service.getAllGameListGenresByUserId(tokenJWT, pageable);
+        return ResponseEntity.ok(gameListGenres);
     }
 
     @PostMapping("/add/bulk")

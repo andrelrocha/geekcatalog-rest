@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import rocha.andre.api.domain.gameGenre.DTO.GameGenreReturnDTO;
 import rocha.andre.api.domain.gameList.DTO.*;
 import rocha.andre.api.domain.gameList.useCase.*;
+import rocha.andre.api.domain.genres.DTO.GenreCountDTO;
 import rocha.andre.api.service.GameListService;
 
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class GameListServiceImpl implements GameListService {
     @Autowired
     private GetGameIdAndConsolesAvailableByGameListID getGameIdAndConsolesAvailableByGameListID;
     @Autowired
+    private GetAllGameListGenresByUser getAllGameListGenresByUser;
+    @Autowired
     private UpdateGameList updateGameList;
 
     @Override
@@ -49,6 +53,11 @@ public class GameListServiceImpl implements GameListService {
     @Override
     public GameListGameAndConsolesDTO getGameInfoByGameListID(String gameListId) {
         return getGameIdAndConsolesAvailableByGameListID.getGameInfoByGameListID(gameListId);
+    }
+
+    @Override
+    public Page<GenreCountDTO> getAllGameListGenresByUserId(String tokenJWT, Pageable pageable) {
+        return getAllGameListGenresByUser.getAllGameListGenresByUserId(tokenJWT, pageable);
     }
 
     @Override
