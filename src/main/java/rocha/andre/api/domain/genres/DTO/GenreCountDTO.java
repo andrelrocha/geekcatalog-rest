@@ -1,4 +1,6 @@
 package rocha.andre.api.domain.genres.DTO;
 
-public record GenreCountDTO(String genreName, int count) {
+import java.util.UUID;
+
+public record GenreCountDTO(UUID genreId, String genreName, int count) {
 }

@@ -37,15 +37,14 @@ public class GetAllGameListGenresByUser {
                 .flatMap(gameList -> gameGenreRepository.findAllGameGenresByGameId(gameList.getGame().getId(), pageableGenres).stream())
                 .toList();
 
-        Map<String, Integer> genreCountMap = new HashMap<>();
+        Map<UUID, GenreCountDTO> genreCountMap = new HashMap<>();
         for (GameGenre gameGenre : gameGenres) {
+            var genreId = gameGenre.getGenre().getId();
             var genreName = gameGenre.getGenre().getName();
-            genreCountMap.put(genreName, genreCountMap.getOrDefault(genreName, 0) + 1);
+            genreCountMap.put(genreId, new GenreCountDTO(genreId, genreName, genreCountMap.getOrDefault(genreId, new GenreCountDTO(genreId, genreName, 0)).count() + 1));
         }
 
-        List<GenreCountDTO> genreCountList = genreCountMap.entrySet().stream()
-                .map(entry -> new GenreCountDTO(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
+        List<GenreCountDTO> genreCountList = new ArrayList<>(genreCountMap.values());
 
         PagedListHolder<GenreCountDTO> pagedListHolder = new PagedListHolder<>(genreCountList);
         pagedListHolder.setPageSize(pageable.getPageSize());
