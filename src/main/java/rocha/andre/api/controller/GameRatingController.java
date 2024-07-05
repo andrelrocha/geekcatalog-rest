@@ -33,4 +33,11 @@ public class GameRatingController {
         var gameRating = service.getRatingByGameAndUser(data);
         return ResponseEntity.ok(gameRating);
     }
+
+    @GetMapping("/average/user/{userId}")
+    public ResponseEntity getAverageRatingByUser(@RequestHeader("Authorization") String authorizationHeader) {
+        var tokenJWT = authorizationHeader.substring(7);
+        var averageRating = service.getAverageRatingByJWT(tokenJWT);
+        return ResponseEntity.ok(averageRating);
+    }
 }
