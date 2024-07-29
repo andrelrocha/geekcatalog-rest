@@ -7,6 +7,7 @@ import rocha.andre.api.domain.game.GameRepository;
 import rocha.andre.api.domain.gameConsole.GameConsoleRepository;
 import rocha.andre.api.domain.gameGenre.GameGenreRepository;
 import rocha.andre.api.domain.gameList.GameListRepository;
+import rocha.andre.api.domain.gameRating.GameRatingRepository;
 import rocha.andre.api.domain.gameStudio.GameStudioRepository;
 import rocha.andre.api.domain.imageGame.ImageGameRepository;
 import rocha.andre.api.domain.imageGame.useCase.DeleteImageGame;
@@ -29,6 +30,8 @@ public class DeleteGame {
     @Autowired
     private ImageGameRepository imageGameRepository;
     @Autowired
+    private GameRatingRepository gameRatingRepository;
+    @Autowired
     private DeleteImageGame deleteImageGame;
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -44,6 +47,7 @@ public class DeleteGame {
                 var gameGenresToDelete = gameGenreRepository.findAllByGameId(game.getId());
                 var gameConsolesToDelete = gameConsoleRepository.findAllByGameId(game.getId());
                 var gameStudiosToDelete = gameStudioRepository.findAllByGameId(game.getId());
+                var gameRatingToDelete = gameRatingRepository.findAllByGameId(game.getId());
                 var imageGameToDelete = imageGameRepository.findImageGameByGameID(game.getId());
 
                 if (!gameListToDelete.isEmpty()) {
@@ -57,6 +61,9 @@ public class DeleteGame {
                 }
                 if (!gameStudiosToDelete.isEmpty()) {
                     gameStudioRepository.deleteAll(gameStudiosToDelete);
+                }
+                if (!gameRatingToDelete.isEmpty()) {
+                    gameRatingRepository.deleteAll(gameRatingToDelete);
                 }
                 if (imageGameToDelete != null) {
                     deleteImageGame.deleteImageGameByGameId(gameId);
