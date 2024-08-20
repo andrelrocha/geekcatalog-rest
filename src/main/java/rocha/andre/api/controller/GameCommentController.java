@@ -32,4 +32,12 @@ public class GameCommentController {
         var gameComment = gameCommentService.getCommentsPageable(pageable, gameId);
         return ResponseEntity.ok(gameComment);
     }
+
+    @DeleteMapping("/delete/{commentId}")
+    public ResponseEntity deleteComment(@PathVariable String commentId,
+                                        @RequestHeader("Authorization") String authorizationHeader) {
+        var tokenJWT = authorizationHeader.substring(7);
+        gameCommentService.deleteGameComment(tokenJWT, commentId);
+        return ResponseEntity.noContent().build();
+    }
 }

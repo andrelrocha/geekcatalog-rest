@@ -8,6 +8,7 @@ import rocha.andre.api.domain.gameComment.DTO.CreateGameCommentDTO;
 import rocha.andre.api.domain.gameComment.DTO.GameCommentJOINReturnDTO;
 import rocha.andre.api.domain.gameComment.DTO.GameCommentReturnDTO;
 import rocha.andre.api.domain.gameComment.useCase.AddGameComment;
+import rocha.andre.api.domain.gameComment.useCase.DeleteGameComment;
 import rocha.andre.api.domain.gameComment.useCase.GetGameComments;
 import rocha.andre.api.service.GameCommentService;
 
@@ -15,6 +16,8 @@ import rocha.andre.api.service.GameCommentService;
 public class GameCommentServiceImpl implements GameCommentService {
     @Autowired
     private AddGameComment addGameComment;
+    @Autowired
+    private DeleteGameComment deleteGameComment;
     @Autowired
     private GetGameComments getGameComments;
 
@@ -26,5 +29,10 @@ public class GameCommentServiceImpl implements GameCommentService {
     @Override
     public Page<GameCommentJOINReturnDTO> getCommentsPageable(Pageable pageable, String gameId) {
         return getGameComments.getCommentsPageable(pageable, gameId);
+    }
+
+    @Override
+    public void deleteGameComment(String tokenJWT, String commentId) {
+        deleteGameComment.deleteGameComment(tokenJWT, commentId);
     }
 }
