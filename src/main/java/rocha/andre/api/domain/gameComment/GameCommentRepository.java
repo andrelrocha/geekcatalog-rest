@@ -18,10 +18,12 @@ public interface GameCommentRepository extends JpaRepository<GameComment, UUID> 
 
     @Query("""
             SELECT new rocha.andre.api.domain.gameComment.DTO.GameCommentJOINReturnDTO(
-                    gc.id, u.id, u.name, gr.rating, gc.game.id, gc.comment, gc.createdAt, gc.updatedAt)
+                            gc.id, u.id, u.name,
+                            COALESCE(gr.rating, 0) AS rating,
+                            gc.game.id, gc.comment, gc.createdAt, gc.updatedAt)
             FROM GameComment gc
             JOIN User u ON gc.user.id = u.id
-            JOIN GameRating gr ON gc.game.id = gr.game.id AND gc.user.id = u.id
+            LEFT JOIN GameRating gr ON gr.game.id = gc.game.id AND gr.user.id = u.id
             WHERE gc.game.id = :gameId
             ORDER BY gc.createdAt DESC
             """)

@@ -25,8 +25,8 @@ public class GameCommentController {
     @GetMapping("/get/{gameId}")
     public ResponseEntity getCommentsByGameId(@RequestParam(defaultValue = "0") int page,
                                               @RequestParam(defaultValue = "16") int size,
-                                              @RequestParam(defaultValue = "id") String sortField,
-                                              @RequestParam(defaultValue = "asc") String sortOrder,
+                                              @RequestParam(defaultValue = "createdAt") String sortField,
+                                              @RequestParam(defaultValue = "desc") String sortOrder,
                                               @PathVariable String gameId) {
         var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortOrder), sortField));
         var gameComment = gameCommentService.getCommentsPageable(pageable, gameId);
