@@ -71,4 +71,10 @@ public class UserController {
         userService.deleteUser(tokenJWT);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/public/{userId}")
+    public ResponseEntity getPublicInfo(@PathVariable String userId) {
+        var publicInfo = userService.getPublicInfoByUserId(userId);
+        return ResponseEntity.ok(publicInfo);
+    }
 }

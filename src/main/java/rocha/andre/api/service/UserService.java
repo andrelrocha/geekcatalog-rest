@@ -12,4 +12,5 @@ public interface UserService {
     UserIdDTO getUserIdByJWT(String token);
     UserReturnDTO updateUserInfo(UserGetInfoUpdateDTO data, String tokenJWT);
     void deleteUser(String tokenJWT);
+    UserPublicReturnDTO getPublicInfoByUserId(String userId);
 }

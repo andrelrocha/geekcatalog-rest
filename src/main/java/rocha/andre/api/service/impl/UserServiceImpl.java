@@ -20,6 +20,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private GetUserIdByJWT getUserIdByJWT;
     @Autowired
+    private GetPublicInfo getPublicInfo;
+    @Autowired
     private ForgotPassword forgotPassword;
     @Autowired
     private PerformLogin performLogin;
@@ -73,5 +75,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String tokenJWT) {
         deleteUser.deleteUser(tokenJWT);
+    }
+
+    @Override
+    public UserPublicReturnDTO getPublicInfoByUserId(String userId) {
+        return getPublicInfo.getPublicInfoByUserId(userId);
     }
 }
