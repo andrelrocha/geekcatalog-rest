@@ -1,10 +1,7 @@
 package rocha.andre.api.domain.gameComment;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -18,6 +15,7 @@ import java.util.UUID;
 @Table(name = "user_game_comment")
 @Entity(name = "GameComment")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -63,4 +61,5 @@ public class GameComment {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
 }

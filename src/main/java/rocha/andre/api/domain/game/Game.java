@@ -1,10 +1,7 @@
 package rocha.andre.api.domain.game;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import rocha.andre.api.domain.game.DTO.GameDTO;
 
@@ -15,6 +12,7 @@ import java.util.UUID;
 @Table(name = "games")
 @Entity(name = "Game")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
