@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import rocha.andre.api.service.GameRatingService;
 
 @RestController
 @RequestMapping("/gamerating")
+@Tag(name = "Game Rating Routes Mapped on Controller")
 public class GameRatingController {
     @Autowired
     private GameRatingService service;

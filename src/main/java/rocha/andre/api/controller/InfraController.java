@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -16,6 +17,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/infra")
+@Tag(name = "Infra Routes Mapped on Controller")
 public class InfraController {
     @Autowired
     private TokenService tokenService;

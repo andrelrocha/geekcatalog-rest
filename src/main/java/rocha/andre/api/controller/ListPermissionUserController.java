@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,6 +14,7 @@ import rocha.andre.api.service.ListPermissionUserService;
 
 @RestController
 @RequestMapping("/listspermission")
+@Tag(name = "Lists Permission Routes Mapped on Controller")
 public class ListPermissionUserController {
     @Autowired
     private ListPermissionUserService listPermissionUserService;

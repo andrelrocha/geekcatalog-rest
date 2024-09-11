@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/imagegamelegacy")
+@Tag(name = "DEPRECEATED Image Game Routes Mapped on Controller")
 public class ImageGameLegacyController {
     @Autowired
     private ImageGameLegacyService imageGameLegacyService;

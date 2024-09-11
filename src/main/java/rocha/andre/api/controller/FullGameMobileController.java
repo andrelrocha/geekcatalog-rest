@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import rocha.andre.api.domain.fullGame.useCase.UpdateFullGameAdmin;
 
 @RestController
 @RequestMapping("/fullgame")
+@Tag(name = "Game with Full Info Routes Mapped on Controller")
 public class FullGameMobileController {
     @Autowired
     private GetFullGameAdminInfoService getFullGameAdminInfoService;

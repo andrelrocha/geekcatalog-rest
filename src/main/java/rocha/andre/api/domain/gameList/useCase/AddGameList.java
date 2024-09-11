@@ -6,8 +6,6 @@ import rocha.andre.api.domain.consoles.ConsoleRepository;
 import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 import rocha.andre.api.domain.consoles.useCase.GetAllConsolesByGameId;
 import rocha.andre.api.domain.game.GameRepository;
-import rocha.andre.api.domain.gameConsole.DTO.GameConsoleReturnDTO;
-import rocha.andre.api.domain.gameConsole.useCase.GetAllGameConsolesByGameID;
 import rocha.andre.api.domain.gameList.DTO.*;
 import rocha.andre.api.domain.gameList.GameList;
 import rocha.andre.api.domain.gameList.GameListRepository;

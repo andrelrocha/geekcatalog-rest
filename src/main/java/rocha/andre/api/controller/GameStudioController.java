@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import rocha.andre.api.service.GameStudioService;
 
 @RestController
 @RequestMapping("/gamestudio")
+@Tag(name = "Game Studio Routes Mapped on Controller")
 public class GameStudioController {
     @Autowired
     private GameStudioService service;

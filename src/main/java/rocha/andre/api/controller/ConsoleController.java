@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,7 @@ import rocha.andre.api.service.ConsoleService;
 
 @RestController
 @RequestMapping("/consoles")
+@Tag(name = "Console Routes Mapped on Controller")
 public class ConsoleController {
     @Autowired
     private ConsoleService consoleService;

@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import rocha.andre.api.service.UserService;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User Routes Mapped on Controller")
 public class UserController {
 
     @Autowired

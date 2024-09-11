@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import rocha.andre.api.service.GenreService;
 
 @RestController
 @RequestMapping("/genres")
+@Tag(name = "Genre Routes Mapped on Controller")
 public class GenreController {
 
     @Autowired

@@ -1,5 +1,6 @@
 package rocha.andre.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -11,6 +12,7 @@ import rocha.andre.api.domain.fullList.useCase.GetPublicListFullService;
 
 @RestController
 @RequestMapping("/listfull")
+@Tag(name = "App List with Full Info Routes Mapped on Controller")
 public class FullListMobileController {
     @Autowired
     private GetListFullInfoService getListFullInfoService;
