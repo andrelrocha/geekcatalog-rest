@@ -31,6 +31,7 @@ public class TokenService {
                     .withIssuer("geekcatalog-api")
                     .withSubject(user.getLogin())
                     .withClaim("id", user.getId().toString())
+                    .withIssuedAt(Instant.now())
                     .withExpiresAt(dateExpires())
                     .sign(algorithm);
 
@@ -40,14 +41,18 @@ public class TokenService {
         }
     }
 
-    public String generateRefreshToken(User user) {
+    public String generateRefreshToken(String token) {
         try {
+            var subject = getSubject(token);
+            var claim = getClaim(token);
+
             Algorithm algorithm = Algorithm.HMAC256(refreshSecret);
             return JWT.create()
                     .withIssuer("geekcatalog-api")
-                    .withSubject(user.getLogin())
-                    .withClaim("id", user.getId().toString())
+                    .withSubject(subject)
+                    .withClaim("id", claim)
                     .withClaim("refreshId", UUID.randomUUID().toString())
+                    .withIssuedAt(Instant.now())
                     .withExpiresAt(refreshTokenExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {

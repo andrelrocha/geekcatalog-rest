@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
-import rocha.andre.api.infra.security.SecurityFilter;
-import rocha.andre.api.infra.security.TokenJwtDto;
 import rocha.andre.api.infra.security.TokenService;
 
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class InfraController {
         var isValid = tokenService.isJwtTokenValid(tokenJwt);
 
         if (!isValid) {
-            throw new BadCredentialsException("Seu accessToken de autenticação falhou. Você não tem autorização para acessar a aplicação.");
+            throw new BadCredentialsException("Seu token de autenticação falhou. Você não tem autorização para acessar a aplicação.");
         }
 
         return true;
