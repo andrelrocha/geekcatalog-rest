@@ -6,7 +6,8 @@ spring.datasource.driver-class-name=org.postgresql.Driver
 
 server.port=8080
 
-api.security.token.secret=${JWT_SECRET:PASSWORDSECRET}
+api.security.accessToken.secret=${ACCESSTOKEN_SECRET:PASSWORDSECRET}
+pi.security.refresh.secret=${REFRESH_SECRET:REFRESHSECRET}
 
 spring.servlet.multipart.max-file-size=20MB
 spring.servlet.multipart.max-request-size=20MB

@@ -27,7 +27,7 @@ public class InfraController {
         var isValid = tokenService.isJwtTokenValid(tokenJwt);
 
         if (!isValid) {
-            throw new BadCredentialsException("Seu token de autenticação falhou. Você não tem autorização para acessar a aplicação.");
+            throw new BadCredentialsException("Seu accessToken de autenticação falhou. Você não tem autorização para acessar a aplicação.");
         }
 
         return true;

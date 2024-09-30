@@ -36,7 +36,7 @@ public class ResetPassword {
                 String encodedPassword = bCryptPasswordEncoder.encode(data.password());
                 user.setPassword(encodedPassword);
             } else {
-                throw new ValidationException("Invalid reset token key");
+                throw new ValidationException("Invalid reset accessToken key");
             }
         }
         catch (Exception e) {

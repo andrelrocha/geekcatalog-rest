@@ -26,8 +26,9 @@ public class PerformLogin {
 
         User userAuthenticated = (User) authentication.getPrincipal();
 
-        String tokenJwt = tokenService.generateJwtToken(userAuthenticated);
+        String accessToken = tokenService.generateJwtToken(userAuthenticated);
+        String refreshToken = tokenService.generateRefreshToken(userAuthenticated);
 
-        return new TokenJwtDto(tokenJwt);
+        return new TokenJwtDto(accessToken, refreshToken);
     }
 }
