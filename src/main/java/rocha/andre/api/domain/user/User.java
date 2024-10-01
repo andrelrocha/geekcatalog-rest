@@ -6,7 +6,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import rocha.andre.api.domain.authenticationType.AuthenticationType;
 import rocha.andre.api.domain.country.Country;
+import rocha.andre.api.domain.theme.Theme;
 import rocha.andre.api.domain.user.DTO.*;
 
 import java.time.LocalDate;
@@ -34,6 +36,8 @@ public class User implements UserDetails {
     private String login;
 
     private String password;
+    @Column(name = "username", unique = true, length = 20)
+    private String username;
 
     private String name;
 
@@ -51,6 +55,26 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Column(name = "access_failed_count")
+    private int accessFailedCount = 0;
+
+    @Column(name = "lockout_enabled")
+    private boolean lockoutEnabled = false;
+
+    @Column(name = "lockout_end")
+    private LocalDateTime lockoutEnd;
+
+    @Column(name = "two_factor_enabled")
+    private boolean twoFactorEnabled = false;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "authentication_type_id", referencedColumnName = "id")
+    private AuthenticationType authenticationType;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "theme_id", referencedColumnName = "id")
+    private Theme theme;
 
     @Column(name = "token_mail")
     private String tokenMail;
@@ -73,6 +97,9 @@ public class User implements UserDetails {
         this.phone = dto.data().phone();
         this.birthday = dto.birthday();
         this.country = dto.country();
+        this.username = dto.data().username();
+        this.twoFactorEnabled = dto.data().twoFactorEnabled();
+        this.theme = dto.theme();
         this.role = UserRole.USER;
     }
 
@@ -101,7 +128,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !lockoutEnabled;
     }
 
     @Override
@@ -111,7 +138,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !lockoutEnabled;
     }
 
     public void setPassword(String encodedPassword) {
@@ -130,12 +157,25 @@ public class User implements UserDetails {
         if (data.name() != null ) {
             this.name = data.name();
         }
+
+        if (data.username() != null) {
+            this.username = data.username();
+        }
+
         if (data.phone() != null) {
             this.phone = data.phone();
         }
 
         if (data.birthday() != null) {
             this.birthday = data.birthday();
+        }
+
+        if (data.twoFactorEnabled() != null) {
+            this.twoFactorEnabled = data.twoFactorEnabled();
+        }
+
+        if (data.theme() != null) {
+            this.theme = data.theme();
         }
 
         if (data.country() != null) {
