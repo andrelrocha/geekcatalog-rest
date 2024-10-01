@@ -1,0 +1,8 @@
+ALTER TABLE users
+ADD COLUMN access_failed_count INT DEFAULT 0,
+ADD COLUMN lockout_enabled BOOLEAN DEFAULT FALSE,
+ADD COLUMN lockout_end TIMESTAMP,
+ADD COLUMN username VARCHAR(20) UNIQUE,
+ADD COLUMN two_factor_enabled BOOLEAN DEFAULT FALSE,
+ADD COLUMN theme_id UUID,
+ADD CONSTRAINT fk_theme_id FOREIGN KEY (theme_id) REFERENCES themes(id);

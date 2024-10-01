@@ -27,19 +27,23 @@ public class JwtResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
 
+        /*
         String tokenJwt = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
         // Verifica se o token está presente e é válido
         if (tokenJwt != null && tokenJwt.startsWith("Bearer ")) {
             tokenJwt = tokenJwt.substring(7);
-            if (tokenService.isJwtTokenValid(tokenJwt)) {
-                String refreshToken = tokenService.generateRefreshToken(tokenJwt);
 
-                // Adiciona o refresh token ao cabeçalho da resposta
-                response.getHeaders().add(HttpHeaders.SET_COOKIE,
-                        "refreshToken=" + refreshToken + "; HttpOnly; Secure; Path=/; Max-Age=" + 7 * 24 * 60 * 60);
-            }
+            // Gere um novo refresh token
+            String refreshToken = tokenService.generateRefreshToken(tokenJwt);
+
+            // Adiciona o refresh token ao cabeçalho da resposta
+            response.getHeaders().add(HttpHeaders.SET_COOKIE,
+                    "refreshToken=" + refreshToken + "; HttpOnly; Secure; Path=/; Max-Age=" + 7 * 24 * 60 * 60);
         }
+         */
+
+        response.getHeaders().add(HttpHeaders.CACHE_CONTROL, "private, no-store");
 
         return body;
     }

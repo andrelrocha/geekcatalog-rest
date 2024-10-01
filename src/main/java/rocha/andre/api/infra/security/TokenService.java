@@ -13,6 +13,7 @@ import rocha.andre.api.domain.user.User;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -31,6 +32,7 @@ public class TokenService {
                     .withIssuer("geekcatalog-api")
                     .withSubject(user.getLogin())
                     .withClaim("id", user.getId().toString())
+                    .withClaim("role", user.getRole().toString())
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(dateExpires())
                     .sign(algorithm);
@@ -41,16 +43,13 @@ public class TokenService {
         }
     }
 
-    public String generateRefreshToken(String token) {
+    public String generateRefreshToken(User user) {
         try {
-            var subject = getSubject(token);
-            var claim = getClaim(token);
-
             Algorithm algorithm = Algorithm.HMAC256(refreshSecret);
             return JWT.create()
                     .withIssuer("geekcatalog-api")
-                    .withSubject(subject)
-                    .withClaim("id", claim)
+                    .withSubject(user.getLogin())
+                    .withClaim("id", user.getId().toString())
                     .withClaim("refreshId", UUID.randomUUID().toString())
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(refreshTokenExpirationDate())
@@ -69,7 +68,9 @@ public class TokenService {
 
             DecodedJWT jwt = verifier.verify(tokenJwt);
 
-            return true;
+            Date expiration = jwt.getExpiresAt();
+
+            return expiration != null && expiration.after(new Date());
         } catch (JWTVerificationException | IllegalArgumentException exception) {
             // IllegalArgumentException é lançada se o tokenJwt for nulo ou vazio
             return false;
@@ -97,14 +98,43 @@ public class TokenService {
             String userId = decodedJWT.getClaim("id").asString();
             String userLogin = decodedJWT.getSubject();
 
-            User user = findUserByIdOrLogin(userId, userLogin);
-            return generateJwtToken(user);
+            System.out.println("Decoded JWT: User ID = " + userId + ", User Login = " + userLogin);
 
+
+
+            /*
+            // Recuperar o usuário do contexto de segurança
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("authentication: "+authentication);
+            if (authentication != null && authentication.getPrincipal() instanceof User) {
+                User user = (User) authentication.getPrincipal();
+
+                System.out.println("User found in security context: ID = " + user.getId() + ", Login = " + user.getLogin());
+
+                if (user.getId().toString().equals(userId) && user.getLogin().equals(userLogin)) {
+                    String newJwtToken = generateJwtToken(user);
+                    System.out.println("New JWT Token generated: " + newJwtToken);
+                    return newJwtToken;
+                } else {
+                    System.out.println("User ID or Login does not match.");
+                }
+            } else {
+                System.out.println("User not found in security context.");
+                throw new RuntimeException("User not found in security context.");
+            }
+
+
+            return null;
         } catch (JWTVerificationException exception) {
+            System.out.println("Error during JWT verification: " + exception.getMessage());
             throw new RuntimeException("Invalid or expired refresh accessToken.", exception);
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred: " + e.getMessage());
+            throw e; // Re-throwing to maintain the original exception
         }
     }
     */
+
 
     public String getSubject(String tokenJwt) {
         try {
@@ -137,7 +167,8 @@ public class TokenService {
     }
 
     private Instant dateExpires() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
+        //return LocalDateTime.now().plusSeconds(30).toInstant(ZoneOffset.of("-03:00"));
     }
 
     private Instant refreshTokenExpirationDate() {
