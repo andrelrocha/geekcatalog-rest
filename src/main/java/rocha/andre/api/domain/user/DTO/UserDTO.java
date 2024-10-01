@@ -31,6 +31,6 @@ public record UserDTO(@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "O 
 
                       Boolean twoFactorEnabled,
 
-                      UUID theme
+                      UUID themeId
                       ) {
 }

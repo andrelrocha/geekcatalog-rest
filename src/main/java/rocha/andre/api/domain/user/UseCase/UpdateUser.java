@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rocha.andre.api.domain.country.Country;
 import rocha.andre.api.domain.country.CountryRepository;
+import rocha.andre.api.domain.theme.Theme;
+import rocha.andre.api.domain.theme.ThemeRepository;
 import rocha.andre.api.domain.user.DTO.UserReturnDTO;
 import rocha.andre.api.domain.user.DTO.UserGetInfoUpdateDTO;
 import rocha.andre.api.domain.user.DTO.UserUpdateDTO;
@@ -21,6 +23,8 @@ public class UpdateUser {
     private UserRepository repository;
     @Autowired
     private CountryRepository countryRepository;
+    @Autowired
+    private ThemeRepository themeRepository;
     @Autowired
     private TokenService tokenService;
 
@@ -51,7 +55,15 @@ public class UpdateUser {
             formattedBirthday = LocalDate.parse(dto.birthday().format(formatter));
         }
 
-        var data = new UserUpdateDTO(dto.name(), dto.phone(), formattedBirthday, country);
+        Theme theme = null;
+        if (dto.themeId() != null) {
+            var themeIdUUID = UUID.fromString(dto.themeId());
+
+            theme = themeRepository.findById(themeIdUUID)
+                    .orElseThrow(() -> new ValidationException("Não foi encontrado tema com o id informado no update de user"));
+        }
+
+        var data = new UserUpdateDTO(dto.name(), dto.username(), dto.twoFactorEnabled(), dto.phone(), formattedBirthday, country, theme);
 
         user.updateUser(data);
 

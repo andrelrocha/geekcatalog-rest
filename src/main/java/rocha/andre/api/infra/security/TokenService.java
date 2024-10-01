@@ -33,6 +33,7 @@ public class TokenService {
                     .withSubject(user.getLogin())
                     .withClaim("id", user.getId().toString())
                     .withClaim("role", user.getRole().toString())
+                    .withClaim("theme", user.getTheme().getName())
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(dateExpires())
                     .sign(algorithm);

@@ -69,10 +69,6 @@ public class User implements UserDetails {
     private boolean twoFactorEnabled = false;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "authentication_type_id", referencedColumnName = "id")
-    private AuthenticationType authenticationType;
-
-    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id", referencedColumnName = "id")
     private Theme theme;
 
