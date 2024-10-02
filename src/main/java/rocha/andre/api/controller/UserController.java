@@ -1,14 +1,18 @@
 package rocha.andre.api.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.user.DTO.*;
-import rocha.andre.api.infra.security.TokenJwtDto;
+import rocha.andre.api.infra.security.AccessTokenDTO;
+import rocha.andre.api.infra.security.AuthTokensDTO;
 import rocha.andre.api.service.UserService;
 
 @RestController
@@ -21,9 +25,18 @@ public class UserController {
 
     @PostMapping("/login")
     @Transactional
-    public ResponseEntity performLogin(@RequestBody @Valid UserLoginDTO data) {
-        TokenJwtDto tokenJwt = userService.performLogin(data);
-        return ResponseEntity.ok(tokenJwt);
+    public ResponseEntity performLogin(@RequestBody @Valid UserLoginDTO data, HttpServletResponse response) {
+        AuthTokensDTO tokensJwt = userService.performLogin(data);
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokensJwt.refreshToken())
+                .httpOnly(true)
+                .path("/")
+                .maxAge(7 * 24 * 60 * 60) // Validade do refresh token: 7 dias
+                .sameSite("Strict") // Proteção contra CSRF
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        AccessTokenDTO accessTokenDto = new AccessTokenDTO(tokensJwt.accessToken());
+        return ResponseEntity.ok(accessTokenDto);
     }
 
     @PostMapping("/create")

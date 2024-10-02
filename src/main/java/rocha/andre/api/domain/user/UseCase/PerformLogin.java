@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import rocha.andre.api.domain.user.DTO.UserLoginDTO;
 import rocha.andre.api.domain.user.User;
-import rocha.andre.api.infra.security.TokenJwtDto;
+import rocha.andre.api.infra.security.AuthTokensDTO;
 import rocha.andre.api.infra.security.TokenService;
 
 @Component
@@ -18,7 +18,7 @@ public class PerformLogin {
     @Autowired
     TokenService tokenService;
 
-    public TokenJwtDto performLogin(UserLoginDTO data) {
+    public AuthTokensDTO performLogin(UserLoginDTO data) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
 
         //está chamando authenticateService
@@ -29,6 +29,6 @@ public class PerformLogin {
         String accessToken = tokenService.generateJwtToken(userAuthenticated);
         String refreshToken = tokenService.generateRefreshToken(userAuthenticated);
 
-        return new TokenJwtDto(accessToken, refreshToken);
+        return new AuthTokensDTO(accessToken, refreshToken);
     }
 }

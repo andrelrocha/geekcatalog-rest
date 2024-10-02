@@ -26,6 +26,19 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String tokenJwt = getToken(request);
+        if (tokenJwt != null) {
+            String subject = tokenService.getSubject(tokenJwt);
+            User user = authenticateUserWithValidJwt.findUserAuthenticated(subject);
+            //avisa para o spring que o usuário está autenticado
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+        filterChain.doFilter(request, response);
+    }
+    /*
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String tokenJwt = getToken(request);
         String refreshToken = getRefreshToken(request);
 
         if (tokenJwt != null && tokenService.isJwtTokenValid(tokenJwt) || refreshToken != null && tokenService.isRefreshTokenValid(refreshToken)) {
@@ -48,7 +61,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-    }
+    }    */
 
     private String getRefreshToken(HttpServletRequest request) {
         String refreshToken = null;
