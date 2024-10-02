@@ -8,12 +8,13 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
 import rocha.andre.api.domain.user.User;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,21 +26,29 @@ public class TokenService {
     @Value("${api.security.refresh.secret}")
     private String refreshSecret;
 
-    public String generateJwtToken(User user) {
+    public String generateAccessToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(accessSecret);
+
+            // Convertendo authorities para uma lista de Strings
+            List<String> authorities = user.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
+
+            // Criando o token e incluindo as authorities
             String token = JWT.create()
                     .withIssuer("geekcatalog-api")
                     .withSubject(user.getLogin())
                     .withClaim("id", user.getId().toString())
                     .withClaim("role", user.getRole().toString())
                     .withClaim("theme", user.getTheme().getName())
+                    .withClaim("authorities", authorities)
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(dateExpires())
                     .sign(algorithm);
 
             return token;
-        } catch (JWTCreationException exception){
+        } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generating JWT accessToken", exception);
         }
     }
@@ -60,7 +69,7 @@ public class TokenService {
         }
     }
 
-    public boolean isJwtTokenValid(String tokenJwt) {
+    public boolean isAccessTokenValid(String tokenJwt) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(accessSecret);
             JWTVerifier verifier = JWT.require(algorithm)
@@ -69,9 +78,7 @@ public class TokenService {
 
             DecodedJWT jwt = verifier.verify(tokenJwt);
 
-            Date expiration = jwt.getExpiresAt();
-
-            return expiration != null && expiration.after(new Date());
+            return true;
         } catch (JWTVerificationException | IllegalArgumentException exception) {
             // IllegalArgumentException é lançada se o tokenJwt for nulo ou vazio
             return false;
@@ -81,61 +88,51 @@ public class TokenService {
     public boolean isRefreshTokenValid(String refreshToken) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(refreshSecret);
-            JWT.require(algorithm).withIssuer("geekcatalog-api").build().verify(refreshToken);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer("geekcatalog-api").build();
+            DecodedJWT jwt = verifier.verify(refreshToken);
+
             return true;
         } catch (JWTVerificationException | IllegalArgumentException exception) {
             return false;
         }
     }
 
-    /*
-    public String refreshJwtToken(String refreshToken) {
+    public String refreshJwtToken(String refreshToken, String accessToken) {
         try {
-            if (!isRefreshTokenValid(refreshToken)) {
-                throw new RuntimeException("Invalid refresh accessToken");
-            }
+            if (isRefreshTokenValid(refreshToken)) {
+                Algorithm algorithm = Algorithm.HMAC256(accessSecret);
 
-            DecodedJWT decodedJWT = JWT.decode(refreshToken);
-            String userId = decodedJWT.getClaim("id").asString();
-            String userLogin = decodedJWT.getSubject();
-
-            System.out.println("Decoded JWT: User ID = " + userId + ", User Login = " + userLogin);
-
-
-
-            /*
-            // Recuperar o usuário do contexto de segurança
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println("authentication: "+authentication);
-            if (authentication != null && authentication.getPrincipal() instanceof User) {
-                User user = (User) authentication.getPrincipal();
-
-                System.out.println("User found in security context: ID = " + user.getId() + ", Login = " + user.getLogin());
-
-                if (user.getId().toString().equals(userId) && user.getLogin().equals(userLogin)) {
-                    String newJwtToken = generateJwtToken(user);
-                    System.out.println("New JWT Token generated: " + newJwtToken);
-                    return newJwtToken;
-                } else {
-                    System.out.println("User ID or Login does not match.");
-                }
+                return JWT.create()
+                        .withIssuer("geekcatalog-api")
+                        .withSubject(getSubject(accessToken))
+                        .withClaim("id", getClaim(accessToken))
+                        .withClaim("authorities", getClaim(accessToken))
+                        .withClaim("theme", getClaim(accessToken))
+                        .withIssuedAt(Instant.now())
+                        .withClaim("refreshedAt", Instant.now().toString())
+                        .withExpiresAt(dateExpires())
+                        .sign(algorithm);
             } else {
-                System.out.println("User not found in security context.");
-                throw new RuntimeException("User not found in security context.");
+                throw new RuntimeException("Invalid or expired refresh token.");
             }
-
-
-            return null;
         } catch (JWTVerificationException exception) {
             System.out.println("Error during JWT verification: " + exception.getMessage());
-            throw new RuntimeException("Invalid or expired refresh accessToken.", exception);
+            throw new RuntimeException("Invalid or expired refresh token.", exception);
         } catch (Exception e) {
             System.out.println("An unexpected error occurred: " + e.getMessage());
-            throw e; // Re-throwing to maintain the original exception
+            throw e;
         }
     }
-    */
 
+    public List<String> getAuthorities(String token) {
+        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(accessSecret))
+                .withIssuer("geekcatalog-api")
+                .build()
+                .verify(token);
+
+        // Recupera a claim "authorities" como uma lista de strings
+        return decodedJWT.getClaim("authorities").asList(String.class);
+    }
 
     public String getSubject(String tokenJwt) {
         try {
@@ -168,8 +165,8 @@ public class TokenService {
     }
 
     private Instant dateExpires() {
-        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
-        //return LocalDateTime.now().plusSeconds(30).toInstant(ZoneOffset.of("-03:00"));
+        //return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusSeconds(30).toInstant(ZoneOffset.of("-03:00"));
     }
 
     private Instant refreshTokenExpirationDate() {

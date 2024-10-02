@@ -22,7 +22,7 @@ public class InfraController {
 
     @GetMapping("/verifyjwt/{tokenJwt}")
     public boolean isTokenJWTValid(@PathVariable String tokenJwt) {
-        var isValid = tokenService.isJwtTokenValid(tokenJwt);
+        var isValid = tokenService.isAccessTokenValid(tokenJwt);
 
         if (!isValid) {
             throw new BadCredentialsException("Seu token de autenticação falhou. Você não tem autorização para acessar a aplicação.");

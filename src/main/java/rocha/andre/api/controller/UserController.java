@@ -48,7 +48,7 @@ public class UserController {
 
     @GetMapping("/bytokenjwt")
     public ResponseEntity getUserByTokenJWT(@RequestHeader("Authorization") String authorizationHeader) {
-        var tokenJWT = authorizationHeader.substring(7); // Recupera o tokenJWT a partir do index 7
+        var tokenJWT = authorizationHeader.substring(7);
         var user = userService.getUserByTokenJWT(tokenJWT);
         return ResponseEntity.ok(user);
     }
