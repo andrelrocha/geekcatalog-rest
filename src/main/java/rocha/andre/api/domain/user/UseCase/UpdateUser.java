@@ -30,7 +30,7 @@ public class UpdateUser {
 
     public UserReturnDTO updateUserInfo(UserGetInfoUpdateDTO dto, String tokenJWT) {
 
-        var userId = tokenService.getClaim(tokenJWT);
+        var userId = tokenService.getIdClaim(tokenJWT);
         userId = userId.replaceAll("\"", "");
 
         var uuid = UUID.fromString(userId);

@@ -11,7 +11,7 @@ public class GetUserIdByJWT {
     private TokenService tokenService;
 
     public UserIdDTO getUserByJWT(String token) {
-        var userId = tokenService.getClaim(token);
+        var userId = tokenService.getIdClaim(token);
         userId = userId.replace("\"", "").replace("\\", "");
 
         return new UserIdDTO(userId);

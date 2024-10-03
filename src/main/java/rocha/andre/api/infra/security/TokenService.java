@@ -8,13 +8,11 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.GrantedAuthority;
 import rocha.andre.api.domain.user.User;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,19 +28,12 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(accessSecret);
 
-            // Convertendo authorities para uma lista de Strings
-            List<String> authorities = user.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .toList();
-
-            // Criando o token e incluindo as authorities
             String token = JWT.create()
                     .withIssuer("geekcatalog-api")
                     .withSubject(user.getLogin())
                     .withClaim("id", user.getId().toString())
                     .withClaim("role", user.getRole().toString())
                     //.withClaim("theme", user.getTheme().getName())
-                    .withClaim("authorities", authorities)
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(dateExpires())
                     .sign(algorithm);
@@ -97,43 +88,6 @@ public class TokenService {
         }
     }
 
-    public String refreshJwtToken(String refreshToken, String accessToken) {
-        try {
-            if (isRefreshTokenValid(refreshToken)) {
-                Algorithm algorithm = Algorithm.HMAC256(accessSecret);
-
-                return JWT.create()
-                        .withIssuer("geekcatalog-api")
-                        .withSubject(getSubject(accessToken))
-                        .withClaim("id", getClaim(accessToken))
-                        .withClaim("authorities", getClaim(accessToken))
-                        .withClaim("theme", getClaim(accessToken))
-                        .withIssuedAt(Instant.now())
-                        .withClaim("refreshedAt", Instant.now().toString())
-                        .withExpiresAt(dateExpires())
-                        .sign(algorithm);
-            } else {
-                throw new RuntimeException("Invalid or expired refresh token.");
-            }
-        } catch (JWTVerificationException exception) {
-            System.out.println("Error during JWT verification: " + exception.getMessage());
-            throw new RuntimeException("Invalid or expired refresh token.", exception);
-        } catch (Exception e) {
-            System.out.println("An unexpected error occurred: " + e.getMessage());
-            throw e;
-        }
-    }
-
-    public List<String> getAuthorities(String token) {
-        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(accessSecret))
-                .withIssuer("geekcatalog-api")
-                .build()
-                .verify(token);
-
-        // Recupera a claim "authorities" como uma lista de strings
-        return decodedJWT.getClaim("authorities").asList(String.class);
-    }
-
     public String getSubject(String tokenJwt) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(accessSecret);
@@ -149,7 +103,7 @@ public class TokenService {
         }
     }
 
-    public String getClaim(String tokenJwt) {
+    public String getIdClaim(String tokenJwt) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(accessSecret);
             String userVerifiedId = String.valueOf(JWT.require(algorithm)

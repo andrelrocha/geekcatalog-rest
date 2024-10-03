@@ -6,6 +6,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -40,8 +41,10 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (user != null) {
                 String newAccessToken = tokenService.generateAccessToken(user);
                 String newRefreshToken = tokenService.generateRefreshToken(user);
+
                 response.setHeader("Authorization", "Bearer " + newAccessToken);
-                System.out.println("Novo access token gerado: " + newAccessToken);
+                addRefreshTokenCookie(response, newRefreshToken);
+
                 authenticateUser(subject);
             }
         }
@@ -61,6 +64,15 @@ public class SecurityFilter extends OncePerRequestFilter {
     private User getUserFromCacheOrDb(String subject) {
         // Verifica se o usuário está no cache, se não tiver busca no banco de dados
         return userCache.computeIfAbsent(subject, s -> authenticateUserWithValidJwt.findUserAuthenticated(s));
+    }
+
+    private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        cookie.setHttpOnly(true); // Impede o acesso ao cookie via JavaScript
+        cookie.setSecure(false); // Use true se estiver em HTTPS
+        cookie.setPath("/"); // Define o caminho do cookie
+        cookie.setMaxAge(60 * 60 * 24 * 30); // Defina a expiração do cookie para 7 dias
+        response.addCookie(cookie);
     }
 
     private String getRefreshToken(HttpServletRequest request) {

@@ -17,7 +17,7 @@ public class GetUserByTokenJWT {
     private TokenService tokenService;
 
     public UserReturnDTO getUserByID(String tokenJWT) {
-        var userId = tokenService.getClaim(tokenJWT);
+        var userId = tokenService.getIdClaim(tokenJWT);
         userId = userId.replaceAll("\"", "");
 
         var uuid = UUID.fromString(userId);
