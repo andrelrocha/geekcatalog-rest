@@ -13,16 +13,15 @@ public record UserReturnDTO(String id,
                             String cpf,
                             String phone,
                             LocalDate birthday,
+                            String theme,
                             String countryName,
                             String countryId,
-                            String themeName,
-                            String themeId,
                             Boolean twoFactorEnabled,
                             UserRole role) {
 
     public UserReturnDTO(User user) {
         this(user.getId().toString(), user.getLogin(), user.getUsername(), user.getName(), user.getCpf(), user.getPhone(),
-                user.getBirthday(), user.getCountry().getName(), user.getCountry().getId().toString(), user.getTheme().getName(),
-                user.getTheme().getId().toString(), user.isTwoFactorEnabled(), user.getRole());
+                user.getBirthday(), String.valueOf(user.getTheme()), user.getCountry().getName(), user.getCountry().getId().toString(),
+                user.isTwoFactorEnabled(), user.getRole());
     }
 }

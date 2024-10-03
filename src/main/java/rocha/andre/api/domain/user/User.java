@@ -6,9 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import rocha.andre.api.domain.authenticationType.AuthenticationType;
 import rocha.andre.api.domain.country.Country;
-import rocha.andre.api.domain.theme.Theme;
 import rocha.andre.api.domain.user.DTO.*;
 
 import java.time.LocalDate;
@@ -56,6 +54,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Enumerated(EnumType.STRING)
+    private UserTheme theme;
+
     @Column(name = "access_failed_count")
     private int accessFailedCount = 0;
 
@@ -67,10 +68,6 @@ public class User implements UserDetails {
 
     @Column(name = "two_factor_enabled")
     private boolean twoFactorEnabled = false;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theme_id", referencedColumnName = "id")
-    private Theme theme;
 
     @Column(name = "token_mail")
     private String tokenMail;
@@ -95,7 +92,7 @@ public class User implements UserDetails {
         this.country = dto.country();
         this.username = dto.data().username();
         this.twoFactorEnabled = dto.data().twoFactorEnabled();
-        this.theme = dto.theme();
+        this.theme = UserTheme.valueOf(dto.data().theme());
         this.role = UserRole.USER;
     }
 
@@ -171,7 +168,7 @@ public class User implements UserDetails {
         }
 
         if (data.theme() != null) {
-            this.theme = data.theme();
+            this.theme = UserTheme.valueOf(data.theme());
         }
 
         if (data.country() != null) {

@@ -13,5 +13,5 @@ public record UserGetInfoUpdateDTO(String name,
                                     @DateTimeFormat(pattern = "dd/MM/yyyy")
                                     LocalDate birthday,
                                    String countryId,
-                                   String themeId) {
+                                   String theme) {
 }
