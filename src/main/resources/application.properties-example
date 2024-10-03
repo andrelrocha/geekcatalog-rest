@@ -4,7 +4,9 @@ spring.datasource.username=USERNAME
 spring.datasource.password=PASSWORD
 spring.datasource.driver-class-name=org.postgresql.Driver
 
-server.port=8080
+server.port=${SERVER_PORT}
+spring.redis.host={REDIS_HOST}
+spring.redis.port={REDIS_PORT}
 
 api.security.accessToken.secret=${ACCESSTOKEN_SECRET:PASSWORDSECRET}
 pi.security.refresh.secret=${REFRESH_SECRET:REFRESHSECRET}

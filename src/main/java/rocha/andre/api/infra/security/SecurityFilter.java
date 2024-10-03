@@ -10,11 +10,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import rocha.andre.api.domain.user.User;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -32,48 +30,49 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = getAccessToken(request);
-        //String refreshToken = getRefreshToken(request);
+        String refreshToken = getRefreshToken(request);
 
         if (accessToken != null && tokenService.isAccessTokenValid(accessToken)) {
-            String subject = tokenService.getSubject(accessToken);
-            User user;
-
-            // Verifica se o usuário está no cache
-            if (userCache.containsKey(subject)) {
-                user = userCache.get(subject);
-            } else {
-                user = authenticateUserWithValidJwt.findUserAuthenticated(subject);
-                if (user != null) {
-                    userCache.put(subject, user);
-                }
-            }
-
+            authenticateUser(tokenService.getSubject(accessToken));
+        } else if (refreshToken != null && tokenService.isRefreshTokenValid(refreshToken)) {
+            String subject = tokenService.getSubject(refreshToken);
+            User user = getUserFromCacheOrDb(subject);
             if (user != null) {
-                Collection<String> authoritiesString = tokenService.getAuthorities(accessToken);
-                var authorities = authoritiesString.stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .toList();
-
-                // Avisa ao Spring que o usuário está autenticado
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String newAccessToken = tokenService.generateAccessToken(user);
+                String newRefreshToken = tokenService.generateRefreshToken(user);
+                response.setHeader("Authorization", "Bearer " + newAccessToken);
+                System.out.println("Novo access token gerado: " + newAccessToken);
+                authenticateUser(subject);
             }
         }
         filterChain.doFilter(request, response);
     }
 
+    private void authenticateUser(String subject) {
+        User user = getUserFromCacheOrDb(subject);
+
+        if (user != null) {
+            // Avisa ao Spring que o usuário está autenticado
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+    }
+
+    private User getUserFromCacheOrDb(String subject) {
+        // Verifica se o usuário está no cache, se não tiver busca no banco de dados
+        return userCache.computeIfAbsent(subject, s -> authenticateUserWithValidJwt.findUserAuthenticated(s));
+    }
+
     private String getRefreshToken(HttpServletRequest request) {
-        String refreshToken = null;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("refreshToken".equals(cookie.getName())) {
-                    refreshToken = cookie.getValue();
-                    break;
+                    return cookie.getValue();
                 }
             }
         }
-        return refreshToken;
+        return null;
     }
 
     private String getAccessToken(HttpServletRequest request) {
@@ -81,7 +80,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             return authorizationHeader.substring(7);
         }
-
         return null;
     }
 }
