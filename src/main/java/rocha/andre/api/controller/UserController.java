@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.domain.user.DTO.*;
 import rocha.andre.api.infra.security.AccessTokenDTO;
 import rocha.andre.api.infra.security.AuthTokensDTO;
+import rocha.andre.api.infra.utils.httpCookies.CookieManager;
 import rocha.andre.api.service.UserService;
 
 @RestController
@@ -22,19 +23,14 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private CookieManager cookieManager;
 
     @PostMapping("/login")
     @Transactional
     public ResponseEntity<AccessTokenDTO> performLogin(@RequestBody @Valid UserLoginDTO data, HttpServletResponse response) {
         AuthTokensDTO tokensJwt = userService.performLogin(data);
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokensJwt.refreshToken())
-                .httpOnly(true)
-                .path("/")
-                .maxAge(15 * 24 * 60 * 60) // Validade do refresh token: 15 dias
-                .sameSite("Strict") // Proteção contra CSRF
-                .build();
-
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+        cookieManager.addRefreshTokenCookie(response, tokensJwt.refreshToken());
         AccessTokenDTO accessTokenDto = new AccessTokenDTO(tokensJwt.accessToken());
         return ResponseEntity.ok(accessTokenDto);
     }

@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import rocha.andre.api.domain.user.User;
+import rocha.andre.api.infra.utils.httpCookies.CookieManager;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +21,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     private TokenService tokenService;
-
+    @Autowired
+    private CookieManager cookieManager;
     @Autowired
     private AuthenticateUserWithValidJwt authenticateUserWithValidJwt;
 
@@ -68,12 +70,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private void addRefreshTokenCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
         if (request.getRequestURI().equals("/user/login")) return;
 
-        Cookie newCookie = new Cookie("refreshToken", refreshToken);
-        newCookie.setHttpOnly(true); // Impede o acesso ao cookie via JavaScript
-        newCookie.setSecure(false); // Use true se estiver em HTTPS
-        newCookie.setPath("/"); // Define o caminho do cookie
-        newCookie.setMaxAge(15 * 24 * 60 * 60); // Defina a expiração do cookie para 15 dias
-        response.addCookie(newCookie);
+        cookieManager.addRefreshTokenCookie(response, refreshToken);
     }
 
     private String getRefreshToken(HttpServletRequest request) {
