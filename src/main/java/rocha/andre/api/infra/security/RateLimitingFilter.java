@@ -18,8 +18,8 @@ public class RateLimitingFilter implements Filter {
 
 
     public RateLimitingFilter() {
-        // Define a taxa de 20 requisições por minuto
-        Bandwidth limit = Bandwidth.classic(20, Refill.greedy(20, Duration.ofMinutes(1)));
+        // Define a taxa de 10 requisições por minuto
+        Bandwidth limit = Bandwidth.classic(10, Refill.greedy(10, Duration.ofMinutes(1)));
         this.bucket = Bucket.builder().addLimit(limit).build();
     }
 
