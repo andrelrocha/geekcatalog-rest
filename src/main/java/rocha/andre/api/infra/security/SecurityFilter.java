@@ -32,9 +32,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         String accessToken = getAccessToken(request);
         String refreshToken = getRefreshToken(request);
 
-        System.out.println(accessToken);
-        System.out.println(refreshToken);
-
         if (accessToken != null && tokenService.isAccessTokenValid(accessToken)) {
             authenticateUser(tokenService.getSubject(accessToken));
         } else if (refreshToken != null && tokenService.isRefreshTokenValid(refreshToken)) {

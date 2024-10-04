@@ -8,10 +8,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @ControllerAdvice
-public class JwtResponseBodyAdvice implements ResponseBodyAdvice<Object> {
+public class ResponseBodyAdvice implements org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice<Object> {
 
     @Autowired
     private TokenService tokenService;
@@ -27,23 +26,13 @@ public class JwtResponseBodyAdvice implements ResponseBodyAdvice<Object> {
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
 
-        /*
-        String tokenJwt = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-
-        // Verifica se o token está presente e é válido
-        if (tokenJwt != null && tokenJwt.startsWith("Bearer ")) {
-            tokenJwt = tokenJwt.substring(7);
-
-            // Gere um novo refresh token
-            String refreshToken = tokenService.generateRefreshToken(tokenJwt);
-
-            // Adiciona o refresh token ao cabeçalho da resposta
-            response.getHeaders().add(HttpHeaders.SET_COOKIE,
-                    "refreshToken=" + refreshToken + "; HttpOnly; Secure; Path=/; Max-Age=" + 7 * 24 * 60 * 60);
-        }
-         */
-
+        //CONFIGS DE SEGURANÇA!
         response.getHeaders().add(HttpHeaders.CACHE_CONTROL, "private, no-store");
+        response.getHeaders().add("X-Content-Type-Options", "nosniff");
+        response.getHeaders().add("X-Frame-Options", "DENY");
+        response.getHeaders().add("X-XSS-Protection", "1; mode=block");
+        response.getHeaders().add("Content-Security-Policy", "default-src 'self'");
+        //response.getHeaders().add("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
 
         return body;
     }

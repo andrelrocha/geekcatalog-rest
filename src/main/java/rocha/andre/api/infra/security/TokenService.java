@@ -119,12 +119,10 @@ public class TokenService {
     }
 
     private Instant dateExpires() {
-        //return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
-        return LocalDateTime.now().plusSeconds(30).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
     }
 
     private Instant refreshTokenExpirationDate() {
-        //return LocalDateTime.now().plusDays(7).toInstant(ZoneOffset.of("-03:00"));
-        return LocalDateTime.now().plusSeconds(30).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusDays(15).toInstant(ZoneOffset.of("-03:00"));
     }
 }
