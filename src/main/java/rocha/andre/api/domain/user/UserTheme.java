@@ -6,7 +6,7 @@ public enum UserTheme {
 
     private String theme;
 
-    UserTheme(String role) {
+    UserTheme(String theme) {
         this.theme = theme;
     }
 }

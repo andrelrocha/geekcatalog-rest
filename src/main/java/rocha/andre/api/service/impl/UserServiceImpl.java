@@ -1,5 +1,6 @@
 package rocha.andre.api.service.impl;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class UserServiceImpl implements UserService {
     private ResetPassword resetPassword;
 
     @Override
-    public AuthTokensDTO performLogin(UserLoginDTO data) {
-        var tokensJwt = performLogin.performLogin(data);
+    public AuthTokensDTO performLogin(UserLoginDTO data, HttpServletRequest request) {
+        var tokensJwt = performLogin.performLogin(data, request);
         return tokensJwt;
     }
 

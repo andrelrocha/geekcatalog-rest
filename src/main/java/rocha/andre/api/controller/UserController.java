@@ -1,6 +1,7 @@
 package rocha.andre.api.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rocha.andre.api.domain.auditLog.useCase.RegisterAuditLog;
 import rocha.andre.api.domain.user.DTO.*;
 import rocha.andre.api.infra.security.AccessTokenDTO;
 import rocha.andre.api.infra.security.AuthTokensDTO;
@@ -28,8 +30,8 @@ public class UserController {
 
     @PostMapping("/login")
     @Transactional
-    public ResponseEntity<AccessTokenDTO> performLogin(@RequestBody @Valid UserLoginDTO data, HttpServletResponse response) {
-        AuthTokensDTO tokensJwt = userService.performLogin(data);
+    public ResponseEntity<AccessTokenDTO> performLogin(@RequestBody @Valid UserLoginDTO data, HttpServletResponse response, HttpServletRequest request) {
+        AuthTokensDTO tokensJwt = userService.performLogin(data, request);
         cookieManager.addRefreshTokenCookie(response, tokensJwt.refreshToken());
         AccessTokenDTO accessTokenDto = new AccessTokenDTO(tokensJwt.accessToken());
         return ResponseEntity.ok(accessTokenDto);
