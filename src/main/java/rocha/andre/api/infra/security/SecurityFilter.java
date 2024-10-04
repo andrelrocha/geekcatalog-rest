@@ -6,7 +6,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -33,6 +32,9 @@ public class SecurityFilter extends OncePerRequestFilter {
         String accessToken = getAccessToken(request);
         String refreshToken = getRefreshToken(request);
 
+        System.out.println(accessToken);
+        System.out.println(refreshToken);
+
         if (accessToken != null && tokenService.isAccessTokenValid(accessToken)) {
             authenticateUser(tokenService.getSubject(accessToken));
         } else if (refreshToken != null && tokenService.isRefreshTokenValid(refreshToken)) {
@@ -43,7 +45,7 @@ public class SecurityFilter extends OncePerRequestFilter {
                 String newRefreshToken = tokenService.generateRefreshToken(user);
 
                 response.setHeader("Authorization", "Bearer " + newAccessToken);
-                addRefreshTokenCookie(response, newRefreshToken);
+                addRefreshTokenCookie(request, response, newRefreshToken);
 
                 authenticateUser(subject);
             }
@@ -66,13 +68,15 @@ public class SecurityFilter extends OncePerRequestFilter {
         return userCache.computeIfAbsent(subject, s -> authenticateUserWithValidJwt.findUserAuthenticated(s));
     }
 
-    private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
-        cookie.setHttpOnly(true); // Impede o acesso ao cookie via JavaScript
-        cookie.setSecure(false); // Use true se estiver em HTTPS
-        cookie.setPath("/"); // Define o caminho do cookie
-        cookie.setMaxAge(60 * 60 * 24 * 30); // Defina a expiração do cookie para 7 dias
-        response.addCookie(cookie);
+    private void addRefreshTokenCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
+        if (request.getRequestURI().equals("/user/login")) return;
+
+        Cookie newCookie = new Cookie("refreshToken", refreshToken);
+        newCookie.setHttpOnly(true); // Impede o acesso ao cookie via JavaScript
+        newCookie.setSecure(false); // Use true se estiver em HTTPS
+        newCookie.setPath("/"); // Define o caminho do cookie
+        newCookie.setMaxAge(15 * 24 * 60 * 60); // Defina a expiração do cookie para 15 dias
+        response.addCookie(newCookie);
     }
 
     private String getRefreshToken(HttpServletRequest request) {

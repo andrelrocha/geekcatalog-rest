@@ -25,12 +25,12 @@ public class UserController {
 
     @PostMapping("/login")
     @Transactional
-    public ResponseEntity performLogin(@RequestBody @Valid UserLoginDTO data, HttpServletResponse response) {
+    public ResponseEntity<AccessTokenDTO> performLogin(@RequestBody @Valid UserLoginDTO data, HttpServletResponse response) {
         AuthTokensDTO tokensJwt = userService.performLogin(data);
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokensJwt.refreshToken())
                 .httpOnly(true)
                 .path("/")
-                .maxAge(7 * 24 * 60 * 60) // Validade do refresh token: 7 dias
+                .maxAge(15 * 24 * 60 * 60) // Validade do refresh token: 15 dias
                 .sameSite("Strict") // Proteção contra CSRF
                 .build();
 
@@ -41,13 +41,13 @@ public class UserController {
 
     @PostMapping("/create")
     @Transactional
-    public ResponseEntity createUser(@RequestBody @Valid UserDTO data) {
+    public ResponseEntity<UserReturnDTO> createUser(@RequestBody @Valid UserDTO data) {
         var newUser = userService.createUser(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @GetMapping("/bytokenjwt")
-    public ResponseEntity getUserByTokenJWT(@RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<UserReturnDTO> getUserByTokenJWT(@RequestHeader("Authorization") String authorizationHeader) {
         var tokenJWT = authorizationHeader.substring(7);
         var user = userService.getUserByTokenJWT(tokenJWT);
         return ResponseEntity.ok(user);
@@ -55,14 +55,14 @@ public class UserController {
 
     @PostMapping("/forgot_password")
     @Transactional
-    public ResponseEntity forgotPassword(@RequestBody UserOnlyLoginDTO data) {
+    public ResponseEntity<String> forgotPassword(@RequestBody UserOnlyLoginDTO data) {
         var stringReturn = userService.forgotPassword(data);
         return ResponseEntity.ok(stringReturn);
     }
 
     @PostMapping("/reset_password")
     @Transactional
-    public ResponseEntity resetPassword(@RequestBody UserResetPassDTO data) {
+    public ResponseEntity<String> resetPassword(@RequestBody UserResetPassDTO data) {
         var stringSuccess= userService.resetPassword(data);
         return ResponseEntity.ok(stringSuccess);
     }
@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity updateUser(@RequestHeader("Authorization") String authorizationHeader, @RequestBody UserGetInfoUpdateDTO data) {
+    public ResponseEntity<UserReturnDTO> updateUser(@RequestHeader("Authorization") String authorizationHeader, @RequestBody UserGetInfoUpdateDTO data) {
         var tokenJWT = authorizationHeader.substring(7);
         var updatedUser = userService.updateUserInfo(data, tokenJWT);
         return ResponseEntity.ok(updatedUser);
@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @GetMapping("/public/{userId}")
-    public ResponseEntity getPublicInfo(@PathVariable String userId) {
+    public ResponseEntity<UserPublicReturnDTO> getPublicInfo(@PathVariable String userId) {
         var publicInfo = userService.getPublicInfoByUserId(userId);
         return ResponseEntity.ok(publicInfo);
     }

@@ -33,7 +33,7 @@ public class TokenService {
                     .withSubject(user.getLogin())
                     .withClaim("id", user.getId().toString())
                     .withClaim("role", user.getRole().toString())
-                    //.withClaim("theme", user.getTheme().getName())
+                    .withClaim("theme", user.getTheme().toString())
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(dateExpires())
                     .sign(algorithm);
@@ -99,7 +99,7 @@ public class TokenService {
 
             return userVerified;
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("Invalid or expired JWT accessToken.");
+            throw new RuntimeException("Invalid or expired JWT token.");
         }
     }
 
@@ -114,7 +114,7 @@ public class TokenService {
 
             return userVerifiedId;
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("Invalid or expired JWT accessToken.");
+            throw new RuntimeException("Invalid or expired JWT token.");
         }
     }
 
@@ -124,6 +124,7 @@ public class TokenService {
     }
 
     private Instant refreshTokenExpirationDate() {
-        return LocalDateTime.now().plusDays(7).toInstant(ZoneOffset.of("-03:00"));
+        //return LocalDateTime.now().plusDays(7).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusSeconds(30).toInstant(ZoneOffset.of("-03:00"));
     }
 }
