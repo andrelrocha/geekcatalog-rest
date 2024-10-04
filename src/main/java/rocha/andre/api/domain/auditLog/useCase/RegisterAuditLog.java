@@ -21,6 +21,7 @@ public class RegisterAuditLog {
     @Autowired
     private AuthenticationTypeRepository authenticationTypeRepository;
 
+    //Isola a transação para que se torne independente em caso de exceção lançada que geraria o rollback quando fosse chamado em outra parte do código
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void logLogin(String userName, HttpServletRequest request, LoginStatus loginStatus, String userAgent, UUID authenticationTypeId) {
         AuditLog auditLog = new AuditLog();

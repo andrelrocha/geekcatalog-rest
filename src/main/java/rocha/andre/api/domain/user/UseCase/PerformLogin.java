@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rocha.andre.api.domain.auditLog.LoginStatus;
 import rocha.andre.api.domain.auditLog.useCase.RegisterAuditLog;
@@ -32,7 +33,7 @@ public class PerformLogin {
     @Autowired
     private RegisterAuditLog registerAuditLog;
     @Autowired
-    private UserRepository userRepository;
+    private UpdateUserFailedLogin updateUserFailedLogin;
 
     @Transactional(noRollbackFor = BadCredentialsException.class)
     public AuthTokensDTO performLogin(UserLoginDTO data, HttpServletRequest request) {
@@ -47,7 +48,7 @@ public class PerformLogin {
 
             User userAuthenticated = (User) authentication.getPrincipal();
 
-            resetFailedAttempts(userAuthenticated);
+            //resetFailedAttempts(userAuthenticated);
 
             String accessToken = tokenService.generateAccessToken(userAuthenticated);
             String refreshToken = tokenService.generateRefreshToken(userAuthenticated);
@@ -69,47 +70,18 @@ public class PerformLogin {
         }
     }
 
+    /*
     private void resetFailedAttempts(User user) {
         user.setAccessFailedCount(0);
         user.setLockoutEnabled(false);
         user.setLockoutEnd(null);
         userRepository.save(user);
     }
+     */
 
+    @Transactional
     private void handleFailedLogin(String login, HttpServletRequest request) {
-        System.out.println("Iniciando handleFailedLogin para o login: " + login);
-
-        // Buscar o usuário diretamente pelo login
-        User user = userRepository.findByLoginToHandle(login);
-
-        // Verificar se o usuário foi encontrado
-        if (user == null) {
-            System.out.println("Usuário não encontrado para o login: " + login);
-            throw new ValidationException("Usuário não encontrado para o login: " + login);
-        }
-
-        System.out.println("Usuário encontrado: " + user.getLogin());
-
-        // Incrementar tentativas falhas
-        int failedAttempts = user.getAccessFailedCount() + 1;
-        System.out.println("Tentativas falhas atuais: " + failedAttempts);
-
-        // Verificar se o limite de tentativas foi atingido
-        if (failedAttempts >= MAX_ATTEMPTS) {
-            user.setLockoutEnabled(true);
-            user.setLockoutEnd(LocalDateTime.now().plusMinutes(15));
-            System.out.println("Usuário bloqueado por 15 minutos.");
-        } else {
-            user.setAccessFailedCount(failedAttempts);
-            System.out.println("Incrementando contador de tentativas falhas para: " + failedAttempts);
-        }
-
-        // Salvar as alterações no banco de dados
-        var user1 = userRepository.saveAndFlush(user);
-        System.out.println(user1);
-        System.out.println(user1.getId());
-        System.out.println("novo contador: "+user1.getAccessFailedCount());
-        System.out.println("Usuário atualizado no banco de dados.");
+        updateUserFailedLogin.updateFailedLogin(login);
 
         registerAuditLog.logLogin(
                 login,

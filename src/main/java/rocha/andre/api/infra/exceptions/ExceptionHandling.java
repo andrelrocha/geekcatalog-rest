@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,6 +64,11 @@ public class ExceptionHandling {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity handleAccessDeniedException() {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado");
+    }
+
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity handleLockedException() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Conta bloqueada.");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
