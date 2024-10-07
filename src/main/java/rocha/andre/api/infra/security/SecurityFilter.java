@@ -39,9 +39,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         } else if (refreshToken != null && tokenService.isRefreshTokenValid(refreshToken)) {
             String subject = tokenService.getSubject(refreshToken);
             User user = getUserFromCacheOrDb(subject);
-            if (user != null) {
-                if (!user.isRefreshTokenEnabled()) return;
-
+            if (user != null && user.isRefreshTokenEnabled()) {
                 String newAccessToken = tokenService.generateAccessToken(user);
                 String newRefreshToken = tokenService.generateRefreshToken(user);
 

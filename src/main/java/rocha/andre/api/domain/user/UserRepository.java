@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
     UserDetails findByLogin(String login);
+    UserDetails findByUsername(String username);
 
     @Query("""
             SELECT CASE WHEN COUNT(u) > 0 THEN true
