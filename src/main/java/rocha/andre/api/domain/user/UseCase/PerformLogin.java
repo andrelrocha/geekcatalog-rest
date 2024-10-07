@@ -45,7 +45,10 @@ public class PerformLogin {
             userAuthenticated.resetAccessCount();
 
             String accessToken = tokenService.generateAccessToken(userAuthenticated);
-            String refreshToken = tokenService.generateRefreshToken(userAuthenticated);
+            String refreshToken = null;
+            if (userAuthenticated.isRefreshTokenEnabled()) {
+                refreshToken = tokenService.generateRefreshToken(userAuthenticated);
+            }
 
             registerAuditLog.logLogin(
                     data.login(),
@@ -56,7 +59,6 @@ public class PerformLogin {
             );
 
             return new AuthTokensDTO(accessToken, refreshToken);
-
         } catch (BadCredentialsException e) {
             handleFailedLogin(data.login(), request);
             throw new BadCredentialsException("Login ou senha errados.");

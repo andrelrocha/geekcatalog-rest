@@ -32,7 +32,9 @@ public class UserController {
     @Transactional
     public ResponseEntity<AccessTokenDTO> performLogin(@RequestBody @Valid UserLoginDTO data, HttpServletResponse response, HttpServletRequest request) {
         AuthTokensDTO tokensJwt = userService.performLogin(data, request);
-        cookieManager.addRefreshTokenCookie(response, tokensJwt.refreshToken());
+        if (tokensJwt.refreshToken() != null) {
+            cookieManager.addRefreshTokenCookie(response, tokensJwt.refreshToken());
+        }
         AccessTokenDTO accessTokenDto = new AccessTokenDTO(tokensJwt.accessToken());
         return ResponseEntity.ok(accessTokenDto);
     }
