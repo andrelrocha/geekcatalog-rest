@@ -66,6 +66,9 @@ public class User implements UserDetails {
     @Column(name = "lockout_end")
     private LocalDateTime lockoutEnd;
 
+    @Column(name = "refresh_token_enabled")
+    private boolean refreshTokenEnabled = false;
+
     @Column(name = "two_factor_enabled")
     private boolean twoFactorEnabled = false;
 
@@ -86,12 +89,13 @@ public class User implements UserDetails {
         this.login = dto.data().login();
         this.password = dto.data().password();
         this.name = dto.data().name();
+        this.username = dto.data().username();
         this.cpf = dto.data().cpf();
         this.phone = dto.data().phone();
         this.birthday = dto.birthday();
         this.country = dto.country();
-        this.username = dto.data().username();
         this.twoFactorEnabled = dto.data().twoFactorEnabled();
+        this.refreshTokenEnabled = dto.data().refreshTokenEnabled();
         this.theme = UserTheme.valueOf(dto.data().theme());
         this.role = UserRole.USER;
     }
@@ -111,7 +115,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return username;
     }
 
     @Override
@@ -167,6 +171,10 @@ public class User implements UserDetails {
             this.twoFactorEnabled = data.twoFactorEnabled();
         }
 
+        if (data.refreshTokenEnabled() != null) {
+            this.refreshTokenEnabled = data.refreshTokenEnabled();
+        }
+
         if (data.theme() != null) {
             this.theme = UserTheme.valueOf(data.theme());
         }
@@ -203,4 +211,12 @@ public class User implements UserDetails {
         this.tokenExpiration = time;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

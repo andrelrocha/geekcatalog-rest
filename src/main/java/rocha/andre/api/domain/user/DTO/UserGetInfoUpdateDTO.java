@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public record UserGetInfoUpdateDTO(String name,
                                    String username,
                                    Boolean twoFactorEnabled,
+                                   Boolean refreshTokenEnabled,
                                    String phone,
                                    @JsonFormat(pattern = "dd/MM/yyyy")
                                     @DateTimeFormat(pattern = "dd/MM/yyyy")

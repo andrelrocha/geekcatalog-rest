@@ -30,6 +30,7 @@ public record UserDTO(@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "O 
                       String username,
 
                       Boolean twoFactorEnabled,
+                      Boolean refreshTokenEnabled,
 
                       String theme
                       ) {

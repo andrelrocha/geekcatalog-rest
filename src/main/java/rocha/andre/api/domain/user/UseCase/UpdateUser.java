@@ -51,7 +51,7 @@ public class UpdateUser {
             formattedBirthday = LocalDate.parse(dto.birthday().format(formatter));
         }
 
-        var data = new UserUpdateDTO(dto.name(), dto.username(), dto.twoFactorEnabled(), dto.phone(), formattedBirthday, country, dto.theme());
+        var data = new UserUpdateDTO(dto.name(), dto.username(), dto.twoFactorEnabled(), dto.refreshTokenEnabled(), dto.phone(), formattedBirthday, country, dto.theme());
 
         user.updateUser(data);
 

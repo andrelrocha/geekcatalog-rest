@@ -84,6 +84,8 @@ public class ExceptionHandling {
                     return ResponseEntity.badRequest().body("Erro de violação de integridade dos dados. Chave primária duplicada para o campo CPF.");
                 } else if (errorMessage.contains("users_login_key")) {
                     return ResponseEntity.badRequest().body("Erro de violação de integridade dos dados. Chave primária duplicada para o campo login.");
+                } else if (errorMessage.contains("users_username_key")) {
+                    return ResponseEntity.badRequest().body("Erro de violação de integridade dos dados. Chave primária duplicada para o campo username.");
                 }
             }
         }
