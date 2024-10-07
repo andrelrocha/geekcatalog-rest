@@ -176,6 +176,12 @@ public class User implements UserDetails {
         }
     }
 
+    public void resetAccessCount() {
+        this.accessFailedCount = 0;
+        this.setLockoutEnabled(false);
+        this.setLockoutEnd(null);
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

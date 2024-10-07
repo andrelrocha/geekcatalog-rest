@@ -35,7 +35,7 @@ public class PerformLogin {
     @Autowired
     private UpdateUserFailedLogin updateUserFailedLogin;
 
-    @Transactional(noRollbackFor = BadCredentialsException.class)
+    @Transactional
     public AuthTokensDTO performLogin(UserLoginDTO data, HttpServletRequest request) {
         if (data.login().isEmpty() || data.password().isEmpty()) {
             throw new IllegalArgumentException("Login e senha não podem ser vazios.");
@@ -48,7 +48,7 @@ public class PerformLogin {
 
             User userAuthenticated = (User) authentication.getPrincipal();
 
-            //resetFailedAttempts(userAuthenticated);
+            userAuthenticated.resetAccessCount();
 
             String accessToken = tokenService.generateAccessToken(userAuthenticated);
             String refreshToken = tokenService.generateRefreshToken(userAuthenticated);
@@ -64,20 +64,10 @@ public class PerformLogin {
             return new AuthTokensDTO(accessToken, refreshToken);
 
         } catch (BadCredentialsException e) {
-            // Autenticação falhou, vamos tratar o incremento de falhas
             handleFailedLogin(data.login(), request);
             throw new BadCredentialsException("Login ou senha errados.");
         }
     }
-
-    /*
-    private void resetFailedAttempts(User user) {
-        user.setAccessFailedCount(0);
-        user.setLockoutEnabled(false);
-        user.setLockoutEnd(null);
-        userRepository.save(user);
-    }
-     */
 
     @Transactional
     private void handleFailedLogin(String login, HttpServletRequest request) {
