@@ -7,24 +7,18 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rocha.andre.api.domain.auditLog.LoginStatus;
 import rocha.andre.api.domain.auditLog.useCase.RegisterAuditLog;
 import rocha.andre.api.domain.user.DTO.UserLoginDTO;
 import rocha.andre.api.domain.user.User;
-import rocha.andre.api.domain.user.UserRepository;
-import rocha.andre.api.infra.exceptions.ValidationException;
 import rocha.andre.api.infra.security.AuthTokensDTO;
 import rocha.andre.api.infra.security.TokenService;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
 public class PerformLogin {
-
-    private static final int MAX_ATTEMPTS = 5;
 
     @Autowired
     private AuthenticationManager manager;

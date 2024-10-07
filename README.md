@@ -24,6 +24,9 @@ Replace your-project-name.jar with the actual name of your generated JAR file.
 - [x] Handling and conversion of information from .csv and .xlsm tables to entities properly mapped in the system, facilitating the control of this information with application-specific algorithms
 - [x] User custom system with different levels of permissions
 - [x] Login system with JWT authentication
+- [x] User Authentication Using a Refresh Token Scheme with User Experience Patterns
+- [x] Access audit routines for application security logging
+- [x] Cache-based User Management System to Minimize Database Queries for Logged-in Users
 - [x] CRUD for different sort of media types, categorized as backlog, such as games, animes, mangas, with their er relationships
 - [x] Routine for all entities in the system, easily traceable by the user
 - [x] List management system, with users able to rate, indicate medium which they consumed the entity, and provide personal notes for them
@@ -38,7 +41,7 @@ Replace your-project-name.jar with the actual name of your generated JAR file.
 - [x] Games relationships in a social media format, with user comments and rating, for social interaction
 - [x] All endpoints mapped in the REST standard
 - [x] Security schema implemented in the backend for requests in different layers
-
+- [x] Vulnerability Protection through HTTP Cookies, Rate Limiting Filters, and IP Blocking
 ---
 
 ## 🛠 Technologies
@@ -55,4 +58,5 @@ The following technologies were used in the development of the REST API project:
 - **[JWT](https://jwt.io/)**
 - **[AWS](https://aws.amazon.com/sdk-for-java/)**
 - **[S3](https://aws.amazon.com/pt/pm/serv-s3/)**
+- **[Bucket4j](https://bucket4j.com/)**
 - **[IGDB-API](https://www.igdb.com/api)**
