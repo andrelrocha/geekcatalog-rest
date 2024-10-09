@@ -70,7 +70,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     private void addRefreshTokenCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
         if (request.getRequestURI().equals("/user/login")) return;
 
-        System.out.println("Adicionando cookie de refresh token...");
         cookieManager.addRefreshTokenCookie(response, refreshToken);
     }
 

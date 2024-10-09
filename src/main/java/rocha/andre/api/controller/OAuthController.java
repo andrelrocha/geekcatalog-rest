@@ -1,16 +1,14 @@
 package rocha.andre.api.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.TemplateEngine;
@@ -21,8 +19,8 @@ import rocha.andre.api.domain.user.UserRepository;
 import rocha.andre.api.domain.user.UserTheme;
 import rocha.andre.api.infra.security.AccessTokenDTO;
 import rocha.andre.api.infra.security.TokenService;
+import rocha.andre.api.infra.utils.httpCookies.CookieManager;
 import rocha.andre.api.infra.utils.oauth.google.GoogleUserInfo;
-import rocha.andre.api.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +33,8 @@ public class OAuthController {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private CookieManager cookieManager;
     @Autowired
     private TemplateEngine templateEngine;
 
@@ -50,7 +49,7 @@ public class OAuthController {
 
     @GetMapping("/options")
     public ModelAndView showLoginOptions() {
-        ModelAndView modelAndView = new ModelAndView("oauth/oauth-options");
+        ModelAndView modelAndView = new ModelAndView("oauth-options");
         modelAndView.addObject("client_id", clientId);
         modelAndView.addObject("redirect_uri", redirectUri);
 
@@ -59,12 +58,18 @@ public class OAuthController {
 
     @GetMapping("/google")
     public ResponseEntity handleGoogleLogin(@RequestParam String code) {
-        // Troca o código de autorização pelo access token do google
         String accessToken = exchangeCodeForAccessToken(code);
+        var googleAccessToken = new GoogleAccessToken(accessToken);
+        return ResponseEntity.ok(googleAccessToken);
+    }
 
-        // Recupera as informações do usuário a partir do token
-        GoogleUserInfo googleUser = getGoogleUserInfo(accessToken);
+    @GetMapping("/googlelogin")
+    public ResponseEntity authenticateGoogleUser(@RequestHeader("Authorization") String authorizationHeader, HttpServletResponse response) {
+        var googleAccessToken = authorizationHeader.substring(7);
+        GoogleUserInfo googleUser = getGoogleUserInfo(googleAccessToken);
+        System.out.println(googleUser);
 
+        //aqui é para checar pelo oauth_id, ou seja, deve ser criada nova coluna para usuário
         User user = userRepository.findByLoginToHandle(googleUser.email());
 
         if (user == null) {
@@ -89,13 +94,24 @@ public class OAuthController {
             System.out.println("usuário no banco"+userOnDB);
         }
 
-        // Gera tokens JWT para o usuário autenticado
+        //AQUI DEVE SER CHAMADO OUTRO MÉTODO  -tenho que garantir que o usuário logado pelo google que esteja com o refresh enabled,
+        // deve se manter logado
+        //falta
+        if (user.isRefreshTokenEnabled()) {
+            var refreshToken = tokenService.generateRefreshToken(user);
+
+            // Imprime o valor do refresh token e as informações do cookie antes de adicioná-lo
+            System.out.println("Refresh Token gerado: " + refreshToken);
+            System.out.println("Adicionando cookie de refresh token...");
+
+            cookieManager.addRefreshTokenCookie(response, refreshToken);
+            System.out.println("supostamente adicionado o cookie");
+        }
+
         String jwtToken = tokenService.generateAccessToken(user);
         AccessTokenDTO accessTokenDto = new AccessTokenDTO(jwtToken);
-
         return ResponseEntity.ok(accessTokenDto);
     }
-
 
     private String exchangeCodeForAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
