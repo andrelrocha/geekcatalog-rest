@@ -92,7 +92,7 @@ public class User implements UserDetails {
         this.username = dto.data().username();
         this.cpf = dto.data().cpf();
         this.phone = dto.data().phone();
-        this.birthday = dto.birthday();
+        this.birthday = dto.data().birthday();
         this.country = dto.country();
         this.twoFactorEnabled = dto.data().twoFactorEnabled();
         this.refreshTokenEnabled = dto.data().refreshTokenEnabled();
@@ -209,14 +209,5 @@ public class User implements UserDetails {
 
     public void setTokenExpiration(LocalDateTime time) {
         this.tokenExpiration = time;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", username='" + username + '\'' +
-                '}';
     }
 }

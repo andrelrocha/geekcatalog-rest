@@ -35,6 +35,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/user/**").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/oauth/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/infra/verifyjwt/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/infra/download/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/infra/ping").permitAll();

@@ -4,5 +4,5 @@ import rocha.andre.api.domain.country.Country;
 
 import java.time.LocalDate;
 
-public record UserCreateDTO(UserDTO data, Country country, LocalDate birthday) {
+public record UserCreateDTO(UserDTO data, Country country) {
 }

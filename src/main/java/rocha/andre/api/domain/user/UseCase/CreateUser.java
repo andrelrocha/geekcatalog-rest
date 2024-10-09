@@ -36,7 +36,21 @@ public class CreateUser {
         var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         var formattedBirthday = LocalDate.parse(data.birthday().format(formatter));
 
-        var createDTO = new UserCreateDTO(data, country, formattedBirthday);
+        var updatedData = new UserDTO(
+                data.login(),
+                data.password(),
+                data.name(),
+                data.cpf(),
+                data.phone(),
+                formattedBirthday,
+                data.countryId(),
+                data.username(),
+                data.twoFactorEnabled(),
+                data.refreshTokenEnabled(),
+                data.theme()
+        );
+
+        var createDTO = new UserCreateDTO(updatedData, country);
 
         var newUser = new User(createDTO);
 
