@@ -78,6 +78,8 @@ public class OAuthController {
         User user = userRepository.findByLoginToHandle(googleUser.email());
 
         if (user == null) {
+            var newUsername = generateUniqueUsername(googleUser.email());
+
             UserCreateDTO userCreateDTO = new UserCreateDTO(
                     new UserDTO(
                             googleUser.email(),
@@ -87,16 +89,16 @@ public class OAuthController {
                             "N/A", // Telefone não disponível
                             null, // Data de aniversário não disponível
                             null, // countryId
-                            googleUser.name(), // username
+                            newUsername,
                             false, // twoFactorEnabled
                             false, // refreshTokenEnabled
-                            UserTheme.LIGHT.toString() // theme
+                            UserTheme.LIGHT.toString()
                     ),
                     null // country, se aplicável
             );
+
             user = new User(userCreateDTO);
-            var userOnDB = userRepository.save(user);
-            System.out.println("usuário no banco"+userOnDB);
+            userRepository.save(user);
         }
 
         if (user.isRefreshTokenEnabled()) {
@@ -118,6 +120,19 @@ public class OAuthController {
 
         return ResponseEntity.ok(accessTokenDto);
     }
+
+    public String generateUniqueUsername(String email) {
+        var username = email.trim().substring(0, email.indexOf("@"));
+        int counter = 0;
+
+        while (userRepository.userExistsByUsername(username)) {
+            counter++;
+            username = username + String.format("%03d", counter);
+        }
+
+        return username;
+    }
+
 
     private String exchangeCodeForAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();

@@ -18,6 +18,13 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     boolean userExistsByLogin(String login);
 
     @Query("""
+            SELECT CASE WHEN COUNT(u) > 0 THEN true
+            ELSE false END
+            FROM User u WHERE u.username = :username
+            """)
+    boolean userExistsByUsername(String username);
+
+    @Query("""
             SELECT u FROM User u WHERE u.login = :login
             """)
     User findByLoginToHandle(String login);
