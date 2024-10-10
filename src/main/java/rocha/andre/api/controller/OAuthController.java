@@ -1,6 +1,7 @@
 package rocha.andre.api.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.TemplateEngine;
+import rocha.andre.api.domain.auditLog.LoginStatus;
+import rocha.andre.api.domain.auditLog.useCase.RegisterAuditLog;
 import rocha.andre.api.domain.user.DTO.UserCreateDTO;
 import rocha.andre.api.domain.user.DTO.UserDTO;
 import rocha.andre.api.domain.user.User;
@@ -24,6 +27,7 @@ import rocha.andre.api.infra.utils.oauth.google.GoogleUserInfo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/oauth")
@@ -33,6 +37,8 @@ public class OAuthController {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RegisterAuditLog registerAuditLog;
     @Autowired
     private CookieManager cookieManager;
     @Autowired
@@ -64,10 +70,9 @@ public class OAuthController {
     }
 
     @GetMapping("/googlelogin")
-    public ResponseEntity authenticateGoogleUser(@RequestHeader("Authorization") String authorizationHeader, HttpServletResponse response) {
+    public ResponseEntity authenticateGoogleUser(@RequestHeader("Authorization") String authorizationHeader, HttpServletResponse response, HttpServletRequest request) {
         var googleAccessToken = authorizationHeader.substring(7);
         GoogleUserInfo googleUser = getGoogleUserInfo(googleAccessToken);
-        System.out.println(googleUser);
 
         //aqui é para checar pelo oauth_id, ou seja, deve ser criada nova coluna para usuário
         User user = userRepository.findByLoginToHandle(googleUser.email());
@@ -94,22 +99,23 @@ public class OAuthController {
             System.out.println("usuário no banco"+userOnDB);
         }
 
-        //AQUI DEVE SER CHAMADO OUTRO MÉTODO  -tenho que garantir que o usuário logado pelo google que esteja com o refresh enabled,
-        // deve se manter logado
-        //falta
         if (user.isRefreshTokenEnabled()) {
             var refreshToken = tokenService.generateRefreshToken(user);
-
-            // Imprime o valor do refresh token e as informações do cookie antes de adicioná-lo
-            System.out.println("Refresh Token gerado: " + refreshToken);
-            System.out.println("Adicionando cookie de refresh token...");
-
             cookieManager.addRefreshTokenCookie(response, refreshToken);
-            System.out.println("supostamente adicionado o cookie");
         }
 
         String jwtToken = tokenService.generateAccessToken(user);
         AccessTokenDTO accessTokenDto = new AccessTokenDTO(jwtToken);
+
+        registerAuditLog.logLogin(
+                user.getLogin(),
+                request,
+                LoginStatus.SUCCESS,
+                request.getHeader("User-Agent"),
+                //codigo do login social pelo google no banco
+                UUID.fromString("1c8b6843-b182-49c8-9083-3bf35cc50870")
+        );
+
         return ResponseEntity.ok(accessTokenDto);
     }
 
