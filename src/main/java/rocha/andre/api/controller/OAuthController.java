@@ -88,9 +88,6 @@ public class OAuthController {
         var googleAccessToken = authorizationHeader.substring(7);
         GoogleUserInfo googleUser = getGoogleUserInfo(googleAccessToken);
 
-        //aqui é para checar pelo oauth_id, ou seja, deve ser criada nova coluna para usuário
-        //User user = userRepository.findByLoginToHandle(googleUser.email());
-
         var user = userAuthenticationTypeRepository.findUserByOAuthId(googleUser.sub());
 
         if (user == null) {
