@@ -9,22 +9,28 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.TemplateEngine;
 import rocha.andre.api.domain.auditLog.LoginStatus;
 import rocha.andre.api.domain.auditLog.useCase.RegisterAuditLog;
+import rocha.andre.api.domain.authenticationType.AuthenticationTypeRepository;
 import rocha.andre.api.domain.user.DTO.UserCreateDTO;
 import rocha.andre.api.domain.user.DTO.UserDTO;
 import rocha.andre.api.domain.user.User;
 import rocha.andre.api.domain.user.UserRepository;
 import rocha.andre.api.domain.user.UserTheme;
+import rocha.andre.api.domain.userAuthenticationType.DTO.CreateUserAuthenticationTypeDTO;
+import rocha.andre.api.domain.userAuthenticationType.UserAuthenticationType;
+import rocha.andre.api.domain.userAuthenticationType.UserAuthenticationTypeRepository;
 import rocha.andre.api.infra.security.AccessTokenDTO;
 import rocha.andre.api.infra.security.TokenService;
 import rocha.andre.api.infra.utils.httpCookies.CookieManager;
 import rocha.andre.api.infra.utils.oauth.google.GoogleUserInfo;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -33,10 +39,18 @@ import java.util.UUID;
 @RequestMapping("/oauth")
 @Tag(name = "OAuth Routes Mapped on Controller")
 public class OAuthController {
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=<>?";
+    private static final int PASSWORD_LENGTH = 20;
     @Autowired
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AuthenticationTypeRepository authenticationTypeRepository;
+    @Autowired
+    private UserAuthenticationTypeRepository userAuthenticationTypeRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private RegisterAuditLog registerAuditLog;
     @Autowired
@@ -75,18 +89,20 @@ public class OAuthController {
         GoogleUserInfo googleUser = getGoogleUserInfo(googleAccessToken);
 
         //aqui é para checar pelo oauth_id, ou seja, deve ser criada nova coluna para usuário
-        User user = userRepository.findByLoginToHandle(googleUser.email());
+        //User user = userRepository.findByLoginToHandle(googleUser.email());
+
+        var user = userAuthenticationTypeRepository.findUserByOAuthId(googleUser.sub());
 
         if (user == null) {
             var newUsername = generateUniqueUsername(googleUser.email());
 
-            UserCreateDTO userCreateDTO = new UserCreateDTO(
+            var userCreateDTO = new UserCreateDTO(
                     new UserDTO(
                             googleUser.email(),
-                            "N/A", // Senha não aplicável
+                            "N/A",
                             googleUser.name(),
                             "N/A", // CPF não disponível
-                            "N/A", // Telefone não disponível
+                            null, // Telefone não disponível
                             null, // Data de aniversário não disponível
                             null, // countryId
                             newUsername,
@@ -98,7 +114,19 @@ public class OAuthController {
             );
 
             user = new User(userCreateDTO);
-            userRepository.save(user);
+
+            String encodedPassword = bCryptPasswordEncoder.encode(generateUniquePassword());
+            user.setPassword(encodedPassword);
+
+            var userOnDB = userRepository.save(user);
+
+            var authenticationTypeGoogle = authenticationTypeRepository.findByName("google");
+
+            var userAuthTypeDTO = new CreateUserAuthenticationTypeDTO(authenticationTypeGoogle, userOnDB, googleUser.sub());
+
+            var userAuthType = new UserAuthenticationType(userAuthTypeDTO);
+
+            userAuthenticationTypeRepository.save(userAuthType);
         }
 
         if (user.isRefreshTokenEnabled()) {
@@ -133,6 +161,17 @@ public class OAuthController {
         return username;
     }
 
+    public static String generateUniquePassword() {
+        var random = new SecureRandom();
+        var password = new StringBuilder(PASSWORD_LENGTH);
+
+        for (int i = 0; i < PASSWORD_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            password.append(CHARACTERS.charAt(index));
+        }
+
+        return password.toString();
+    }
 
     private String exchangeCodeForAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
