@@ -18,7 +18,7 @@ public record UserDTO(@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "O 
                       String password,
                       @NotNull String name,
                       @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "O CPF deve seguir o formato 999.999.999-99")
-                      @NotNull String cpf,
+                      String cpf,
                       @Pattern(regexp = "\\(\\d{2,3}\\)\\d{5}-\\d{4}", message = "O telefone deve seguir o formato (99)99999-9999")
                       String phone,
                       @JsonFormat(pattern = "dd/MM/yyyy")

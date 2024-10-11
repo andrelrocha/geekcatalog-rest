@@ -155,9 +155,10 @@ public class User implements UserDetails {
             this.name = data.name();
         }
 
+        /*
         if (data.username() != null) {
             this.username = data.username();
-        }
+        } */
 
         if (data.phone() != null) {
             this.phone = data.phone();
