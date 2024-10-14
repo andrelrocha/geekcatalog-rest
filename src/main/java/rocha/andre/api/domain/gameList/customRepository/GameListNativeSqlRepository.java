@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface GameListNativeSqlRepository {
-    List<Object[]> findAllGamesInfoByUserId(UUID userId);
+    List<GamesOnUserListInfoDTO> findAllGamesInfoByUserId(UUID userId);
 }

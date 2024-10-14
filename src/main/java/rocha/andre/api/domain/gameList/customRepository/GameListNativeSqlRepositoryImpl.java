@@ -4,11 +4,13 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import rocha.andre.api.domain.gameList.useCase.sheet.GamesOnUserListInfoDTO;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Repository
 public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlRepository {
@@ -16,9 +18,9 @@ public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlReposit
     private EntityManager entityManager;
 
     @Override
-    public List<Object[]> findAllGamesInfoByUserId(UUID userId) {
+    public List<GamesOnUserListInfoDTO> findAllGamesInfoByUserId(UUID userId) {
         String sql = """
-            SELECT 
+            SELECT DISTINCT ON (g.name)
                 g.name, 
                 g.metacritic, 
                 g.yr_of_release, 
@@ -29,7 +31,7 @@ public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlReposit
                 COALESCE(gl.note, '') AS note,
                 g.id
             FROM 
-                game_list AS gl
+                game_list AS gl 
             JOIN 
                 games AS g ON g.id = gl.game_id
             LEFT JOIN 
@@ -56,6 +58,22 @@ public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlReposit
 
         List<Object[]> resultados = query.getResultList();
 
-        return resultados;
+        return resultados.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private GamesOnUserListInfoDTO mapToDTO(Object[] row) {
+        return new GamesOnUserListInfoDTO(
+                (String) row[0],       // name
+                (Integer) row[1],      // metacritic
+                (Integer) row[2],      // yearOfRelease
+                (String) row[3],       // genres
+                (String) row[4],       // studios
+                (String) row[5],       // consolePlayed
+                (Integer) row[6],      // rating
+                (String) row[7],       // note
+                (UUID) row[8]          // id
+        );
     }
 }
