@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import rocha.andre.api.domain.gameGenre.GameGenre;
+import rocha.andre.api.domain.gameList.useCase.sheet.GamesOnUserListInfoDTO;
 import rocha.andre.api.domain.listPermissionUser.ListPermissionUser;
 import rocha.andre.api.domain.listsApp.ListApp;
 

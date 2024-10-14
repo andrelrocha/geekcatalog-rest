@@ -37,7 +37,7 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.POST, "/user/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/oauth/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/infra/verifyjwt/**").permitAll();
-                    req.requestMatchers(HttpMethod.GET, "/infra/download/**").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/infra/download/apk").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/infra/ping").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/countries/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "fullgame/admin/**").hasRole("ADMIN");

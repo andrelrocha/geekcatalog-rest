@@ -23,7 +23,8 @@ Replace your-project-name.jar with the actual name of your generated JAR file.
 
 - [x] Handling and conversion of information from .csv and .xlsm tables to entities properly mapped in the system, facilitating the control of this information with application-specific algorithms
 - [x] User custom system with different levels of permissions
-- [x] Login system with JWT authentication
+- [x] Sign In system with JWT authentication
+- [x] OAuth Sign In with external identity providers
 - [x] User Authentication Using a Refresh Token Scheme with User Experience Patterns
 - [x] Access audit routines for application security logging
 - [x] Cache-based User Management System to Minimize Database Queries for Logged-in Users
@@ -60,3 +61,4 @@ The following technologies were used in the development of the REST API project:
 - **[S3](https://aws.amazon.com/pt/pm/serv-s3/)**
 - **[Bucket4j](https://bucket4j.com/)**
 - **[IGDB-API](https://www.igdb.com/api)**
+- **[ThymeLeaf](https://www.thymeleaf.org/)**

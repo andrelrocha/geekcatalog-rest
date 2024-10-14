@@ -45,4 +45,6 @@ public interface GameRepository extends JpaRepository<Game, UUID> {
             WHERE LOWER(g.name) LIKE LOWER(CONCAT('%', :nameCompare, '%'))
             """)
     Page<Game> findGamesByNameContaining(String nameCompare, Pageable pageable);
+
+
 }

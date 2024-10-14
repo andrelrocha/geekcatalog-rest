@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.infra.security.TokenService;
+import rocha.andre.api.service.SpreadsheetService;
 
 import java.io.IOException;
 
@@ -19,6 +20,8 @@ import java.io.IOException;
 public class InfraController {
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private SpreadsheetService spreadsheetService;
 
     @GetMapping("/verifyjwt/{tokenJwt}")
     public boolean isTokenJWTValid(@PathVariable String tokenJwt) {
@@ -31,22 +34,10 @@ public class InfraController {
         return true;
     }
 
-    @GetMapping("/oauth")
-    public String handleOAuthResponse(@RequestParam(name = "code", required = false) String authorizationCode,
-                                      @RequestParam(name = "error", required = false) String error,
-                                      @RequestParam(name = "error_description", required = false) String errorDescription,
-                                      @RequestParam(name = "redirect_uri", required = false) String redirectUri) {
-
-        if (error != null) {
-            System.out.println("Falha na autorização: " + error);
-            System.out.println("Descrição do erro: " + errorDescription);
-            return "error";
-        }
-
-        System.out.println("Código de autorização recebido: " + authorizationCode);
-        System.out.println("Redirect URI: " + redirectUri);
-
-        return "success";
+    @GetMapping("/download/games/{userId}")
+    public ResponseEntity downloadGamesOnListToXLS(@PathVariable String userId) {
+        var gamesOnUserList = spreadsheetService.exportGamesOnListWithRatingAndNote(userId);
+        return ResponseEntity.ok(gamesOnUserList);
     }
 
     @GetMapping("/ping")
