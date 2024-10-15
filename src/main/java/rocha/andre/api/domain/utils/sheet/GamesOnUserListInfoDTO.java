@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.gameList.useCase.sheet;
+package rocha.andre.api.domain.utils.sheet;
 
 import java.util.UUID;
 

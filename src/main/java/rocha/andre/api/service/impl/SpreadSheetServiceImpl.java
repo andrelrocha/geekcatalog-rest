@@ -2,18 +2,22 @@ package rocha.andre.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rocha.andre.api.domain.gameList.useCase.sheet.GamesOnUserListInfoDTO;
-import rocha.andre.api.domain.gameList.useCase.sheet.GetFullGamesOnListByUser;
+import rocha.andre.api.domain.utils.sheet.ExportGamesOnListToSheets;
+import rocha.andre.api.domain.utils.sheet.GetFullGamesOnListByUser;
 import rocha.andre.api.service.SpreadsheetService;
 
-import java.util.List;
+import java.io.ByteArrayInputStream;
 
 @Service
 public class SpreadSheetServiceImpl implements SpreadsheetService {
     @Autowired
     private GetFullGamesOnListByUser getFullGamesOnListByUser;
+    @Autowired
+    private ExportGamesOnListToSheets exportGamesOnListToSheets;
 
-    public List<GamesOnUserListInfoDTO> exportGamesOnListWithRatingAndNote(String userId) {
-        return getFullGamesOnListByUser.getAllGamesByUserId(userId);
+    @Override
+    public ByteArrayInputStream exportGamesOnListWithRatingAndNoteToXlsx(String userId) {
+        var allGamesOnUserLists = getFullGamesOnListByUser.getAllGamesByUserId(userId);
+        return exportGamesOnListToSheets.exportToXLSX(allGamesOnUserLists);
     }
 }

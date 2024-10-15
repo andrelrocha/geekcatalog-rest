@@ -4,13 +4,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import rocha.andre.api.domain.gameList.useCase.sheet.GamesOnUserListInfoDTO;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Repository
 public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlRepository {
@@ -18,7 +14,7 @@ public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlReposit
     private EntityManager entityManager;
 
     @Override
-    public List<GamesOnUserListInfoDTO> findAllGamesInfoByUserId(UUID userId) {
+    public List<Object[]> findAllGamesInfoByUserId(UUID userId) {
         String sql = """
             SELECT DISTINCT ON (g.name)
                 g.name, 
@@ -56,24 +52,6 @@ public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlReposit
         Query query = entityManager.createNativeQuery(sql);
         query.setParameter("userId", userId);
 
-        List<Object[]> resultados = query.getResultList();
-
-        return resultados.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-    }
-
-    private GamesOnUserListInfoDTO mapToDTO(Object[] row) {
-        return new GamesOnUserListInfoDTO(
-                (String) row[0],       // name
-                (Integer) row[1],      // metacritic
-                (Integer) row[2],      // yearOfRelease
-                (String) row[3],       // genres
-                (String) row[4],       // studios
-                (String) row[5],       // consolePlayed
-                (Integer) row[6],      // rating
-                (String) row[7],       // note
-                (UUID) row[8]          // id
-        );
+        return query.getResultList();
     }
 }

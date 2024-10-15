@@ -6,6 +6,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ public class InfraController {
     @Autowired
     private SpreadsheetService spreadsheetService;
 
+    @Deprecated
     @GetMapping("/verifyjwt/{tokenJwt}")
     public boolean isTokenJWTValid(@PathVariable String tokenJwt) {
         var isValid = tokenService.isAccessTokenValid(tokenJwt);
@@ -34,15 +36,20 @@ public class InfraController {
         return true;
     }
 
-    @GetMapping("/download/games/{userId}")
-    public ResponseEntity downloadGamesOnListToXLS(@PathVariable String userId) {
-        var gamesOnUserList = spreadsheetService.exportGamesOnListWithRatingAndNote(userId);
-        return ResponseEntity.ok(gamesOnUserList);
-    }
-
     @GetMapping("/ping")
     public String pingServer() {
         return "Servidor está online";
+    }
+
+    @GetMapping("/download/games/{userId}")
+    public ResponseEntity<byte[]> exportGamesOnUserListsToXLS(@PathVariable String userId) {
+        var xlsxFile = spreadsheetService.exportGamesOnListWithRatingAndNoteToXlsx(userId);
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=games_on_list.xlsx");
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(xlsxFile.readAllBytes());
     }
 
     @GetMapping("/download/apk")
