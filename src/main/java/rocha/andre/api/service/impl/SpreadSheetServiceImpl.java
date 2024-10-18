@@ -22,9 +22,15 @@ public class SpreadSheetServiceImpl implements SpreadsheetService {
     private ImportGamesOnSheetToDB importGamesOnSheetToDB;
 
     @Override
-    public ByteArrayInputStream exportGamesOnListWithRatingAndNoteToXlsx(String userId) {
+    public ByteArrayInputStream exportGamesOnListRegularUserToXlsx(String userId) {
         var allGamesOnUserLists = getFullGamesOnListByUser.getAllGamesByUserId(userId);
-        return exportGamesOnListToSheets.exportToXLSX(allGamesOnUserLists);
+        return exportGamesOnListToSheets.exportToXLSX(allGamesOnUserLists, false);
+    }
+
+    @Override
+    public ByteArrayInputStream exportGamesOnListWithIdXlsx(String userId) {
+        var allGamesOnUserLists = getFullGamesOnListByUser.getAllGamesByUserId(userId);
+        return exportGamesOnListToSheets.exportToXLSX(allGamesOnUserLists, true);
     }
 
     @Override

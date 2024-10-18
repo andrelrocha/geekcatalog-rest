@@ -18,7 +18,6 @@ public class ImportGamesOnSheetToDB {
     @Autowired
     private CellValidator cellValidator;
 
-
     public List<GamesOnUserListInfoDTO> saveNewGameDataOnDB(MultipartFile file, List<GamesOnUserListInfoDTO> existingGamesOnUserList) {
         var gamesFromSpreadsheet = convertSpreadsheetToGamesList(file);
         var newDataFromSpreadSheet = filterNewGames(gamesFromSpreadsheet, existingGamesOnUserList);
@@ -56,8 +55,6 @@ public class ImportGamesOnSheetToDB {
             throw new RuntimeException("Error while reading the spreadsheet.", e);
         }
     }
-
-
 
     private List<GamesOnUserListInfoDTO> filterNewGames(List<GamesOnUserListInfoDTO> gamesOnSheet, List<GamesOnUserListInfoDTO> gamesOnList) {
         return gamesOnSheet.stream()

@@ -7,7 +7,8 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface SpreadsheetService {
-    ByteArrayInputStream exportGamesOnListWithRatingAndNoteToXlsx(String userId);
+    ByteArrayInputStream exportGamesOnListRegularUserToXlsx(String userId);
+    ByteArrayInputStream exportGamesOnListWithIdXlsx(String userId);
 
     List<GamesOnUserListInfoDTO> saveNewGameDataOnDB(MultipartFile file, String userId);
 }

@@ -8,17 +8,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import rocha.andre.api.domain.utils.sheet.GamesOnUserListInfoDTO;
 import rocha.andre.api.infra.security.TokenService;
 import rocha.andre.api.service.SpreadsheetService;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/infra")
@@ -45,9 +41,36 @@ public class InfraController {
         return "Servidor está online";
     }
 
+    @GetMapping("/download/apk")
+    public ResponseEntity<Resource> downloadApk() throws IOException {
+        var resource = new ClassPathResource("files/geekcatalog-v.1.0.2.apk");
+
+        if (!resource.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        var headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=geekcatalog-v.1.0.2.apk");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
+    }
+
     @GetMapping("/download/games/{userId}")
     public ResponseEntity<byte[]> exportGamesOnUserListsToXLS(@PathVariable String userId) {
-        var xlsxFile = spreadsheetService.exportGamesOnListWithRatingAndNoteToXlsx(userId);
+        var xlsxFile = spreadsheetService.exportGamesOnListRegularUserToXlsx(userId);
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=games_on_list.xlsx");
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(xlsxFile.readAllBytes());
+    }
+
+    @GetMapping("/admin/download/games/{userId}")
+    public ResponseEntity<byte[]> exportGamesOnUserListsAdminToXLS(@PathVariable String userId) {
+        var xlsxFile = spreadsheetService.exportGamesOnListWithIdXlsx(userId);
         var headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=games_on_list.xlsx");
         return ResponseEntity.ok()
@@ -67,19 +90,5 @@ public class InfraController {
         return ResponseEntity.status(HttpStatus.OK).body(savedGames);
     }
 
-    @GetMapping("/download/apk")
-    public ResponseEntity<Resource> downloadApk() throws IOException {
-        var resource = new ClassPathResource("files/geekcatalog-v.1.0.2.apk");
 
-        if (!resource.exists()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        var headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=geekcatalog-v.1.0.2.apk");
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(resource);
-    }
 }

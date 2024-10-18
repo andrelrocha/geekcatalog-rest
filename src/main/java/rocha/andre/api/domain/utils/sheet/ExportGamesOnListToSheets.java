@@ -11,7 +11,8 @@ import java.util.List;
 
 @Component
 public class ExportGamesOnListToSheets {
-    public ByteArrayInputStream exportToXLSX(List<GamesOnUserListInfoDTO> gamesOnUserList) {
+
+    public ByteArrayInputStream exportToXLSX(List<GamesOnUserListInfoDTO> gamesOnUserList, boolean isAdmin) {
         try (var workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Games On User Lists");
 
@@ -29,7 +30,15 @@ public class ExportGamesOnListToSheets {
             headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
             Row headerRow = sheet.createRow(0);
-            String[] columns = {"Name", "Genres", "Studios", "Year of Release", "Console Played", "Rating", "Id", "Note"};
+            String[] columns;
+
+            if (isAdmin) {
+                columns = new String[]{"Name", "Genres", "Studios", "Year of Release", "Console Played", "Rating", "Id", "Note"};
+            } else {
+                columns = new String[]{"Name", "Genres", "Studios", "Year of Release", "Console Played", "Rating", "Note"};
+            }
+
+            // Cria as células do cabeçalho
             for (int i = 0; i < columns.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(columns[i]);
@@ -59,10 +68,15 @@ public class ExportGamesOnListToSheets {
                 row.createCell(3).setCellValue(game.yearOfRelease());
                 row.createCell(4).setCellValue(game.consolePlayed());
                 row.createCell(5).setCellValue(game.rating());
-                row.createCell(6).setCellValue(game.id().toString());
-                row.createCell(7).setCellValue(game.note());
 
-                for (int i = 0; i < 8; i++) {
+                if (isAdmin) {
+                    row.createCell(6).setCellValue(game.id().toString());
+                    row.createCell(7).setCellValue(game.note());
+                } else {
+                    row.createCell(6).setCellValue(game.note());
+                }
+
+                for (int i = 0; i < (isAdmin ? 8 : 7); i++) {
                     row.getCell(i).setCellStyle(centeredStyle);
                 }
             }
