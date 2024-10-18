@@ -2,6 +2,7 @@ package rocha.andre.api.domain.utils.sheet;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class ImportGamesOnSheetToDB {
+    @Autowired
+    private CellValidator cellValidator;
 
 
     public List<GamesOnUserListInfoDTO> saveNewGameDataOnDB(MultipartFile file, List<GamesOnUserListInfoDTO> existingGamesOnUserList) {
@@ -34,14 +37,14 @@ public class ImportGamesOnSheetToDB {
                 Cell nameCell = row.getCell(0);
                 if (nameCell == null || nameCell.getCellType() == CellType.BLANK) continue;
 
-                String name = getStringCellValue(row.getCell(0));
-                String genres = getStringCellValue(row.getCell(1));
-                String studios = getStringCellValue(row.getCell(2));
-                int yearOfRelease = getNumericCellValue(row.getCell(3), 0);
-                String consolePlayed = getStringCellValue(row.getCell(4));
-                int rating = getNumericCellValue(row.getCell(5), 0);
-                UUID id = getUuidCellValue(row.getCell(6));
-                String note = getStringCellValue(row.getCell(7));
+                String name = cellValidator.validate(row.getCell(0), "N/A");
+                String genres = cellValidator.validate(row.getCell(1), "N/A");
+                String studios = cellValidator.validate(row.getCell(2), "N/A");
+                int yearOfRelease = cellValidator.validate(row.getCell(3), 0);
+                String consolePlayed = cellValidator.validate(row.getCell(4), "N/A");
+                int rating = cellValidator.validate(row.getCell(5), 0);
+                UUID id = cellValidator.validate(row.getCell(6), UUID.randomUUID());
+                String note = cellValidator.validate(row.getCell(7), "N/A");
 
                 GamesOnUserListInfoDTO gameInfo = new GamesOnUserListInfoDTO(name, yearOfRelease, genres, studios, consolePlayed, rating, id, note);
                 gamesOnSheet.add(gameInfo);
@@ -53,15 +56,7 @@ public class ImportGamesOnSheetToDB {
         }
     }
 
-    private String getStringCellValue(Cell cell) {
-        return (cell != null && cell.getCellType() == CellType.STRING) ? cell.getStringCellValue().trim() : "N/A";
-    }
-    private int getNumericCellValue(Cell cell, int defaultValue) {
-        return (cell != null && cell.getCellType() == CellType.NUMERIC) ? (int) cell.getNumericCellValue() : defaultValue;
-    }
-    private UUID getUuidCellValue(Cell cell) {
-        return (cell != null && cell.getCellType() == CellType.STRING) ? UUID.fromString(cell.getStringCellValue().trim()) : null;
-    }
+
 
     private List<GamesOnUserListInfoDTO> filterNewGames(List<GamesOnUserListInfoDTO> gamesOnSheet, List<GamesOnUserListInfoDTO> gamesOnList) {
         return gamesOnSheet.stream()
