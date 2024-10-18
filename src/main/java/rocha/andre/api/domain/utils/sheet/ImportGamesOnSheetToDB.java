@@ -3,40 +3,74 @@ package rocha.andre.api.domain.utils.sheet;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class ImportGamesOnSheetToDB {
 
 
-    public List<GamesOnUserListInfoDTO> convertSpreadsheetToGamesList(ByteArrayInputStream spreadsheetInput, List<GamesOnUserListInfoDTO> gamesOnList) {
-        try (Workbook workbook = new XSSFWorkbook(spreadsheetInput)) {
-            Sheet sheet = workbook.getSheetAt(0);
+    public List<GamesOnUserListInfoDTO> saveNewGameDataOnDB(MultipartFile file, List<GamesOnUserListInfoDTO> existingGamesOnUserList) {
+        var gamesFromSpreadsheet = convertSpreadsheetToGamesList(file);
+        var newDataFromSpreadSheet = filterNewGames(gamesFromSpreadsheet, existingGamesOnUserList);
+        return newDataFromSpreadSheet;
+    }
 
-            List<GamesOnUserListInfoDTO> gamesList = new ArrayList<>();
+    private List<GamesOnUserListInfoDTO> convertSpreadsheetToGamesList(MultipartFile file) {
+        try (Workbook workbook = new XSSFWorkbook(new ByteArrayInputStream(file.getBytes()))) {
+            Sheet sheet = workbook.getSheetAt(0);
+            List<GamesOnUserListInfoDTO> gamesOnSheet = new ArrayList<>();
+
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
+                //conferindo se a última linha está vazia ou não
+                Cell nameCell = row.getCell(0);
+                if (nameCell == null || nameCell.getCellType() == CellType.BLANK) continue;
 
-                String name = row.getCell(0).getStringCellValue().trim();
-                String genres = row.getCell(1).getStringCellValue().trim();
-                String studios = row.getCell(2).getStringCellValue().trim();
-                int yearOfRelease = (int) row.getCell(3).getNumericCellValue();
-                String consolePlayed = row.getCell(4).getStringCellValue().trim();
-                int rating = (int) row.getCell(5).getNumericCellValue();
-                String note = row.getCell(6).getStringCellValue().trim();
+                String name = getStringCellValue(row.getCell(0));
+                String genres = getStringCellValue(row.getCell(1));
+                String studios = getStringCellValue(row.getCell(2));
+                int yearOfRelease = getNumericCellValue(row.getCell(3), 0);
+                String consolePlayed = getStringCellValue(row.getCell(4));
+                int rating = getNumericCellValue(row.getCell(5), 0);
+                UUID id = getUuidCellValue(row.getCell(6));
+                String note = getStringCellValue(row.getCell(7));
 
-                gamesList.add(new GamesOnUserListInfoDTO(name, yearOfRelease, genres, studios, consolePlayed, rating, null, note));
+                GamesOnUserListInfoDTO gameInfo = new GamesOnUserListInfoDTO(name, yearOfRelease, genres, studios, consolePlayed, rating, id, note);
+                gamesOnSheet.add(gameInfo);
             }
 
-            return gamesList;
-
+            return gamesOnSheet;
         } catch (IOException e) {
             throw new RuntimeException("Error while reading the spreadsheet.", e);
         }
+    }
+
+    private String getStringCellValue(Cell cell) {
+        return (cell != null && cell.getCellType() == CellType.STRING) ? cell.getStringCellValue().trim() : "N/A";
+    }
+    private int getNumericCellValue(Cell cell, int defaultValue) {
+        return (cell != null && cell.getCellType() == CellType.NUMERIC) ? (int) cell.getNumericCellValue() : defaultValue;
+    }
+    private UUID getUuidCellValue(Cell cell) {
+        return (cell != null && cell.getCellType() == CellType.STRING) ? UUID.fromString(cell.getStringCellValue().trim()) : null;
+    }
+
+    private List<GamesOnUserListInfoDTO> filterNewGames(List<GamesOnUserListInfoDTO> gamesOnSheet, List<GamesOnUserListInfoDTO> gamesOnList) {
+        return gamesOnSheet.stream()
+                .filter(gameOnSheet -> gamesOnList.stream()
+                        .noneMatch(existingGame ->
+                                existingGame.name().equalsIgnoreCase(gameOnSheet.name()) &&
+                                        existingGame.consolePlayed().equalsIgnoreCase(gameOnSheet.consolePlayed())
+                        )
+                )
+                .collect(Collectors.toList());
     }
 }

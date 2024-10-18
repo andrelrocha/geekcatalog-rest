@@ -8,12 +8,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import rocha.andre.api.domain.utils.sheet.GamesOnUserListInfoDTO;
 import rocha.andre.api.infra.security.TokenService;
 import rocha.andre.api.service.SpreadsheetService;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/infra")
@@ -49,6 +54,17 @@ public class InfraController {
                 .headers(headers)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(xlsxFile.readAllBytes());
+    }
+
+    @PostMapping("/admin/import/games/{userId}")
+    public ResponseEntity importGamesOnXLSXSheet(@PathVariable String userId, @RequestPart("file") MultipartFile file) {
+        if (file.isEmpty() || !file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File format not accepted");
+        }
+
+        var savedGames = spreadsheetService.saveNewGameDataOnDB(file, userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(savedGames);
     }
 
     @GetMapping("/download/apk")
