@@ -22,7 +22,8 @@ public class ImportGamesOnSheetToDB {
     public List<GamesOnUserListInfoDTO> saveNewGameDataOnDB(MultipartFile file, List<GamesOnUserListInfoDTO> existingGamesOnUserList) {
         var gamesFromSpreadsheet = convertSpreadsheetToGamesList(file);
         var newDataFromSpreadSheet = filterNewGames(gamesFromSpreadsheet, existingGamesOnUserList);
-        return newDataFromSpreadSheet;
+        var updatedGames = updateExistingGames(gamesFromSpreadsheet, existingGamesOnUserList);
+        return updatedGames;
     }
 
     private List<GamesOnUserListInfoDTO> convertSpreadsheetToGamesList(MultipartFile file) {
@@ -62,10 +63,31 @@ public class ImportGamesOnSheetToDB {
         return gamesOnSheet.stream()
                 .filter(gameOnSheet -> gamesOnList.stream()
                         .noneMatch(existingGame ->
-                                existingGame.name().equalsIgnoreCase(gameOnSheet.name()) &&
-                                        existingGame.consolePlayed().equalsIgnoreCase(gameOnSheet.consolePlayed())
+                                existingGame.id().equals(gameOnSheet.id())
                         )
                 )
                 .collect(Collectors.toList());
+    }
+
+    private List<GamesOnUserListInfoDTO> updateExistingGames(List<GamesOnUserListInfoDTO> gamesFromSpreadsheet, List<GamesOnUserListInfoDTO> existingGamesOnUserList) {
+        List<GamesOnUserListInfoDTO> gamesToUpdate = new ArrayList<>();
+
+        for (GamesOnUserListInfoDTO newGame : gamesFromSpreadsheet) {
+            for (GamesOnUserListInfoDTO existingGame : existingGamesOnUserList) {
+                if (existingGame.id().equals(newGame.id())) {
+                    boolean hasChanges =
+                            !existingGame.consolePlayed().trim().equalsIgnoreCase(newGame.consolePlayed().trim()) ||
+                                    existingGame.rating() != newGame.rating() ||
+                                    !existingGame.note().trim().equals(newGame.note().trim());
+
+                    if (hasChanges) {
+                        gamesToUpdate.add(newGame);
+                    }
+                    break;
+                }
+            }
+        }
+
+        return gamesToUpdate;
     }
 }
