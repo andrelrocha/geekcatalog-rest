@@ -11,7 +11,6 @@ import java.util.List;
 
 @Component
 public class ExportGamesOnListToSheets {
-
     public ByteArrayInputStream exportToXLSX(List<GamesOnUserListInfoDTO> gamesOnUserList, boolean isAdmin) {
         try (var workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Games On User Lists");
@@ -33,7 +32,7 @@ public class ExportGamesOnListToSheets {
             String[] columns;
 
             if (isAdmin) {
-                columns = new String[]{"Name", "Genres", "Studios", "Year of Release", "Console Played", "Rating", "Id", "Note"};
+                columns = new String[]{"Name", "Genres", "Studios", "Year of Release", "Console Played", "Rating", "GameList Id", "Game Id", "Note"};
             } else {
                 columns = new String[]{"Name", "Genres", "Studios", "Year of Release", "Console Played", "Rating", "Note"};
             }
@@ -67,16 +66,18 @@ public class ExportGamesOnListToSheets {
                 row.createCell(2).setCellValue(game.studios());
                 row.createCell(3).setCellValue(game.yearOfRelease());
                 row.createCell(4).setCellValue(game.consolePlayed());
-                row.createCell(5).setCellValue(game.rating());
 
                 if (isAdmin) {
-                    row.createCell(6).setCellValue(game.id().toString());
-                    row.createCell(7).setCellValue(game.note());
+                    row.createCell(5).setCellValue(game.rating());
+                    row.createCell(6).setCellValue(game.gameListId().toString());
+                    row.createCell(7).setCellValue(game.gameId().toString());
+                    row.createCell(8).setCellValue(game.note());
                 } else {
+                    row.createCell(5).setCellValue(game.rating());
                     row.createCell(6).setCellValue(game.note());
                 }
 
-                for (int i = 0; i < (isAdmin ? 8 : 7); i++) {
+                for (int i = 0; i < (isAdmin ? 9 : 7); i++) {
                     row.getCell(i).setCellStyle(centeredStyle);
                 }
             }

@@ -22,7 +22,11 @@ public class ImportGamesOnSheetToDB {
         var gamesFromSpreadsheet = convertSpreadsheetToGamesList(file);
         var newDataFromSpreadSheet = filterNewGames(gamesFromSpreadsheet, existingGamesOnUserList);
         var updatedGames = updateExistingGames(gamesFromSpreadsheet, existingGamesOnUserList);
-        return updatedGames;
+
+        List<GamesOnUserListInfoDTO> combinedList = new ArrayList<>();
+        combinedList.addAll(newDataFromSpreadSheet);
+        combinedList.addAll(updatedGames);
+        return combinedList;
     }
 
     private List<GamesOnUserListInfoDTO> convertSpreadsheetToGamesList(MultipartFile file) {
@@ -30,10 +34,30 @@ public class ImportGamesOnSheetToDB {
             Sheet sheet = workbook.getSheetAt(0);
             List<GamesOnUserListInfoDTO> gamesOnSheet = new ArrayList<>();
 
+            // Verifica se as colunas necessárias estão presentes
+            String[] columns = new String[]{"Name", "Genres", "Studios", "Year of Release", "Console Played", "Rating", "GameList Id", "Game Id", "Note"};
+            Row headerRow = sheet.getRow(0);
+            if (headerRow == null) {
+                throw new RuntimeException("Header row is missing.");
+            }
+
+            for (String column : columns) {
+                boolean found = false;
+                for (Cell cell : headerRow) {
+                    if (cell.getStringCellValue().equalsIgnoreCase(column)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    throw new RuntimeException("Missing required column: " + column);
+                }
+            }
+
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
-                //conferindo se a última linha está vazia ou não
+                // Conferindo se a última linha está vazia ou não
                 Cell nameCell = row.getCell(0);
                 if (nameCell == null || nameCell.getCellType() == CellType.BLANK) continue;
 
@@ -43,10 +67,11 @@ public class ImportGamesOnSheetToDB {
                 int yearOfRelease = cellValidator.validate(row.getCell(3), 0);
                 String consolePlayed = cellValidator.validate(row.getCell(4), "N/A");
                 int rating = cellValidator.validate(row.getCell(5), 0);
-                UUID id = cellValidator.validate(row.getCell(6), UUID.randomUUID());
-                String note = cellValidator.validate(row.getCell(7), "N/A");
+                UUID gameListId = cellValidator.validate(row.getCell(6), UUID.randomUUID());
+                UUID gameId = cellValidator.validate(row.getCell(7), UUID.randomUUID());
+                String note = cellValidator.validate(row.getCell(8), "N/A");
 
-                GamesOnUserListInfoDTO gameInfo = new GamesOnUserListInfoDTO(name, yearOfRelease, genres, studios, consolePlayed, rating, id, note);
+                GamesOnUserListInfoDTO gameInfo = new GamesOnUserListInfoDTO(name, yearOfRelease, genres, studios, consolePlayed, rating, gameListId, gameId, note);
                 gamesOnSheet.add(gameInfo);
             }
 
@@ -56,11 +81,12 @@ public class ImportGamesOnSheetToDB {
         }
     }
 
+
     private List<GamesOnUserListInfoDTO> filterNewGames(List<GamesOnUserListInfoDTO> gamesOnSheet, List<GamesOnUserListInfoDTO> gamesOnList) {
         return gamesOnSheet.stream()
                 .filter(gameOnSheet -> gamesOnList.stream()
                         .noneMatch(existingGame ->
-                                existingGame.id().equals(gameOnSheet.id())
+                                existingGame.gameId().equals(gameOnSheet.gameId())
                         )
                 )
                 .collect(Collectors.toList());
@@ -71,7 +97,7 @@ public class ImportGamesOnSheetToDB {
 
         for (GamesOnUserListInfoDTO newGame : gamesFromSpreadsheet) {
             for (GamesOnUserListInfoDTO existingGame : existingGamesOnUserList) {
-                if (existingGame.id().equals(newGame.id())) {
+                if (existingGame.gameListId().equals(newGame.gameListId())) {
                     boolean hasChanges =
                             !existingGame.consolePlayed().trim().equalsIgnoreCase(newGame.consolePlayed().trim()) ||
                                     existingGame.rating() != newGame.rating() ||
@@ -87,4 +113,17 @@ public class ImportGamesOnSheetToDB {
 
         return gamesToUpdate;
     }
+
+    /*
+    private List<GamesOnUserListInfoDTO> updateGamesDataFromSheet(List<GamesOnUserListInfoDTO> updatableGames) {
+        return null;
+    }
+
+    /*
+    private List<GamesOnUserListInfoDTO> addNewGames(List<GamesOnUserListInfoDTO> data) {
+        var gameDTO = new GameDTO()
+        var newGame = gameService.createGame()
+    }
+
+     */
 }

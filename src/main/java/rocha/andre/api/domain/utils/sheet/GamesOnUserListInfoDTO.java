@@ -14,6 +14,7 @@ public record GamesOnUserListInfoDTO(
         String consolePlayed,
 
         int rating,
-        UUID id,
+        UUID gameListId,
+        UUID gameId,
         String note
 ) {}

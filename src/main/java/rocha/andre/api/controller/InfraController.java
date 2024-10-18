@@ -84,11 +84,7 @@ public class InfraController {
         if (file.isEmpty() || !file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File format not accepted");
         }
-
         var savedGames = spreadsheetService.saveNewGameDataOnDB(file, userId);
-
         return ResponseEntity.status(HttpStatus.OK).body(savedGames);
     }
-
-
 }

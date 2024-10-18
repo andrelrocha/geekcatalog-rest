@@ -18,12 +18,13 @@ public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlReposit
         String sql = """
             SELECT DISTINCT ON (g.name)
                 g.name,
-                g.yr_of_release, 
-                COALESCE(STRING_AGG(DISTINCT gen.name, ', '), '') AS genres, 
-                COALESCE(STRING_AGG(DISTINCT stu.name, ', '), '') AS studios, 
-                COALESCE(c.name, '') AS console_name,  
+                g.yr_of_release,
+                COALESCE(STRING_AGG(DISTINCT gen.name, ', '), '') AS genres,
+                COALESCE(STRING_AGG(DISTINCT stu.name, ', '), '') AS studios,
+                COALESCE(c.name, '') AS console_name,
                 COALESCE(gr.rating, 0) AS rating, 
-                g.id,
+                gl.id AS gameListId,
+                g.id AS gameId,
                 COALESCE(gl.note, '') AS note
             FROM 
                 game_list AS gl 
@@ -44,7 +45,7 @@ public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlReposit
             WHERE 
                 gl.user_id = :userId
             GROUP BY 
-                g.id, g.name, g.yr_of_release, c.name, gr.rating, gl.note
+                g.id, g.name, g.yr_of_release, c.name, gr.rating, gl.id, gl.note
             ORDER BY 
                 g.name
         """;

@@ -28,8 +28,9 @@ public class GetFullGamesOnListByUser {
                 (String) row[3],       // studios
                 (String) row[4],       // consolePlayed
                 (Integer) row[5],      // rating
-                (UUID) row[6],         // id
-                (String) row[7]        // note
+                (UUID) row[6],         // gameListId
+                (UUID) row[7],         // gameId
+                (String) row[8]        // note
         );
     }
 }
