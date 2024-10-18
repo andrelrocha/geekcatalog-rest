@@ -23,14 +23,13 @@ public class GetFullGamesOnListByUser {
     private GamesOnUserListInfoDTO mapToDTO(Object[] row) {
         return new GamesOnUserListInfoDTO(
                 (String) row[0],       // name
-                (Integer) row[1],      // metacritic
-                (Integer) row[2],      // yearOfRelease
-                (String) row[3],       // genres
-                (String) row[4],       // studios
-                (String) row[5],       // consolePlayed
-                (Integer) row[6],      // rating
-                (String) row[7],       // note
-                (UUID) row[8]          // id
+                (Integer) row[1],      // yearOfRelease
+                (String) row[2],       // genres
+                (String) row[3],       // studios
+                (String) row[4],       // consolePlayed
+                (Integer) row[5],      // rating
+                (UUID) row[6],         // id
+                (String) row[7]        // note
         );
     }
 }

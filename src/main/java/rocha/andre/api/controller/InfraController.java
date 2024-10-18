@@ -24,11 +24,10 @@ public class InfraController {
     @Autowired
     private SpreadsheetService spreadsheetService;
 
-    @Deprecated
-    @GetMapping("/verifyjwt/{tokenJwt}")
-    public boolean isTokenJWTValid(@PathVariable String tokenJwt) {
+    @GetMapping("/verifyjwt")
+    public boolean isTokenJWTValid(@RequestHeader("Authorization") String authorizationHeader) {
+        String tokenJwt = authorizationHeader.substring(7);
         var isValid = tokenService.isAccessTokenValid(tokenJwt);
-
         if (!isValid) {
             throw new BadCredentialsException("Seu token de autenticação falhou. Você não tem autorização para acessar a aplicação.");
         }

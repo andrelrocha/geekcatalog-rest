@@ -29,7 +29,7 @@ public class ExportGamesOnListToSheets {
             headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 
             Row headerRow = sheet.createRow(0);
-            String[] columns = {"Name", "Genres", "Studios", "Year of Release", "Console Played", "Rating", "Note"};
+            String[] columns = {"Name", "Genres", "Studios", "Year of Release", "Console Played", "Rating", "Id", "Note"};
             for (int i = 0; i < columns.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(columns[i]);
@@ -59,10 +59,10 @@ public class ExportGamesOnListToSheets {
                 row.createCell(3).setCellValue(game.yearOfRelease());
                 row.createCell(4).setCellValue(game.consolePlayed());
                 row.createCell(5).setCellValue(game.rating());
-                row.createCell(6).setCellValue(game.note());
+                row.createCell(6).setCellValue(game.id().toString());
+                row.createCell(7).setCellValue(game.note());
 
-                // Aplicar estilo centralizado nas células
-                for (int i = 0; i < 7; i++) {
+                for (int i = 0; i < 8; i++) {
                     row.getCell(i).setCellStyle(centeredStyle);
                 }
             }

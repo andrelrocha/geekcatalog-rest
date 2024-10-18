@@ -17,15 +17,14 @@ public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlReposit
     public List<Object[]> findAllGamesInfoByUserId(UUID userId) {
         String sql = """
             SELECT DISTINCT ON (g.name)
-                g.name, 
-                g.metacritic, 
+                g.name,
                 g.yr_of_release, 
                 COALESCE(STRING_AGG(DISTINCT gen.name, ', '), '') AS genres, 
                 COALESCE(STRING_AGG(DISTINCT stu.name, ', '), '') AS studios, 
                 COALESCE(c.name, '') AS console_name,  
                 COALESCE(gr.rating, 0) AS rating, 
-                COALESCE(gl.note, '') AS note,
-                g.id
+                g.id,
+                COALESCE(gl.note, '') AS note
             FROM 
                 game_list AS gl 
             JOIN 
@@ -45,7 +44,7 @@ public class GameListNativeSqlRepositoryImpl implements GameListNativeSqlReposit
             WHERE 
                 gl.user_id = :userId
             GROUP BY 
-                g.id, g.name, g.metacritic, g.yr_of_release, c.name, gr.rating, gl.note
+                g.id, g.name, g.yr_of_release, c.name, gr.rating, gl.note
             ORDER BY 
                 g.name
         """;

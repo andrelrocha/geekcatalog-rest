@@ -5,8 +5,6 @@ import java.util.UUID;
 public record GamesOnUserListInfoDTO(
         String name,
 
-        int metacritic,
-
         int yearOfRelease,
 
         String genres,
@@ -16,6 +14,6 @@ public record GamesOnUserListInfoDTO(
         String consolePlayed,
 
         int rating,
-        String note,
-        UUID id
+        UUID id,
+        String note
 ) {}
