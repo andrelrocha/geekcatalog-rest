@@ -1,7 +1,7 @@
 package rocha.andre.api.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import rocha.andre.api.domain.utils.sheet.GamesOnUserListInfoDTO;
+import rocha.andre.api.domain.utils.sheet.xlsx.GamesOnUserListInfoDTO;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;

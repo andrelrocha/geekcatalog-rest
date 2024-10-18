@@ -3,10 +3,10 @@ package rocha.andre.api.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import rocha.andre.api.domain.utils.sheet.ExportGamesOnListToSheets;
-import rocha.andre.api.domain.utils.sheet.GamesOnUserListInfoDTO;
-import rocha.andre.api.domain.utils.sheet.GetFullGamesOnListByUser;
-import rocha.andre.api.domain.utils.sheet.ImportGamesOnSheetToDB;
+import rocha.andre.api.domain.utils.sheet.xlsx.ExportGamesOnListToSheets;
+import rocha.andre.api.domain.utils.sheet.xlsx.GamesOnUserListInfoDTO;
+import rocha.andre.api.domain.utils.sheet.xlsx.GetFullGamesOnListByUser;
+import rocha.andre.api.domain.utils.sheet.xlsx.ImportGamesOnSheetToDB;
 import rocha.andre.api.service.SpreadsheetService;
 
 import java.io.ByteArrayInputStream;

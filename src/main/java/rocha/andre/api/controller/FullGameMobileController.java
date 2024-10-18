@@ -4,12 +4,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rocha.andre.api.domain.fullGame.DTO.FullGameReturnDTO;
-import rocha.andre.api.domain.fullGame.DTO.FullGameUpdateDTO;
-import rocha.andre.api.domain.fullGame.DTO.FullGameUserDTO;
-import rocha.andre.api.domain.fullGame.useCase.GetFullGameAdminInfoService;
-import rocha.andre.api.domain.fullGame.useCase.GetFullGameInfoService;
-import rocha.andre.api.domain.fullGame.useCase.UpdateFullGameAdmin;
+import rocha.andre.api.domain.utils.fullGame.DTO.FullGameReturnDTO;
+import rocha.andre.api.domain.utils.fullGame.DTO.FullGameUpdateDTO;
+import rocha.andre.api.domain.utils.fullGame.DTO.FullGameUserDTO;
+import rocha.andre.api.domain.utils.fullGame.useCase.GetFullGameAdminInfoService;
+import rocha.andre.api.domain.utils.fullGame.useCase.GetFullGameInfoService;
+import rocha.andre.api.domain.utils.fullGame.useCase.UpdateFullGameAdmin;
 
 @RestController
 @RequestMapping("/fullgame")

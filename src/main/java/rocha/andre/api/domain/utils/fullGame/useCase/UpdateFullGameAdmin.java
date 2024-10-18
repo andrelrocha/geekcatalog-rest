@@ -1,9 +1,9 @@
-package rocha.andre.api.domain.fullGame.useCase;
+package rocha.andre.api.domain.utils.fullGame.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rocha.andre.api.domain.fullGame.DTO.FullGameReturnDTO;
-import rocha.andre.api.domain.fullGame.DTO.FullGameUpdateDTO;
+import rocha.andre.api.domain.utils.fullGame.DTO.FullGameReturnDTO;
+import rocha.andre.api.domain.utils.fullGame.DTO.FullGameUpdateDTO;
 import rocha.andre.api.domain.game.DTO.GameDTO;
 import rocha.andre.api.domain.game.useCase.UpdateGame;
 import rocha.andre.api.domain.gameConsole.DTO.UpdateGameConsoleDTO;

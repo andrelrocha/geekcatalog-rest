@@ -1,11 +1,11 @@
-package rocha.andre.api.domain.fullList.useCase;
+package rocha.andre.api.domain.utils.fullList.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import rocha.andre.api.domain.fullList.DTO.FullListReturnDTO;
+import rocha.andre.api.domain.utils.fullList.DTO.FullListReturnDTO;
 import rocha.andre.api.domain.gameList.useCase.CountGameListByListID;
 import rocha.andre.api.domain.gameList.useCase.GetLatestGameListByListID;
 import rocha.andre.api.domain.imageGame.useCase.GetImageGameByGameID;

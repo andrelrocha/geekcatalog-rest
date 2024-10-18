@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.fullGame.DTO;
+package rocha.andre.api.domain.utils.fullGame.DTO;
 
 import rocha.andre.api.domain.game.Game;
 
