@@ -17,10 +17,8 @@ import java.util.UUID;
 public class CreateGameConsole {
     @Autowired
     private GameConsoleRepository repository;
-
     @Autowired
     private GameRepository gameRepository;
-
     @Autowired
     private ConsoleRepository consoleRepository;
 
@@ -48,5 +46,4 @@ public class CreateGameConsole {
 
         return new GameConsoleReturnDTO(gameConsoleOnDB);
     }
-
 }

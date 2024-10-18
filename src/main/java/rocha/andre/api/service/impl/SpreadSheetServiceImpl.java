@@ -35,7 +35,6 @@ public class SpreadSheetServiceImpl implements SpreadsheetService {
 
     @Override
     public List<GamesOnUserListInfoDTO> saveNewGameDataOnDB(MultipartFile file, String userId) {
-        var allGamesOnUserLists = getFullGamesOnListByUser.getAllGamesByUserId(userId);
-        return importGamesOnSheetToDB.saveNewGameDataOnDB(file, allGamesOnUserLists);
+        return importGamesOnSheetToDB.saveNewGameDataOnDB(file, userId);
     }
 }

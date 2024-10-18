@@ -10,4 +10,7 @@ import java.util.UUID;
 public interface ConsoleRepository extends JpaRepository<Console, UUID> {
     @Query("SELECT c FROM Console c ORDER BY c.name ASC")
     Page<Console> findAllConsolesOrderedByName(Pageable pageable);
+
+    @Query("SELECT c FROM Console c WHERE LOWER(c.name) = LOWER(:name)")
+    Console findByName(String name);
 }

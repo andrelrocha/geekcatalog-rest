@@ -3,6 +3,7 @@ package rocha.andre.api.domain.utils.sheet.xlsx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import rocha.andre.api.domain.game.DTO.GameDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,18 +13,26 @@ import java.util.stream.Collectors;
 public class ImportGamesOnSheetToDB {
     @Autowired
     private ConvertXLSXToGamesListDTO convertSpreadsheetToGamesList;
+    @Autowired
+    private GetFullGamesOnListByUser getFullGamesOnListByUser;
+    @Autowired
+    private UpdateGamesAlreadyOnDB updateGamesAlreadyOnDB;
 
-    public List<GamesOnUserListInfoDTO> saveNewGameDataOnDB(MultipartFile file, List<GamesOnUserListInfoDTO> existingGamesOnUserList) {
+
+    public List<GamesOnUserListInfoDTO> saveNewGameDataOnDB(MultipartFile file, String userId) {
+        var existingGamesOnUserList = getFullGamesOnListByUser.getAllGamesByUserId(userId);
         var gamesFromSpreadsheet = convertSpreadsheetToGamesList.convertSpreadsheetToGamesList(file);
+
+        //FALTA AJEITAR A PARTE DE CRIAR JOGO A PARTIR DA TABELA
         var newDataFromSpreadSheet = filterNewGames(gamesFromSpreadsheet, existingGamesOnUserList);
-        var updatedGames = updateExistingGames(gamesFromSpreadsheet, existingGamesOnUserList);
+
+        var updatedGames = updateGamesAlreadyOnDB.updateGamesDataFromSheet(gamesFromSpreadsheet, existingGamesOnUserList, userId);
 
         List<GamesOnUserListInfoDTO> combinedList = new ArrayList<>();
         combinedList.addAll(newDataFromSpreadSheet);
         combinedList.addAll(updatedGames);
         return combinedList;
     }
-
 
     private List<GamesOnUserListInfoDTO> filterNewGames(List<GamesOnUserListInfoDTO> gamesOnSheet, List<GamesOnUserListInfoDTO> gamesOnList) {
         return gamesOnSheet.stream()
@@ -35,38 +44,9 @@ public class ImportGamesOnSheetToDB {
                 .collect(Collectors.toList());
     }
 
-    private List<GamesOnUserListInfoDTO> updateExistingGames(List<GamesOnUserListInfoDTO> gamesFromSpreadsheet, List<GamesOnUserListInfoDTO> existingGamesOnUserList) {
-        List<GamesOnUserListInfoDTO> gamesToUpdate = new ArrayList<>();
-
-        for (GamesOnUserListInfoDTO newGame : gamesFromSpreadsheet) {
-            for (GamesOnUserListInfoDTO existingGame : existingGamesOnUserList) {
-                if (existingGame.gameListId().equals(newGame.gameListId())) {
-                    boolean hasChanges =
-                            !existingGame.consolePlayed().trim().equalsIgnoreCase(newGame.consolePlayed().trim()) ||
-                                    existingGame.rating() != newGame.rating() ||
-                                    !existingGame.note().trim().equals(newGame.note().trim());
-
-                    if (hasChanges) {
-                        gamesToUpdate.add(newGame);
-                    }
-                    break;
-                }
-            }
-        }
-
-        return gamesToUpdate;
-    }
-
-    /*
-    private List<GamesOnUserListInfoDTO> updateGamesDataFromSheet(List<GamesOnUserListInfoDTO> updatableGames) {
-        return null;
-    }
-
     /*
     private List<GamesOnUserListInfoDTO> addNewGames(List<GamesOnUserListInfoDTO> data) {
-        var gameDTO = new GameDTO()
-        var newGame = gameService.createGame()
-    }
 
+    }
      */
 }
