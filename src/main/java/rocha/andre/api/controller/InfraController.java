@@ -7,9 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import rocha.andre.api.domain.utils.API.IGDB.IGDBQueryInfoDTO;
 import rocha.andre.api.domain.utils.API.Twitch.TwitchAuth;
 import rocha.andre.api.infra.security.TokenService;
 import rocha.andre.api.service.IGDBService;
@@ -94,11 +92,11 @@ public class InfraController {
     }
 
     @PostMapping("/igdb/fetch/game")
-    public ResponseEntity<?> fetchGameDetails(@RequestBody IGDBQueryRequestDTO request) {
-        IGDBQueryInfoDTO queryInfo = twitchAuth.authenticateUser(request.gameName());
+    public ResponseEntity fetchGameDetails(@RequestBody IGDBQueryRequestDTO request) {
+        var queryInfo = twitchAuth.authenticateUser(request.gameName());
 
-        //igdbService.fetchGameDetails(queryInfo);
+        var igbdbResponse = igdbService.fetchGameDetails(queryInfo);
 
-        return ResponseEntity.ok(queryInfo);
+        return ResponseEntity.ok(igbdbResponse);
     }
 }
