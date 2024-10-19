@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import rocha.andre.api.infra.security.RateLimitingFilter;
 
@@ -23,5 +24,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public Filter rateLimitingFilter() {
         return new RateLimitingFilter();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

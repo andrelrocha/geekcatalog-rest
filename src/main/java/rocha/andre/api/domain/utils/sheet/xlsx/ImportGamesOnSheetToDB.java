@@ -45,7 +45,9 @@ public class ImportGamesOnSheetToDB {
     }
 
     /*
+    //DEVE CRIAR UM JOGO (NAME, YEAROFRELEASE), CRIAR UM REGISTRO EM GAMECONSOLE, GAMEGENRES, GAMESTUDIOS,
     private List<GamesOnUserListInfoDTO> addNewGames(List<GamesOnUserListInfoDTO> data) {
+        //ESTUDAR A QUESTÃO DE CHAMAR A API DO IGDB PARA DESCOBRIR OS CONSOLES DO JOGO
 
     }
      */

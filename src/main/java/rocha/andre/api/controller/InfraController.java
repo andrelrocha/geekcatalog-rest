@@ -4,14 +4,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import rocha.andre.api.domain.utils.API.IGDB.IGDBQueryInfoDTO;
+import rocha.andre.api.domain.utils.API.Twitch.TwitchAuth;
 import rocha.andre.api.infra.security.TokenService;
+import rocha.andre.api.service.IGDBService;
 import rocha.andre.api.service.SpreadsheetService;
 
 import java.io.IOException;
@@ -24,6 +25,10 @@ public class InfraController {
     private TokenService tokenService;
     @Autowired
     private SpreadsheetService spreadsheetService;
+    @Autowired
+    private IGDBService igdbService;
+    @Autowired
+    private TwitchAuth twitchAuth;
 
     @GetMapping("/verifyjwt")
     public boolean isTokenJWTValid(@RequestHeader("Authorization") String authorizationHeader) {
@@ -86,5 +91,14 @@ public class InfraController {
         }
         var savedGames = spreadsheetService.saveNewGameDataOnDB(file, userId);
         return ResponseEntity.status(HttpStatus.OK).body(savedGames);
+    }
+
+    @PostMapping("/igdb/fetch/game")
+    public ResponseEntity<?> fetchGameDetails(@RequestBody IGDBQueryRequestDTO request) {
+        IGDBQueryInfoDTO queryInfo = twitchAuth.authenticateUser(request.gameName());
+
+        //igdbService.fetchGameDetails(queryInfo);
+
+        return ResponseEntity.ok(queryInfo);
     }
 }
