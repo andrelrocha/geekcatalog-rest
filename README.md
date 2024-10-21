@@ -43,6 +43,7 @@ Replace your-project-name.jar with the actual name of your generated JAR file.
 - [x] All endpoints mapped in the REST standard
 - [x] Security schema implemented in the backend for requests in different layers
 - [x] Vulnerability Protection through HTTP Cookies, Rate Limiting Filters, and IP Blocking
+- [x] SSL/TLS support for secure communication, ensuring data integrity and encryption for all requests between the client and server
 ---
 
 ## 🛠 Technologies

@@ -81,7 +81,7 @@ public class GetGenresAndStudioByGameName {
         String[] words = gameName.split("\\s+");
         StringBuilder formattedName = new StringBuilder();
 
-        String[] lowerCaseWords = { "the", "of", "and", "in", "on", "at", "for", "with", "a", "an" };
+        var lowerCaseWords = new String[]{"the", "of", "and", "in", "on", "at", "for", "with", "a", "an"};
 
         for (int i = 0; i < words.length; i++) {
             String word = words[i].toLowerCase();
