@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 @Component
 public class GetGenresAndStudioByGameName {
@@ -36,7 +35,7 @@ public class GetGenresAndStudioByGameName {
     }
 
     public IGDBResponseFullInfoDTO fetchGameDetails(IGDBQueryInfoDTO queryInfo) {
-        var gameName = queryInfo.gameName();
+        var gameName = formatGameName(queryInfo.gameName());
         var clientId = queryInfo.clientId();
         var token = queryInfo.token();
 
@@ -76,6 +75,39 @@ public class GetGenresAndStudioByGameName {
         }
 
         return null;
+    }
+
+    private String formatGameName(String gameName) {
+        String[] words = gameName.split("\\s+");
+        StringBuilder formattedName = new StringBuilder();
+
+        String[] lowerCaseWords = { "the", "of", "and", "in", "on", "at", "for", "with", "a", "an" };
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i].toLowerCase();
+
+            if (i == 0 || !isLowerCaseWord(word, lowerCaseWords)) {
+                formattedName.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1));
+            } else {
+                formattedName.append(word);
+            }
+
+            if (i < words.length - 1) {
+                formattedName.append(" ");
+            }
+        }
+
+        return formattedName.toString();
+    }
+
+    private boolean isLowerCaseWord(String word, String[] lowerCaseWords) {
+        for (String lowerWord : lowerCaseWords) {
+            if (word.equals(lowerWord)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private List<String> processGenres(List<Integer> genreIds, HttpHeaders headers) {
@@ -183,5 +215,4 @@ public class GetGenresAndStudioByGameName {
 
         return companyReturnList;
     }
-
 }

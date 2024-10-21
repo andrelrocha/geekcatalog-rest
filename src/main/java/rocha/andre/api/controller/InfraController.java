@@ -94,9 +94,7 @@ public class InfraController {
     @PostMapping("/igdb/fetch/game")
     public ResponseEntity fetchGameDetails(@RequestBody IGDBQueryRequestDTO request) {
         var queryInfo = twitchAuth.authenticateUser(request.gameName());
-
         var igbdbResponse = igdbService.fetchGameDetails(queryInfo);
-
         return ResponseEntity.ok(igbdbResponse);
     }
 }
