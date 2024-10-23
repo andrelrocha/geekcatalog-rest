@@ -22,11 +22,6 @@ public class OAuthController {
     @Autowired
     private OAuthGoogleService oAuthGoogleService;
 
-    @GetMapping("/options")
-    public ModelAndView showLoginOptions() {
-        return oAuthGoogleService.showLoginOptions();
-    }
-
     @GetMapping("/google")
     public ResponseEntity<GoogleAccessToken> handleGoogleLogin(@RequestParam String code) {
         String accessToken = oAuthGoogleService.exchangeCodeForAccessToken(code);

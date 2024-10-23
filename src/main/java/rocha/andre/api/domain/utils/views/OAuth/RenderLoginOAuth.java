@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.user.UseCase;
+package rocha.andre.api.domain.utils.views.OAuth;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
