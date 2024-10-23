@@ -66,7 +66,6 @@ public class UtilsController {
         return ResponseEntity.ok(igbdbResponse);
     }
 
-
     @GetMapping("/download/apk")
     public ResponseEntity<Resource> downloadApk() throws IOException {
         var resource = new ClassPathResource("files/geekcatalog-v.1.0.2.apk");

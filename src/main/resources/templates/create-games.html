@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Detalhes do Jogo</title>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 th:text="${gameName}">Título do Jogo</h1>
+
+    <h3>Gêneros:</h3>
+    <select class="custom-select" multiple>
+        <option th:each="genre : ${genresName}" th:value="${genre}" th:text="${genre}">Gênero</option>
+    </select>
+
+    <h3 class="mt-4">Plataformas:</h3>
+    <select class="custom-select" multiple>
+        <option th:each="platform : ${platformsName}" th:value="${platform}" th:text="${platform}">Plataforma</option>
+    </select>
+
+    <h3 class="mt-4">Estúdios Envolvidos:</h3>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div th:each="company : ${involvedCompanies}">
+                <h5 class="card-title" th:text="${company.companyName}">Nome da Empresa</h5>
+                <p class="card-text">
+                    <strong>Desenvolvedor:</strong> <span th:text="${company.developer} ? 'Sim' : 'Não'">Não</span><br>
+                    <strong>Publicador:</strong> <span th:text="${company.publisher} ? 'Sim' : 'Não'">Não</span><br>
+                    <strong>País:</strong> <span th:text="${company.countryInfo.name.common}">Nome do País</span> (<span th:text="${company.countryInfo.cca2}">Código do País</span>)
+                </p>
+                <hr/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
