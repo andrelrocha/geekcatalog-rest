@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.utils.API.IGDB;
+package rocha.andre.api.domain.utils.API.IGDB.utils;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;

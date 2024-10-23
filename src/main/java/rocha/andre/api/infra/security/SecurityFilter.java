@@ -41,10 +41,9 @@ public class SecurityFilter extends OncePerRequestFilter {
             User user = getUserFromCacheOrDb(subject);
             if (user != null && user.isRefreshTokenEnabled()) {
                 String newAccessToken = tokenService.generateAccessToken(user);
-                String newRefreshToken = tokenService.generateRefreshToken(user);
 
                 response.setHeader("Authorization", "Bearer " + newAccessToken);
-                addRefreshTokenCookie(request, response, newRefreshToken);
+
 
                 authenticateUser(subject);
             }
@@ -65,12 +64,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     private User getUserFromCacheOrDb(String subject) {
         // Verifica se o usuário está no cache, se não tiver busca no banco de dados
         return userCache.computeIfAbsent(subject, s -> authenticateUserWithValidJwt.findUserAuthenticated(s));
-    }
-
-    private void addRefreshTokenCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
-        if (request.getRequestURI().equals("/user/login")) return;
-
-        cookieManager.addRefreshTokenCookie(response, refreshToken);
     }
 
     private String getRefreshToken(HttpServletRequest request) {

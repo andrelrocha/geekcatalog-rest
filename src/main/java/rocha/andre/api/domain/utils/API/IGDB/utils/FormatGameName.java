@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.utils.API.IGDB;
+package rocha.andre.api.domain.utils.API.IGDB.utils;
 
 import org.springframework.stereotype.Component;
 

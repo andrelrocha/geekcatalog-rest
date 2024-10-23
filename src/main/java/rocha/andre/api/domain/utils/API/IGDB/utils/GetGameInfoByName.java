@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.utils.API.IGDB;
+package rocha.andre.api.domain.utils.API.IGDB.utils;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -6,6 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.GameInfo;
 
@@ -28,9 +30,20 @@ public class GetGameInfoByName {
 
         HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
 
-        return restTemplate.exchange(
-                GAMES_URL, HttpMethod.POST, requestEntity,
-                new ParameterizedTypeReference<List<GameInfo>>() {}
-        );
+        try {
+            return restTemplate.exchange(
+                    GAMES_URL, HttpMethod.POST, requestEntity,
+                    new ParameterizedTypeReference<List<GameInfo>>() {}
+            );
+        } catch (HttpClientErrorException e) {
+            System.err.println("HTTP Error while fetching game details from IGDB: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+            throw e;
+        } catch (RestClientException e) {
+            System.err.println("Client Error on fetch game details from IGDB: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred: " + e.getMessage());
+            throw e;
+        }
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.HttpClientErrorException;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.*;
+import rocha.andre.api.domain.utils.API.IGDB.utils.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
