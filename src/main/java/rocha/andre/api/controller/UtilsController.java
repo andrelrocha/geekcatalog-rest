@@ -2,6 +2,8 @@ package rocha.andre.api.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import rocha.andre.api.domain.utils.API.Twitch.TwitchAuth;
 import rocha.andre.api.service.IGDBService;
 import rocha.andre.api.service.SpreadsheetService;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/utils")
@@ -59,5 +63,22 @@ public class UtilsController {
         var queryInfo = twitchAuth.authenticateUser(request.gameName());
         var igbdbResponse = igdbService.fetchGameDetails(queryInfo);
         return ResponseEntity.ok(igbdbResponse);
+    }
+
+
+    @GetMapping("/download/apk")
+    public ResponseEntity<Resource> downloadApk() throws IOException {
+        var resource = new ClassPathResource("files/geekcatalog-v.1.0.2.apk");
+
+        if (!resource.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        var headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=geekcatalog-v.1.0.2.apk");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
     }
 }

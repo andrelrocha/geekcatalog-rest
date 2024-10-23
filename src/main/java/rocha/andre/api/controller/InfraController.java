@@ -2,9 +2,6 @@ package rocha.andre.api.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import rocha.andre.api.infra.security.TokenService;
@@ -33,21 +30,5 @@ public class InfraController {
     @GetMapping("/ping")
     public String pingServer() {
         return "Servidor está online";
-    }
-
-    @GetMapping("/download/apk")
-    public ResponseEntity<Resource> downloadApk() throws IOException {
-        var resource = new ClassPathResource("files/geekcatalog-v.1.0.2.apk");
-
-        if (!resource.exists()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        var headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=geekcatalog-v.1.0.2.apk");
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(resource);
     }
 }

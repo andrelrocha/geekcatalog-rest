@@ -25,6 +25,7 @@ public class GetGenresAndStudioByGameName {
     private static final long REQUEST_DELAY_MS = 1000 / MAX_REQUESTS_PER_SECOND;
     private static final String GAMES_URL = "https://api.igdb.com/v4/games";
     private static final String GENRES_URL = "https://api.igdb.com/v4/genres";
+    private static final String PLATFORMS_URL = "https://api.igdb.com/v4/platforms";
     private static final String COMPANIES_URL = "https://api.igdb.com/v4/companies";
     private static final String INVOLVED_COMPANIES_URL = "https://api.igdb.com/v4/involved_companies";
     private static final String COUNTRY_URL = "https://restcountries.com/v3.1/alpha/";
@@ -45,7 +46,7 @@ public class GetGenresAndStudioByGameName {
             headers.set("Client-ID", clientId);
             headers.set("Accept", "application/json");
 
-            var body = "fields name, genres, involved_companies; " +
+            var body = "fields name, genres, involved_companies, platforms; " +
                     "where name = \"" + gameName + "\"; " +
                     "limit 1; " +
                     "sort aggregated_rating desc;";
@@ -63,10 +64,11 @@ public class GetGenresAndStudioByGameName {
                 var gameNameResponse = gameInfo.name();
 
                 List<String> genreNames = processGenres(gameInfo.genres(), headers);
+                List<String> platformsNames = processPlatforms(gameInfo.platforms(), headers);
                 List<InvolvedCompanyInfo> involvedCompanies = processInvolvedCompanies(gameInfo.involvedCompanies(), headers);
                 List<CompanyReturnDTO> companyDetails = processCompanyDetails(involvedCompanies, headers);
 
-                return new IGDBResponseFullInfoDTO(gameNameResponse, genreNames, companyDetails);
+                return new IGDBResponseFullInfoDTO(gameNameResponse, genreNames, platformsNames, companyDetails);
             }
 
         } catch (HttpClientErrorException e) {
@@ -113,7 +115,9 @@ public class GetGenresAndStudioByGameName {
     private List<String> processGenres(List<Integer> genreIds, HttpHeaders headers) {
         List<String> genreNames = new ArrayList<>();
         if (genreIds != null && !genreIds.isEmpty()) {
-            String genreBody = "fields name; where id = (" + String.join(",", genreIds.stream().map(String::valueOf).toArray(String[]::new)) + ");";
+            String genreBody = "fields name; where id = (" +
+                    String.join(",", genreIds.stream().map(String::valueOf).toArray(String[]::new)) +
+                    ");";
 
             HttpEntity<String> requestEntity = new HttpEntity<>(genreBody, headers);
 
@@ -130,6 +134,36 @@ public class GetGenresAndStudioByGameName {
         }
         return genreNames;
     }
+
+    private List<String> processPlatforms(List<Integer> platformsIds, HttpHeaders headers) {
+        List<String> platformsNames = new ArrayList<>();
+
+        if (platformsIds != null && !platformsIds.isEmpty()) {
+            String platformsBody = "fields name; where id = (" +
+                    String.join(",", platformsIds.stream().map(String::valueOf).toArray(String[]::new)) +
+                    ");";
+
+            HttpEntity<String> requestEntity = new HttpEntity<>(platformsBody, headers);
+
+            try {
+                ResponseEntity<List<PlatformsInfo>> platformsResponse = restTemplate.exchange(
+                        PLATFORMS_URL, HttpMethod.POST, requestEntity,
+                        new ParameterizedTypeReference<List<PlatformsInfo>>() {}
+                );
+
+                if (platformsResponse.getBody() != null) {
+                    for (PlatformsInfo platform : platformsResponse.getBody()) {
+                        platformsNames.add(platform.name());
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Error fetching platforms: " + e.getMessage());
+            }
+        }
+
+        return platformsNames;
+    }
+
 
     private List<InvolvedCompanyInfo> processInvolvedCompanies(List<Integer> companyIds, HttpHeaders headers) {
         List<InvolvedCompanyInfo> involvedCompanies = new ArrayList<>();
