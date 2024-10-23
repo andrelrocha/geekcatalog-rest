@@ -2,7 +2,7 @@ package rocha.andre.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rocha.andre.api.domain.utils.API.IGDB.GetGenresAndStudioByGameName;
+import rocha.andre.api.domain.utils.API.IGDB.GetGameInfoOnIGDB;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBQueryInfoDTO;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBResponseFullInfoDTO;
 import rocha.andre.api.service.IGDBService;
@@ -10,9 +10,9 @@ import rocha.andre.api.service.IGDBService;
 @Service
 public class IGDBServiceImpl implements IGDBService {
     @Autowired
-    private GetGenresAndStudioByGameName getGenresAndStudioByGameName;
+    private GetGameInfoOnIGDB getGameInfoOnIGDB;
     @Override
     public IGDBResponseFullInfoDTO fetchGameDetails(IGDBQueryInfoDTO queryInfo) {
-        return getGenresAndStudioByGameName.fetchGameDetails(queryInfo);
+        return getGameInfoOnIGDB.fetchGameDetails(queryInfo);
     }
 }
