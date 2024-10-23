@@ -1,4 +1,4 @@
-package rocha.andre.api.infra.utils.oauth.google;
+package rocha.andre.api.infra.utils.OAuth;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

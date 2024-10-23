@@ -1,4 +1,4 @@
-package rocha.andre.api.infra.utils.oauth.google;
+package rocha.andre.api.infra.utils.OAuth;
 
 public record GoogleUserInfo(
         String sub,       // ID único do usuário Google

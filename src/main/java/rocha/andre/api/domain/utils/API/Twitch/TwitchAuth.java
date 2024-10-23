@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import rocha.andre.api.controller.TwitchAuthResponseDTO;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBQueryInfoDTO;
 
 import java.util.Objects;

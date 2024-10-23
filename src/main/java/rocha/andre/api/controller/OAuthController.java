@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import rocha.andre.api.infra.utils.OAuth.google.GoogleAccessToken;
 import rocha.andre.api.infra.security.AccessTokenDTO;
 import rocha.andre.api.infra.utils.httpCookies.CookieManager;
 import rocha.andre.api.service.OAuthGoogleService;

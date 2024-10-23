@@ -2,13 +2,8 @@ package rocha.andre.api.domain.user.UseCase;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import rocha.andre.api.domain.auditLog.LoginStatus;
 import rocha.andre.api.domain.auditLog.useCase.RegisterAuditLog;
 import rocha.andre.api.domain.authenticationType.AuthenticationTypeRepository;
@@ -23,8 +18,8 @@ import rocha.andre.api.domain.userAuthenticationType.UserAuthenticationTypeRepos
 import rocha.andre.api.infra.exceptions.ValidationException;
 import rocha.andre.api.infra.security.AuthTokensDTO;
 import rocha.andre.api.infra.security.TokenService;
-import rocha.andre.api.infra.utils.oauth.google.GetGoogleUserInfo;
-import rocha.andre.api.infra.utils.oauth.google.GoogleUserInfo;
+import rocha.andre.api.infra.utils.OAuth.GetGoogleUserInfo;
+import rocha.andre.api.infra.utils.OAuth.GoogleUserInfo;
 
 import java.security.SecureRandom;
 import java.util.UUID;

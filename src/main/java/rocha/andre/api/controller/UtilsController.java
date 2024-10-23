@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBQueryRequestDTO;
 import rocha.andre.api.domain.utils.API.Twitch.TwitchAuth;
 import rocha.andre.api.service.IGDBService;
 import rocha.andre.api.service.SpreadsheetService;

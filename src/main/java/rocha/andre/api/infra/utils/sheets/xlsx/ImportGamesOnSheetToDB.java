@@ -1,9 +1,8 @@
-package rocha.andre.api.domain.utils.sheet.xlsx;
+package rocha.andre.api.infra.utils.sheets.xlsx;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import rocha.andre.api.domain.game.DTO.GameDTO;
 
 import java.util.ArrayList;
 import java.util.List;

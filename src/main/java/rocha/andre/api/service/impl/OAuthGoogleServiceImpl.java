@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import rocha.andre.api.domain.user.UseCase.AuthenticateGoogleUser;
 import rocha.andre.api.domain.user.UseCase.RenderLoginOAuth;
 import rocha.andre.api.infra.security.AuthTokensDTO;
-import rocha.andre.api.infra.utils.oauth.google.ExchangeCodeForAccessToken;
+import rocha.andre.api.infra.utils.OAuth.ExchangeCodeForAccessToken;
 import rocha.andre.api.service.OAuthGoogleService;
 
 @Service

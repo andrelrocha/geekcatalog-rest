@@ -1,4 +1,4 @@
-package rocha.andre.api.controller;
+package rocha.andre.api.domain.utils.API.Twitch;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
