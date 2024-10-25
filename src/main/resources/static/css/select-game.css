@@ -1,0 +1,22 @@
+body {
+    background-color: black;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+#container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 40%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+#gameNameInput {
+    width: 100%;
+}
+#inputTitle {
+    color: black;
+}
