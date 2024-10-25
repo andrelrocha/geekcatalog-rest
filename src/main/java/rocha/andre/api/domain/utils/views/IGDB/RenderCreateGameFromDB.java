@@ -21,6 +21,7 @@ public class RenderCreateGameFromDB {
         var modelAndView = new ModelAndView("create-games");
 
         modelAndView.addObject("gameName", igdbResponse.gameName());
+        modelAndView.addObject("yearOfRelease", igdbResponse.yearOfRelease());
         modelAndView.addObject("genresName", igdbResponse.genresName());
         modelAndView.addObject("platformsName", igdbResponse.platformsName());
         modelAndView.addObject("involvedCompanies", igdbResponse.involvedCompanies());

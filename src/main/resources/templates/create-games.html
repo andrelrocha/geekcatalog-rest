@@ -13,7 +13,13 @@
         <h1 th:text="${gameName}">Título do Jogo</h1>
     </div>
 
-    <h3>Gêneros:</h3>
+    <h3>Ano de Lançamento:</h3>
+    <input type="number" class="form-control" id="yearOfReleaseInput" th:value="${yearOfRelease}" placeholder="Digite o ano de lançamento">
+
+    <h3 class="mt-4">Metacritic:</h3>
+    <input type="number" class="form-control" id="metacriticInput" placeholder="Digite a pontuação Metacritic">
+
+    <h3 class="mt-4">Gêneros:</h3>
     <div class="card mb-2">
         <div class="card-body" id="genresContainer">
             <button class="btn btn-secondary mb-2" onclick="addGenre()">Adicionar Gênero</button>
@@ -58,9 +64,6 @@
             </div>
         </div>
     </div>
-
-    <h3 class="mt-4">Metacritic:</h3>
-    <input type="number" class="form-control" id="metacriticInput" placeholder="Digite a pontuação Metacritic">
 
     <div class="d-flex justify-content-center mt-4 mb-4">
         <button class="btn btn-danger mr-2" onclick="clearSelections()">Limpar Seleções</button>
