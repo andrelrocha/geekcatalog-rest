@@ -9,6 +9,7 @@ function clearSelections() {
         checkbox.checked = false;
     });
     document.getElementById('metacriticInput').value = '';
+    document.getElementById('yearOfReleaseInput').value = '';
 }
 
 function getSelections() {
@@ -19,10 +20,12 @@ function getSelections() {
     const companies = Array.from(document.querySelectorAll('.companyCheckbox:checked'))
                            .map(checkbox => checkbox.value);
     const metacritic = document.getElementById('metacriticInput').value;
+    const yearOfRelease = document.getElementById('yearOfReleaseInput').value;
 
     let message = "Gêneros selecionados: " + genres.join(", ") + "\n";
     message += "Plataformas selecionadas: " + platforms.join(", ") + "\n";
     message += "Estúdios selecionados: " + companies.join(", ") + "\n";
+    message += "Ano de Lançamento: " + yearOfRelease + "\n";
     message += "Pontuação Metacritic: " + metacritic;
 
     alert(message);

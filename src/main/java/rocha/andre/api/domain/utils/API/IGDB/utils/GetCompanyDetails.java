@@ -46,33 +46,42 @@ public class GetCompanyDetails {
 
                 if (companyDetailResponse.getBody() != null) {
                     for (CompanyInfo companyInfo : companyDetailResponse.getBody()) {
-                        var countryCode = String.valueOf(companyInfo.country());
-                        var countryUrl = COUNTRY_URL + countryCode;
+                        CountryInfo countryInfoResponse;
 
-                        ResponseEntity<List<CountryInfo>> countryResponse = restTemplate.exchange(
-                                countryUrl,
-                                HttpMethod.GET,
-                                null,
-                                new ParameterizedTypeReference<List<CountryInfo>>() {}
-                        );
+                        if (companyInfo.country() == 0) {
+                            var notValidName = new CountryInfo.Name("N/A");
+                            countryInfoResponse = new CountryInfo(notValidName, "N/A");
+                        } else {
+                            String countryCode = String.valueOf(companyInfo.country());
+                            String countryUrl = COUNTRY_URL + countryCode;
 
-                        if (countryResponse.getBody() != null && !countryResponse.getBody().isEmpty()) {
-                            CountryInfo countryInfoResponse = countryResponse.getBody().get(0);
-
-                            InvolvedCompanyInfo involvedCompanyInfo = involvedCompanies.stream()
-                                    .filter(info -> info.company() == companyInfo.id())
-                                    .findFirst()
-                                    .orElseThrow(() -> new RuntimeException("Involved company info not found for company ID: " + companyInfo.id()));
-
-                            CompanyReturnDTO companyReturnDTO = new CompanyReturnDTO(
-                                    companyInfo.name(),
-                                    involvedCompanyInfo.developer(),
-                                    involvedCompanyInfo.publisher(),
-                                    countryInfoResponse
+                            ResponseEntity<List<CountryInfo>> countryResponse = restTemplate.exchange(
+                                    countryUrl,
+                                    HttpMethod.GET,
+                                    null,
+                                    new ParameterizedTypeReference<List<CountryInfo>>() {}
                             );
 
-                            companyReturnList.add(companyReturnDTO);
+                            if (countryResponse.getBody() != null && !countryResponse.getBody().isEmpty()) {
+                                countryInfoResponse = countryResponse.getBody().get(0);
+                            } else {
+                                countryInfoResponse = new CountryInfo(new CountryInfo.Name("N/A"), "N/A");
+                            }
                         }
+
+                        InvolvedCompanyInfo involvedCompanyInfo = involvedCompanies.stream()
+                                .filter(info -> info.company() == companyInfo.id())
+                                .findFirst()
+                                .orElseThrow(() -> new RuntimeException("Involved company info not found for company ID: " + companyInfo.id()));
+
+                        CompanyReturnDTO companyReturnDTO = new CompanyReturnDTO(
+                                companyInfo.name(),
+                                involvedCompanyInfo.developer(),
+                                involvedCompanyInfo.publisher(),
+                                countryInfoResponse
+                        );
+
+                        companyReturnList.add(companyReturnDTO);
                     }
                 }
             } catch (Exception e) {
