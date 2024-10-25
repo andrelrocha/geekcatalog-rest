@@ -14,21 +14,35 @@ function clearSelections() {
 
 function getSelections() {
     const genres = Array.from(document.querySelectorAll('.genreCheckbox:checked'))
-                        .map(checkbox => checkbox.value);
+                        .map(checkbox => checkbox.nextElementSibling.value);
     const platforms = Array.from(document.querySelectorAll('.platformCheckbox:checked'))
                            .map(checkbox => checkbox.value);
     const companies = Array.from(document.querySelectorAll('.companyCheckbox:checked'))
-                           .map(checkbox => checkbox.value);
-    const metacritic = document.getElementById('metacriticInput').value;
-    const yearOfRelease = document.getElementById('yearOfReleaseInput').value;
+                               .map(checkbox => {
+                                   const cardBody = checkbox.closest('.card-body');
+                                   const countryName = cardBody.querySelector('strong:nth-of-type(3) + span').textContent;
 
-    let message = "Gêneros selecionados: " + genres.join(", ") + "\n";
-    message += "Plataformas selecionadas: " + platforms.join(", ") + "\n";
-    message += "Estúdios selecionados: " + companies.join(", ") + "\n";
-    message += "Ano de Lançamento: " + yearOfRelease + "\n";
-    message += "Pontuação Metacritic: " + metacritic;
+                                   return {
+                                       name: checkbox.value,
+                                       country: {
+                                           name: countryName,
+                                       }
+                                   };
+                               });
+    const metacritic = parseInt(document.getElementById('metacriticInput').value) || 0;
+    const yearOfRelease = parseInt(document.getElementById('yearOfReleaseInput').value) || 0;
 
-    alert(message);
+    const createGameAdminTemplateDTO = {
+            name: document.querySelector('h1').textContent,
+            yearOfRelease: yearOfRelease,
+            metacritic: metacritic,
+            genres: genres,
+            consoles: platforms,
+            studios: companies
+    };
+
+    console.log(JSON.stringify(createGameAdminTemplateDTO, null, 2));
+    alert("Dados do jogo e estúdios foram impressos no console.");
 }
 
 function addGenre() {
