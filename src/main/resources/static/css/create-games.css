@@ -1,0 +1,14 @@
+.custom-container {
+    width: 70%;
+    margin: 2rem auto;
+}
+.genre-input {
+    color: black;
+}
+.form-control.genre-input {
+    color: black;
+    background-color: white;
+}
+.form-control.genre-input::placeholder {
+    color: gray;
+}

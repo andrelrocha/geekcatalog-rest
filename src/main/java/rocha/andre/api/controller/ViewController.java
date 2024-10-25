@@ -2,13 +2,13 @@ package rocha.andre.api.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBQueryRequestDTO;
 import rocha.andre.api.service.ViewService;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/view")
@@ -21,8 +21,9 @@ public class ViewController {
         return viewService.showLoginOptions();
     }
 
-    @GetMapping("/creategame")
-    public ModelAndView createGameWithIGDBInfo(@RequestHeader("gameName") String gameName) {
-        return viewService.createGameFromIGDB(new IGDBQueryRequestDTO(gameName));
+    @GetMapping("/creategame/{gameName}")
+    public ModelAndView createGameWithIGDBInfo(@PathVariable("gameName") String gameName) {
+        String decodedGameName = URLDecoder.decode(gameName, StandardCharsets.UTF_8);
+        return viewService.createGameFromIGDB(new IGDBQueryRequestDTO(decodedGameName));
     }
 }

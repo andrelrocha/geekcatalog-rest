@@ -5,26 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Detalhes do Jogo</title>
+    <link rel="stylesheet" href="/css/create-games.css">
 </head>
 <body>
-<div class="container mt-5">
-    <h1 th:text="${gameName}">Título do Jogo</h1>
+<div class="custom-container">
+    <div class="text-center">
+        <h1 th:text="${gameName}">Título do Jogo</h1>
+    </div>
 
     <h3>Gêneros:</h3>
-    <select class="custom-select" multiple>
-        <option th:each="genre : ${genresName}" th:value="${genre}" th:text="${genre}">Gênero</option>
-    </select>
+    <div class="card mb-2">
+        <div class="card-body" id="genresContainer">
+            <button class="btn btn-secondary mb-2" onclick="addGenre()">Adicionar Gênero</button>
+            <hr/>
+            <div th:each="genre : ${genresName}">
+                <h5 class="card-title">
+                    <input type="checkbox" class="genreCheckbox" th:value="${genre}" />
+                    <input type="text" class="form-control d-inline-block genre-input" th:value="${genre}" style="width: auto; display: inline-block;" />
+                </h5>
+                <hr/>
+            </div>
+        </div>
+    </div>
 
     <h3 class="mt-4">Plataformas:</h3>
-    <select class="custom-select" multiple>
-        <option th:each="platform : ${platformsName}" th:value="${platform}" th:text="${platform}">Plataforma</option>
-    </select>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div th:each="platform : ${platformsName}">
+                <h5 class="card-title">
+                    <input type="checkbox" class="platformCheckbox" th:value="${platform}" />
+                    <span th:text="${platform}">Nome da Plataforma</span>
+                </h5>
+                <hr/>
+            </div>
+        </div>
+    </div>
 
-    <h3 class="mt-4">Estúdios Envolvidos:</h3>
+    <h3 class="mt-4">Empresas Envolvidas:</h3>
     <div class="card mb-4">
         <div class="card-body">
             <div th:each="company : ${involvedCompanies}">
-                <h5 class="card-title" th:text="${company.companyName}">Nome da Empresa</h5>
+                <h5 class="card-title">
+                    <input type="checkbox" class="companyCheckbox" th:value="${company.companyName}" />
+                    <span th:text="${company.companyName}">Nome da Empresa</span>
+                </h5>
                 <p class="card-text">
                     <strong>Desenvolvedor:</strong> <span th:text="${company.developer} ? 'Sim' : 'Não'">Não</span><br>
                     <strong>Publicador:</strong> <span th:text="${company.publisher} ? 'Sim' : 'Não'">Não</span><br>
@@ -34,10 +58,20 @@
             </div>
         </div>
     </div>
+
+    <h3 class="mt-4">Metacritic:</h3>
+    <input type="number" class="form-control" id="metacriticInput" placeholder="Digite a pontuação Metacritic">
+
+    <div class="d-flex justify-content-center mt-4 mb-4">
+        <button class="btn btn-danger mr-2" onclick="clearSelections()">Limpar Seleções</button>
+        <button class="btn btn-primary" onclick="getSelections()">Confirmar Seleções</button>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="/js/create-games.js"></script>
 </body>
 </html>
