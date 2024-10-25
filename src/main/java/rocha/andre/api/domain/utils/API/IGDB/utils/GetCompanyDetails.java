@@ -48,10 +48,7 @@ public class GetCompanyDetails {
                     for (CompanyInfo companyInfo : companyDetailResponse.getBody()) {
                         CountryInfo countryInfoResponse;
 
-                        if (companyInfo.country() == 0) {
-                            var notValidName = new CountryInfo.Name("N/A");
-                            countryInfoResponse = new CountryInfo(notValidName, "N/A");
-                        } else {
+                        try {
                             String countryCode = String.valueOf(companyInfo.country());
                             String countryUrl = COUNTRY_URL + countryCode;
 
@@ -67,6 +64,9 @@ public class GetCompanyDetails {
                             } else {
                                 countryInfoResponse = new CountryInfo(new CountryInfo.Name("N/A"), "N/A");
                             }
+                        } catch (Exception e) {
+                            // Mapeia como "N/A" se a chamada ao país lançar uma exceção (ex: status != 200)
+                            countryInfoResponse = new CountryInfo(new CountryInfo.Name("N/A"), "N/A");
                         }
 
                         InvolvedCompanyInfo involvedCompanyInfo = involvedCompanies.stream()
@@ -90,8 +90,8 @@ public class GetCompanyDetails {
             }
         } else {
             System.out.println("No company details found.");
-        }
 
+        }
         return companyReturnList;
     }
 }

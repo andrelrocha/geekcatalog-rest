@@ -23,7 +23,7 @@ public class GetGameInfoByName {
     }
 
     public ResponseEntity<List<GameInfo>> fetchGameDetailsFromIGDB(String gameName, HttpHeaders headers) {
-        String body = "fields name, genres, involved_companies, platforms, release_dates; " +
+        String body = "fields name, genres, involved_companies, platforms, release_dates, cover; " +
                 "where name = \"" + gameName + "\"; " +
                 "limit 1; " +
                 "sort aggregated_rating desc;";

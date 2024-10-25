@@ -9,8 +9,9 @@
 </head>
 <body>
 <div class="custom-container">
-    <div class="text-center">
-        <h1 th:text="${gameName}">Título do Jogo</h1>
+    <div class="text-center d-flex align-items-center justify-content-center">
+        <h1 th:text="${gameName}" class="mr-2">Título do Jogo</h1>
+        <img th:src="${gameCoverUrl}" alt="Capa do Jogo" style="max-width: 50px;">
     </div>
 
     <h3>Ano de Lançamento:</h3>

@@ -19,6 +19,8 @@ public class GetGameInfoOnIGDB {
     @Autowired
     private GetCompanyDetails getCompanyDetails;
     @Autowired
+    private GetCoverByID getCoverByID;
+    @Autowired
     private GetGameInfoByName getGameInfoByName;
     @Autowired
     private GetGenresNameByID getGenresNameByID;
@@ -57,12 +59,13 @@ public class GetGameInfoOnIGDB {
                 var gameNameResponse = gameInfo.name();
 
                 int yearOfRelease = getReleaseDatesByID.processReleaseDatesList(gameInfo.releaseDates(), headers);
+                String coverUrl = getCoverByID.processCoverId(gameInfo.cover(), headers);
                 List<String> genreNames = getGenresNameByID.processGenres(gameInfo.genres(), headers);
                 List<String> platformsNames = getPlatformsNameByID.processPlatforms(gameInfo.platforms(), headers);
                 List<InvolvedCompanyInfo> involvedCompanies = getInvolvedCompaniesByID.processInvolvedCompanies(gameInfo.involvedCompanies(), headers);
                 List<CompanyReturnDTO> companyDetails = getCompanyDetails.processCompanyDetails(involvedCompanies, headers);
 
-                return new IGDBResponseFullInfoDTO(gameNameResponse, yearOfRelease, genreNames, platformsNames, companyDetails);
+                return new IGDBResponseFullInfoDTO(gameNameResponse, yearOfRelease, coverUrl, genreNames, platformsNames, companyDetails);
             }
 
         } catch (HttpClientErrorException e) {
