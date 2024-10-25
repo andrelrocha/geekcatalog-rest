@@ -8,6 +8,7 @@ import rocha.andre.api.domain.utils.API.IGDB.DTO.*;
 import rocha.andre.api.domain.utils.API.IGDB.utils.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -25,6 +26,8 @@ public class GetGameInfoOnIGDB {
     private GetInvolvedCompaniesByID getInvolvedCompaniesByID;
     @Autowired
     private GetPlatformsNameByID getPlatformsNameByID;
+    @Autowired
+    private GetReleaseDatesByID getReleaseDatesByID;
 
     private final ExecutorService executorService;
     private static final int MAX_REQUESTS_PER_SECOND = 4;
@@ -53,12 +56,13 @@ public class GetGameInfoOnIGDB {
 
                 var gameNameResponse = gameInfo.name();
 
+                int yearOfRelease = getReleaseDatesByID.processReleaseDatesList(gameInfo.releaseDates(), headers);
                 List<String> genreNames = getGenresNameByID.processGenres(gameInfo.genres(), headers);
                 List<String> platformsNames = getPlatformsNameByID.processPlatforms(gameInfo.platforms(), headers);
                 List<InvolvedCompanyInfo> involvedCompanies = getInvolvedCompaniesByID.processInvolvedCompanies(gameInfo.involvedCompanies(), headers);
                 List<CompanyReturnDTO> companyDetails = getCompanyDetails.processCompanyDetails(involvedCompanies, headers);
 
-                return new IGDBResponseFullInfoDTO(gameNameResponse, genreNames, platformsNames, companyDetails);
+                return new IGDBResponseFullInfoDTO(gameNameResponse, yearOfRelease, genreNames, platformsNames, companyDetails);
             }
 
         } catch (HttpClientErrorException e) {
