@@ -21,9 +21,15 @@ public class ViewController {
         return viewService.showLoginOptions();
     }
 
-    @GetMapping("/creategame/{gameName}")
+    @GetMapping("/admin/creategame/{gameName}")
     public ModelAndView createGameWithIGDBInfo(@PathVariable("gameName") String gameName) {
         String decodedGameName = URLDecoder.decode(gameName, StandardCharsets.UTF_8);
         return viewService.createGameFromIGDB(new IGDBQueryRequestDTO(decodedGameName));
     }
+
+    @GetMapping("/admin/selectgame")
+    public ModelAndView renderTypeGamenameView() {
+        return viewService.selectGame();
+    }
+
 }

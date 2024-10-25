@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Criar Jogo</title>
+    <style>
+        body {
+            background-color: black;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        #container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 40%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        #gameNameInput {
+            width: 100%;
+        }
+        #inputTitle {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <h3 id="inputTitle" class="mb-4 mt-1">Digite o Nome do Jogo</h3>
+    <input type="text" class="form-control" id="gameNameInput" placeholder="Nome do Jogo">
+    <button class="btn btn-primary mt-3" onclick="navigateToGame()">Confirmar</button>
+</div>
+
+<div id="spinner" class="spinner-border text-light" style="display: none;" role="status">
+    <span class="sr-only">Loading...</span>
+</div>
+
+<script>
+    function navigateToGame() {
+        const gameName = document.getElementById('gameNameInput').value;
+        if (gameName) {
+            document.getElementById('container').style.display = 'none'; // Oculta o container
+            document.getElementById('spinner').style.display = 'block'; // Exibe o spinner
+
+            setTimeout(function() {
+                window.location.href = `creategame/${encodeURIComponent(gameName)}`;
+            }, 1000);
+        } else {
+            alert('Por favor, digite o nome do jogo!');
+        }
+    }
+</script>
+</body>
+</html>

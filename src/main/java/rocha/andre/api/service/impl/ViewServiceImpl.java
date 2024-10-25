@@ -24,4 +24,9 @@ public class ViewServiceImpl implements ViewService {
     public ModelAndView createGameFromIGDB(IGDBQueryRequestDTO data) {
         return renderCreateGameFromDB.createGameFromIGDB(data);
     }
+
+    @Override
+    public ModelAndView selectGame() {
+        return new ModelAndView("select-game");
+    }
 }
