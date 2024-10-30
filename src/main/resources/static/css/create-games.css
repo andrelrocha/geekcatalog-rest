@@ -9,13 +9,14 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
-.genre-input {
+.genre-input, .platform-input, .company-input {
     color: black;
 }
-.form-control.genre-input {
+.form-control.genre-input, .form-control.platform-input, .form-control.company-input {
     color: black;
     background-color: white;
 }
-.form-control.genre-input::placeholder {
+
+.form-control.genre-input::placeholder, .form-control.platform-input::placeholder, .form-control.company-input::placeholder {
     color: gray;
 }

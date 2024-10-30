@@ -16,19 +16,19 @@ function getSelections() {
     const genres = Array.from(document.querySelectorAll('.genreCheckbox:checked'))
                         .map(checkbox => checkbox.nextElementSibling.value);
     const platforms = Array.from(document.querySelectorAll('.platformCheckbox:checked'))
-                           .map(checkbox => checkbox.value);
+                           .map(checkbox => checkbox.nextElementSibling.value);
     const companies = Array.from(document.querySelectorAll('.companyCheckbox:checked'))
-                               .map(checkbox => {
-                                   const cardBody = checkbox.closest('.card-body');
-                                   const countryName = cardBody.querySelector('strong:nth-of-type(3) + span').textContent;
+                           .map(checkbox => {
+                               const cardBody = checkbox.closest('.card-body');
+                               const countryName = cardBody.querySelector('.country-input').value;
 
-                                   return {
-                                       name: checkbox.value,
-                                       country: {
-                                           name: countryName,
-                                       }
-                                   };
-                               });
+                               return {
+                                   name: checkbox.nextElementSibling.value,
+                                   country: {
+                                       name: countryName,
+                                   }
+                               };
+                           });
     const metacritic = parseInt(document.getElementById('metacriticInput').value) || 0;
     const yearOfRelease = parseInt(document.getElementById('yearOfReleaseInput').value) || 0;
 
@@ -80,8 +80,6 @@ function addCompany() {
             <input type="text" class="form-control d-inline-block company-input" placeholder="Nome da Empresa" style="width: auto; display: inline-block;" />
         </h5>
         <p class="card-text">
-            <strong>Desenvolvedor:</strong> <input type="checkbox" class="form-check-input" /> <br>
-            <strong>Publicador:</strong> <input type="checkbox" class="form-check-input" /> <br>
             <strong>País:</strong> <input type="text" class="form-control d-inline-block country-input" placeholder="Nome do País" style="width: auto; display: inline-block;" />
         </p>
         <hr/>

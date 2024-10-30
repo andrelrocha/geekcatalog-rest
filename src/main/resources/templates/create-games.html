@@ -47,8 +47,8 @@
             <hr/>
             <div th:each="platform : ${platformsName}">
                 <h5 class="card-title">
-                    <input type="checkbox" class="platformCheckbox" th:value="${platform}" />
-                    <span th:text="${platform}">Nome da Plataforma</span>
+                    <input type="checkbox" class="platformCheckbox" />
+                    <input type="text" class="form-control d-inline-block platform-input" th:value="${platform}" style="width: auto; display: inline-block;" />
                 </h5>
                 <hr/>
             </div>
@@ -62,8 +62,8 @@
             <hr/>
             <div th:each="company : ${involvedCompanies}">
                 <h5 class="card-title">
-                    <input type="checkbox" class="companyCheckbox" th:value="${company.companyName}" />
-                    <span th:text="${company.companyName}">Nome da Empresa</span>
+                    <input type="checkbox" class="companyCheckbox" />
+                    <input type="text" class="form-control d-inline-block company-input" th:value="${company.companyName}" style="width: auto; display: inline-block;" />
                 </h5>
                 <p class="card-text">
                     <strong>Desenvolvedor:</strong> <span th:text="${company.developer} ? 'Sim' : 'Não'">Não</span><br>
