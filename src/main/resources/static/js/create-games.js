@@ -57,3 +57,58 @@ function addGenre() {
     `;
     genresContainer.appendChild(newGenreDiv);
 }
+
+function addPlatform() {
+    const platformsContainer = document.getElementById('platformsContainer');
+    const newPlatformDiv = document.createElement('div');
+    newPlatformDiv.innerHTML = `
+        <h5 class="card-title">
+            <input type="checkbox" class="platformCheckbox" />
+            <input type="text" class="form-control d-inline-block platform-input" placeholder="Nova Plataforma" style="width: auto; display: inline-block;" />
+        </h5>
+        <hr/>
+    `;
+    platformsContainer.appendChild(newPlatformDiv);
+}
+
+function addCompany() {
+    const companiesContainer = document.getElementById('companiesContainer');
+    const newCompanyDiv = document.createElement('div');
+    newCompanyDiv.innerHTML = `
+        <h5 class="card-title">
+            <input type="checkbox" class="companyCheckbox" />
+            <input type="text" class="form-control d-inline-block company-input" placeholder="Nome da Empresa" style="width: auto; display: inline-block;" />
+        </h5>
+        <p class="card-text">
+            <strong>Desenvolvedor:</strong> <input type="checkbox" class="form-check-input" /> <br>
+            <strong>Publicador:</strong> <input type="checkbox" class="form-check-input" /> <br>
+            <strong>País:</strong> <input type="text" class="form-control d-inline-block country-input" placeholder="Nome do País" style="width: auto; display: inline-block;" />
+        </p>
+        <hr/>
+    `;
+    companiesContainer.appendChild(newCompanyDiv);
+}
+
+function editGameName() {
+    const titleContainer = document.getElementById('titleContainer');
+    const h1 = titleContainer.querySelector('h1');
+    const input = titleContainer.querySelector('#gameNameInput');
+    const icon = titleContainer.querySelector('i');
+
+    if (h1) {
+        h1.style.display = 'none';
+    }
+    if (icon) {
+        icon.style.display = 'none';
+    }
+
+    input.style.display = 'inline-block';
+    input.focus();
+
+    input.addEventListener('blur', function() {
+        h1.innerText = input.value;
+        input.style.display = 'none';
+        h1.style.display = 'inline';
+        icon.style.display = 'inline';
+    });
+}

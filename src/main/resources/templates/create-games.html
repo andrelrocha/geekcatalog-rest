@@ -6,12 +6,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Detalhes do Jogo</title>
     <link rel="stylesheet" href="/css/create-games.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
 <div class="custom-container">
     <div class="text-center d-flex align-items-center justify-content-center">
-        <h1 th:text="${gameName}" class="mr-2">Título do Jogo</h1>
-        <img th:src="${gameCoverUrl}" alt="Capa do Jogo" style="max-width: 50px;">
+        <div id="titleContainer" class="d-flex align-items-center">
+            <h1 th:if="${gameCoverUrl != ''}" th:text="${gameName}" class="mr-2">Título do Jogo</h1>
+            <input type="text" id="gameNameInput" th:if="${gameCoverUrl == ''}" th:value="${gameName}" class="form-control mr-2" style="max-width: 200px; display: none;" placeholder="Digite o título do jogo">
+            <i th:if="${gameCoverUrl == ''}" class="fas fa-pencil-alt" onclick="editGameName()" style="cursor: pointer; font-size: 24px;"></i>
+            <img th:if="${gameCoverUrl != ''}" th:src="${gameCoverUrl}" alt="Capa do Jogo" style="max-width: 50px;">
+        </div>
     </div>
 
     <h3>Ano de Lançamento:</h3>
@@ -37,7 +42,9 @@
 
     <h3 class="mt-4">Plataformas:</h3>
     <div class="card mb-4">
-        <div class="card-body">
+        <div class="card-body" id="platformsContainer">
+            <button class="btn btn-secondary mb-2" onclick="addPlatform()">Adicionar Plataforma</button>
+            <hr/>
             <div th:each="platform : ${platformsName}">
                 <h5 class="card-title">
                     <input type="checkbox" class="platformCheckbox" th:value="${platform}" />
@@ -50,7 +57,9 @@
 
     <h3 class="mt-4">Empresas Envolvidas:</h3>
     <div class="card mb-4">
-        <div class="card-body">
+        <div class="card-body" id="companiesContainer">
+            <button class="btn btn-secondary mb-2" onclick="addCompany()">Adicionar Empresa</button>
+            <hr/>
             <div th:each="company : ${involvedCompanies}">
                 <h5 class="card-title">
                     <input type="checkbox" class="companyCheckbox" th:value="${company.companyName}" />
@@ -75,6 +84,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <script src="/js/create-games.js"></script>
 </body>
+</html>
