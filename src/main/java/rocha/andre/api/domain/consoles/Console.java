@@ -29,4 +29,8 @@ public class Console {
     public Console(ConsoleDTO data) {
         this.name = data.name();
     }
+
+    public Console(String name) {
+        this.name = name;
+    }
 }

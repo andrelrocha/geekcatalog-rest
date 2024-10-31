@@ -10,4 +10,7 @@ import java.util.UUID;
 public interface GenreRepository extends JpaRepository<Genre, UUID> {
     @Query("SELECT g FROM Genre g ORDER BY g.name ASC")
     Page<Genre> findGenresOrderedByName(Pageable pageable);
+
+    @Query("SELECT g FROM Genre g WHERE LOWER(g.name) = LOWER(:name)")
+    Genre findByName(String name);
 }
