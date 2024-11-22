@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public interface StudioRepository extends JpaRepository<Studio, UUID> {
@@ -28,4 +29,7 @@ public interface StudioRepository extends JpaRepository<Studio, UUID> {
         WHERE gs.game.id = :gameId
         """)
     ArrayList<StudioReturnFullGameInfo> findAllStudiosInfoByGameId(UUID gameId);
+
+    @Query("SELECT s FROM Studio s WHERE LOWER(TRIM(s.name)) IN :names")
+    List<Studio> findAllByNamesIgnoreCaseAndTrimmed(List<String> names);
 }
