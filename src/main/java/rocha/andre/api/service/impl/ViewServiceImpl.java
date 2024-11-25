@@ -6,6 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBQueryRequestDTO;
 import rocha.andre.api.domain.utils.views.IGDB.RenderCreateGameFromDB;
 import rocha.andre.api.domain.utils.views.OAuth.RenderLoginOAuth;
+import rocha.andre.api.domain.utils.views.SignInView;
 import rocha.andre.api.service.ViewService;
 
 @Service
@@ -14,6 +15,8 @@ public class ViewServiceImpl implements ViewService {
     private RenderCreateGameFromDB renderCreateGameFromDB;
     @Autowired
     private RenderLoginOAuth renderLoginOAuth;
+    @Autowired
+    private SignInView signInView;
 
     @Override
     public ModelAndView showLoginOptions() {
@@ -28,5 +31,10 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public ModelAndView selectGame() {
         return new ModelAndView("select-game");
+    }
+
+    @Override
+    public ModelAndView signIn() {
+        return signInView.signInForm();
     }
 }

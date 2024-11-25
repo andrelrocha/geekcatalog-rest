@@ -7,4 +7,5 @@ public interface ViewService {
     ModelAndView showLoginOptions();
     ModelAndView createGameFromIGDB(IGDBQueryRequestDTO data);
     ModelAndView selectGame();
+    ModelAndView signIn();
 }

@@ -21,6 +21,11 @@ public class ViewController {
         return viewService.showLoginOptions();
     }
 
+    @GetMapping("/signin")
+    public ModelAndView signInView() {
+        return viewService.signIn();
+    }
+
     @GetMapping("/admin/creategame/{gameName}")
     public ModelAndView createGameWithIGDBInfo(@PathVariable("gameName") String gameName) {
         String decodedGameName = URLDecoder.decode(gameName, StandardCharsets.UTF_8);
@@ -31,5 +36,6 @@ public class ViewController {
     public ModelAndView renderTypeGamenameView() {
         return viewService.selectGame();
     }
+
 
 }
