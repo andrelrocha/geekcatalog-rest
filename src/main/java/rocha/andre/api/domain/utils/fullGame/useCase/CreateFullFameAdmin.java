@@ -25,9 +25,13 @@ import rocha.andre.api.domain.studios.DTO.StudioReturnDTO;
 import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
 import rocha.andre.api.domain.studios.useCase.CreateStudio;
 import rocha.andre.api.domain.studios.useCase.GetStudiosIdByName;
+import rocha.andre.api.domain.utils.API.IGDB.DTO.CompanyReturnDTO;
 import rocha.andre.api.domain.utils.fullGame.DTO.CreateFullGameDTO;
 import rocha.andre.api.domain.utils.fullGame.DTO.FullGameReturnDTO;
 import rocha.andre.api.infra.exceptions.ValidationException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,19 +64,23 @@ public class CreateFullFameAdmin {
     @Autowired
     private GetStudiosIdByName getStudiosIdByName;
 
+    private static final Logger logger = LoggerFactory.getLogger(CreateFullFameAdmin.class);
+
     public FullGameReturnDTO createGameFromIGDBInfo(CreateFullGameDTO data) {
         try {
             var gameDTO = new GameDTO(data.name(), data.metacritic(), data.yearOfRelease());
             var newGame = createGame.createGame(gameDTO);
+            logger.info("Jogo criado com ID: {}", newGame.id());
 
             var newGameGenres = new ArrayList<GenreReturnDTO>();
             var newGameConsoles = new ArrayList<ConsoleReturnDTO>();
             var newGameStudios = new ArrayList<StudioReturnFullGameInfo>();
 
+            logger.info("Processando gêneros...");
             Map<String, GenreReturnDTO> normalizedGenresWithId = getGenresIdByName.getGenresByName(
-                    (ArrayList<GenreDTO>) data.genres().stream()
+                    new ArrayList<>(data.genres().stream()
                             .map(GenreDTO::new)
-                            .toList()
+                            .toList())
             ).stream().collect(Collectors.toMap(
                     genre -> genre.name().toLowerCase().trim(),
                     genre -> genre
@@ -81,9 +89,14 @@ public class CreateFullFameAdmin {
             for (String genreName : data.genres()) {
                 String normalizedName = genreName.toLowerCase().trim();
 
-                GenreReturnDTO genre = normalizedGenresWithId.getOrDefault(normalizedName,
-                        createGenre.createGenre(new GenreDTO(genreName))
-                );
+                GenreReturnDTO genre = normalizedGenresWithId.getOrDefault(normalizedName, null);
+
+                if (genre == null) {
+                    logger.info("Criando novo gênero '{}'", genreName);
+                    genre = createGenre.createGenre(new GenreDTO(genreName));
+                } else {
+                    logger.info("Gênero '{}' já existe. Associando ao jogo ID: {}", genre.name(), newGame.id());
+                }
 
                 var gameGenreDTO = new GameGenreDTO(newGame.id().toString(), genre.id().toString());
                 var gameGenreCreated = createGameGenre.createGameGenre(gameGenreDTO);
@@ -91,10 +104,11 @@ public class CreateFullFameAdmin {
                 newGameGenres.add(new GenreReturnDTO(gameGenreCreated.genreId(), gameGenreCreated.genreName()));
             }
 
+            logger.info("Processando consoles...");
             Map<String, ConsoleReturnDTO> normalizedConsolesWithId = getConsolesIdByName.getConsolesByName(
-                    (ArrayList<ConsoleDTO>) data.consoles().stream()
+                    new ArrayList<>(data.consoles().stream()
                             .map(ConsoleDTO::new)
-                            .toList()
+                            .toList())
             ).stream().collect(Collectors.toMap(
                     console -> console.name().toLowerCase().trim(),
                     console -> console
@@ -103,9 +117,14 @@ public class CreateFullFameAdmin {
             for (String consoleName : data.consoles()) {
                 String normalizedConsoleName = consoleName.toLowerCase().trim();
 
-                ConsoleReturnDTO console = normalizedConsolesWithId.getOrDefault(normalizedConsoleName,
-                        createConsole.createConsole(new ConsoleDTO(consoleName))
-                );
+                ConsoleReturnDTO console = normalizedConsolesWithId.getOrDefault(normalizedConsoleName, null);
+
+                if (console == null) {
+                    logger.info("Criando novo console '{}'", consoleName);
+                    console = createConsole.createConsole(new ConsoleDTO(consoleName));
+                } else {
+                    logger.info("Console '{}' já existe. Associando ao jogo ID: {}", console.name(), newGame.id());
+                }
 
                 var gameConsoleDTO = new GameConsoleDTO(newGame.id().toString(), console.id().toString());
                 var gameConsoleCreated = createGameConsole.createGameConsole(gameConsoleDTO);
@@ -113,7 +132,7 @@ public class CreateFullFameAdmin {
                 newGameConsoles.add(new ConsoleReturnDTO(gameConsoleCreated.consoleId(), gameConsoleCreated.consoleName()));
             }
 
-            //aqui devemos converter companyreturn do igdb para o meu studioDTO
+            logger.info("Processando estúdios...");
             List<String> countryNames = data.studios().stream()
                     .map(studio -> studio.countryInfo().name().common())
                     .toList();
@@ -133,7 +152,7 @@ public class CreateFullFameAdmin {
                         var country = normalizedCountriesWithId.get(normalizedCountryName);
 
                         if (country == null) {
-                            throw new IllegalArgumentException("Country not found on system: " + studio.countryInfo().name().common());
+                            throw new IllegalArgumentException("País não encontrado no sistema: " + studio.countryInfo().name().common());
                         }
 
                         return new StudioDTO(studio.companyName(), country.id());
@@ -141,35 +160,39 @@ public class CreateFullFameAdmin {
 
             Map<String, StudioReturnDTO> normalizedStudiosWithId = getStudiosIdByName.getStudiosByName(studiosDTO)
                     .stream().collect(Collectors.toMap(
-                        studio -> studio.name().toLowerCase().trim(),
-                        studio -> studio
+                            studio -> studio.name().toLowerCase().trim(),
+                            studio -> studio
                     ));
 
-            for (StudioReturnDTO studioData : normalizedStudiosWithId.values()) {
-                var normalizedName = studioData.name().toLowerCase().trim();
+            for (CompanyReturnDTO studioData : data.studios()) {
+                var normalizedName = studioData.companyName().toLowerCase().trim();
                 StudioReturnDTO studio;
 
                 if (normalizedStudiosWithId.containsKey(normalizedName)) {
                     studio = normalizedStudiosWithId.get(normalizedName);
                 } else {
-                    var newStudio = new StudioDTO(studioData.name(), studioData.countryId());
+                    var studioCountry = studioData.countryInfo().name().common().toLowerCase().trim();
+                    var country = normalizedCountriesWithId.get(studioCountry);
+                    var studioCountryId = country.id();
+                    var newStudio = new StudioDTO(normalizedName, studioCountryId);
                     studio = createStudio.createStudio(newStudio);
                 }
 
+                logger.info("Associando estúdio '{}' ao jogo ID: {}", studio.name(), newGame.id());
                 var gameStudioDTO = new GameStudioDTO(newGame.id().toString(), studio.id().toString());
                 createGameStudio.createGameStudio(gameStudioDTO);
 
                 newGameStudios.add(new StudioReturnFullGameInfo(studio.id(), studio.name()));
             }
 
-
+            logger.info("Criação do jogo a partir dos dados obtidos do IGDB concluída com sucesso!");
             return new FullGameReturnDTO(newGame, newGameConsoles, newGameGenres, newGameStudios);
         } catch (ValidationException e) {
-            System.out.println("Erro: " + e.getMessage());
-            return null;
+            logger.error("Erro de validação: {}", e.getMessage());
+            throw e;
         } catch (Exception e) {
-            System.out.println("Erro ao criar o jogo: " + e.getMessage());
-            return null;
+            logger.error("Erro ao criar o jogo: {}", e.getMessage(), e);
+            throw new RuntimeException("Erro interno ao criar o jogo.", e);
         }
     }
 }

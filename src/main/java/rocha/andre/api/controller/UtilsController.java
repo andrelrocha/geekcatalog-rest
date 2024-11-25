@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBQueryRequestDTO;
 import rocha.andre.api.domain.utils.API.Twitch.TwitchAuth;
+import rocha.andre.api.domain.utils.fullGame.DTO.CreateFullGameDTO;
 import rocha.andre.api.service.IGDBService;
 import rocha.andre.api.service.SpreadsheetService;
 
@@ -64,6 +65,12 @@ public class UtilsController {
         var queryInfo = twitchAuth.authenticateUser(request.gameName());
         var igbdbResponse = igdbService.fetchGameDetails(queryInfo);
         return ResponseEntity.ok(igbdbResponse);
+    }
+
+    @PostMapping("/admin/igdb/creategame")
+    public ResponseEntity createGameFromIGDBData(@RequestBody CreateFullGameDTO data) {
+        var response = igdbService.createGameFromIGDBInfo(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/download/apk")

@@ -13,8 +13,11 @@ public class GetCountriesByName {
     private CountryRepository countryRepository;
 
     public List<CountryReturnDTO> getCountriesByName(List<String> names) {
-
-        var countries = countryRepository.findAllByNamesIgnoreCaseAndTrimmed(names);
+        var namesNormalized = names.stream()
+                .map(String::toLowerCase)
+                .map(String::trim)
+                .toList();
+        var countries = countryRepository.findAllByNamesIgnoreCaseAndTrimmed(namesNormalized);
 
         return countries.stream()
                 .map(country -> new CountryReturnDTO(country.getId(), country.getName(), country.getCode()))
