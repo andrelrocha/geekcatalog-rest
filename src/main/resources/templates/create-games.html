@@ -59,25 +59,25 @@
     <div class="card mb-4">
         <div class="card-body" id="companiesContainer">
             <button class="btn btn-secondary mb-2" onclick="addCompany()">Adicionar Empresa</button>
-            <hr/>
-            <div th:each="company : ${involvedCompanies}">
+            <hr />
+            <div id="companyContainer" th:each="company : ${involvedCompanies}">
                 <h5 class="card-title">
                     <input type="checkbox" class="companyCheckbox" />
-                    <input type="text" class="form-control d-inline-block company-input" th:value="${company.companyName}" style="width: auto; display: inline-block;" />
+                    <input type="text" class="form-control d-inline-block company-name" th:value="${company.companyName}" />
                 </h5>
                 <p class="card-text">
-                    <strong>Desenvolvedor:</strong> <span th:text="${company.developer} ? 'Sim' : 'Não'">Não</span><br>
-                    <strong>Publicador:</strong> <span th:text="${company.publisher} ? 'Sim' : 'Não'">Não</span><br>
-                    <strong>País:</strong> <span th:text="${company.countryInfo.name.common}">Nome do País</span> (<span th:text="${company.countryInfo.cca2}">Código do País</span>)
+                    <strong>Desenvolvedor:</strong> <span class="developer" th:text="${company.developer} ? 'Sim' : 'Não'">Não</span><br>
+                    <strong>Publicador:</strong> <span class="publisher" th:text="${company.publisher} ? 'Sim' : 'Não'">Não</span><br>
+                    <strong>País:</strong> <span class="country-name" th:text="${company.countryInfo.name.common}">Nome do País</span> (<span class="country-code" th:text="${company.countryInfo.cca2}">Código do País</span>)
                 </p>
-                <hr/>
+                <hr />
             </div>
         </div>
     </div>
 
     <div class="d-flex justify-content-center mt-4 mb-4">
         <button class="btn btn-danger mr-2" onclick="clearSelections()">Limpar Seleções</button>
-        <button class="btn btn-primary" onclick="getSelections()">Confirmar Seleções</button>
+        <button class="btn btn-primary" onclick="handleCreateGame()">Confirmar Seleções</button>
     </div>
 </div>
 

@@ -2,6 +2,7 @@ package rocha.andre.api.domain.utils.fullGame.useCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import rocha.andre.api.domain.consoles.DTO.ConsoleDTO;
 import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 import rocha.andre.api.domain.consoles.useCase.CreateConsole;
@@ -66,6 +67,7 @@ public class CreateFullFameAdmin {
 
     private static final Logger logger = LoggerFactory.getLogger(CreateFullFameAdmin.class);
 
+    @Transactional(rollbackFor = Exception.class)
     public FullGameReturnDTO createGameFromIGDBInfo(CreateFullGameDTO data) {
         try {
             var gameDTO = new GameDTO(data.name(), data.metacritic(), data.yearOfRelease());
