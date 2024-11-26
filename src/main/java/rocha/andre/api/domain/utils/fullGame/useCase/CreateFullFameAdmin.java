@@ -70,7 +70,7 @@ public class CreateFullFameAdmin {
     @Transactional(rollbackFor = Exception.class)
     public FullGameReturnDTO createGameFromIGDBInfo(CreateFullGameDTO data) {
         try {
-            var gameDTO = new GameDTO(data.name(), data.metacritic(), data.yearOfRelease());
+            var gameDTO = new GameDTO(capitalizeEachWord(data.name()), data.metacritic(), data.yearOfRelease());
             var newGame = createGame.createGame(gameDTO);
             logger.info("Jogo criado com ID: {}", newGame.id());
 
@@ -94,8 +94,8 @@ public class CreateFullFameAdmin {
                 GenreReturnDTO genre = normalizedGenresWithId.getOrDefault(normalizedName, null);
 
                 if (genre == null) {
-                    logger.info("Criando novo gênero '{}'", genreName);
-                    genre = createGenre.createGenre(new GenreDTO(genreName));
+                    logger.info("Criando novo gênero '{}'", capitalizeEachWord(genreName));
+                    genre = createGenre.createGenre(new GenreDTO(capitalizeEachWord(genreName)));
                 } else {
                     logger.info("Gênero '{}' já existe. Associando ao jogo ID: {}", genre.name(), newGame.id());
                 }
@@ -122,8 +122,8 @@ public class CreateFullFameAdmin {
                 ConsoleReturnDTO console = normalizedConsolesWithId.getOrDefault(normalizedConsoleName, null);
 
                 if (console == null) {
-                    logger.info("Criando novo console '{}'", consoleName);
-                    console = createConsole.createConsole(new ConsoleDTO(consoleName));
+                    logger.info("Criando novo console '{}'", capitalizeEachWord(consoleName));
+                    console = createConsole.createConsole(new ConsoleDTO(capitalizeEachWord(consoleName)));
                 } else {
                     logger.info("Console '{}' já existe. Associando ao jogo ID: {}", console.name(), newGame.id());
                 }
@@ -176,7 +176,7 @@ public class CreateFullFameAdmin {
                     var studioCountry = studioData.countryInfo().name().common().toLowerCase().trim();
                     var country = normalizedCountriesWithId.get(studioCountry);
                     var studioCountryId = country.id();
-                    var newStudio = new StudioDTO(normalizedName, studioCountryId);
+                    var newStudio = new StudioDTO(capitalizeEachWord(normalizedName), studioCountryId);
                     studio = createStudio.createStudio(newStudio);
                 }
 
@@ -196,5 +196,24 @@ public class CreateFullFameAdmin {
             logger.error("Erro ao criar o jogo: {}", e.getMessage(), e);
             throw new RuntimeException("Erro interno ao criar o jogo.", e);
         }
+    }
+
+    public static String capitalizeEachWord(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        String[] words = input.split("\\s+");
+        var capitalizedString = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                capitalizedString.append(word.substring(0, 1).toUpperCase())
+                        .append(word.substring(1).toLowerCase())
+                        .append(" ");
+            }
+        }
+
+        return capitalizedString.toString().trim();
     }
 }

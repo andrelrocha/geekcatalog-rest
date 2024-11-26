@@ -106,33 +106,33 @@ function editGameName() {
 
 function getSelections() {
     const genres = Array.from(document.querySelectorAll('.genreCheckbox:checked'))
-        .map(checkbox => checkbox.nextElementSibling.value);
+        .map(checkbox => capitalizeEachWord(checkbox.nextElementSibling.value.trim()));
 
     const platforms = Array.from(document.querySelectorAll('.platformCheckbox:checked'))
-        .map(checkbox => checkbox.nextElementSibling.value);
+        .map(checkbox => capitalizeEachWord(checkbox.nextElementSibling.value.trim()));
 
-        const companies = Array.from(document.querySelectorAll('.companyCheckbox:checked'))
+    const companies = Array.from(document.querySelectorAll('.companyCheckbox:checked'))
         .map(checkbox => {
             const studioDiv = checkbox.closest('#companyContainer');
-    
+
             const companyName = studioDiv.querySelector('.company-name')?.value || '';
             const developer = studioDiv.querySelector('.developer')?.textContent.trim() === 'Sim';
             const publisher = studioDiv.querySelector('.publisher')?.textContent.trim() === 'Sim';
             const countryName = studioDiv.querySelector('.country-name')?.textContent || studioDiv.querySelector('.country-name')?.value;
             const countryCode = studioDiv.querySelector('.country-code')?.textContent || studioDiv.querySelector('.country-code')?.value;
-    
+
             return {
-                companyName,
+                companyName: capitalizeEachWord(companyName), 
                 developer,
                 publisher,
                 countryInfo: {
                     name: {
-                        common: countryName
+                        common: capitalizeEachWord(countryName)
                     },
                     cca2: countryCode
                 }
             };
-        });
+    });
     
     const metacritic = parseInt(document.getElementById('metacriticInput').value) || 0;
     const yearOfRelease = parseInt(document.getElementById('yearOfReleaseInput').value) || 0;
@@ -178,4 +178,14 @@ async function sendGameData(gameData) {
 const handleCreateGame = async () => {
     const gameData = getSelections();
     await sendGameData(gameData);
+}
+
+function capitalizeEachWord(str) {
+    if (!str) return str;
+    return str
+        .split(' ')        
+        .map(word =>         
+            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() 
+        )
+        .join(' ');          
 }
