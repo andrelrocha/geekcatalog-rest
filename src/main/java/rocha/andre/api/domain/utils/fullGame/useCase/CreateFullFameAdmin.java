@@ -34,6 +34,7 @@ import rocha.andre.api.infra.exceptions.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class CreateFullFameAdmin {
     @Transactional(rollbackFor = Exception.class)
     public FullGameReturnDTO createGameFromIGDBInfo(CreateFullGameDTO data) {
         try {
-            var gameDTO = new GameDTO(capitalizeEachWord(data.name()), data.metacritic(), data.yearOfRelease());
+            var gameDTO = new GameDTO(capitalizeEachWord(normalizeString(data.name())), data.metacritic(), data.yearOfRelease());
             var newGame = createGame.createGame(gameDTO);
             logger.info("Jogo criado com ID: {}", newGame.id());
 
@@ -79,8 +80,12 @@ public class CreateFullFameAdmin {
             var newGameStudios = new ArrayList<StudioReturnFullGameInfo>();
 
             logger.info("Processando gêneros...");
+            List<String> normalizedGenres = data.genres().stream()
+                    .map(CreateFullFameAdmin::normalizeString)
+                    .toList();
+
             Map<String, GenreReturnDTO> normalizedGenresWithId = getGenresIdByName.getGenresByName(
-                    new ArrayList<>(data.genres().stream()
+                    new ArrayList<>(normalizedGenres.stream()
                             .map(GenreDTO::new)
                             .toList())
             ).stream().collect(Collectors.toMap(
@@ -88,10 +93,8 @@ public class CreateFullFameAdmin {
                     genre -> genre
             ));
 
-            for (String genreName : data.genres()) {
-                String normalizedName = genreName.toLowerCase().trim();
-
-                GenreReturnDTO genre = normalizedGenresWithId.getOrDefault(normalizedName, null);
+            for (String genreName : normalizedGenres) {
+                GenreReturnDTO genre = normalizedGenresWithId.getOrDefault(genreName, null);
 
                 if (genre == null) {
                     logger.info("Criando novo gênero '{}'", capitalizeEachWord(genreName));
@@ -107,19 +110,21 @@ public class CreateFullFameAdmin {
             }
 
             logger.info("Processando consoles...");
+            List <String> consolesWithSystemNomenclature = convertConsoles(data.consoles());
+            List<String> normalizedConsoles = consolesWithSystemNomenclature.stream()
+                    .map(CreateFullFameAdmin::normalizeString)
+                    .toList();
+
             Map<String, ConsoleReturnDTO> normalizedConsolesWithId = getConsolesIdByName.getConsolesByName(
-                    new ArrayList<>(data.consoles().stream()
+                    new ArrayList<>(normalizedConsoles.stream()
                             .map(ConsoleDTO::new)
                             .toList())
             ).stream().collect(Collectors.toMap(
                     console -> console.name().toLowerCase().trim(),
                     console -> console
             ));
-
-            for (String consoleName : data.consoles()) {
-                String normalizedConsoleName = consoleName.toLowerCase().trim();
-
-                ConsoleReturnDTO console = normalizedConsolesWithId.getOrDefault(normalizedConsoleName, null);
+            for (String consoleName : normalizedConsoles) {
+                ConsoleReturnDTO console = normalizedConsolesWithId.getOrDefault(consoleName, null);
 
                 if (console == null) {
                     logger.info("Criando novo console '{}'", capitalizeEachWord(consoleName));
@@ -143,13 +148,17 @@ public class CreateFullFameAdmin {
 
             Map<String, CountryReturnDTO> normalizedCountriesWithId = countries.stream()
                     .collect(Collectors.toMap(
-                            country -> country.name().toLowerCase().trim(),
+                            country -> normalizeString(country.name()),
                             country -> country
                     ));
 
+            logger.info("Processando estúdios...");
+
             List<StudioDTO> studiosDTO = data.studios().stream()
                     .map(studio -> {
-                        var normalizedCountryName = studio.countryInfo().name().common().toLowerCase().trim();
+                        var normalizedCompanyName = normalizeString(studio.companyName());
+
+                        var normalizedCountryName = normalizeString(studio.countryInfo().name().common());
 
                         var country = normalizedCountriesWithId.get(normalizedCountryName);
 
@@ -157,17 +166,19 @@ public class CreateFullFameAdmin {
                             throw new IllegalArgumentException("País não encontrado no sistema: " + studio.countryInfo().name().common());
                         }
 
-                        return new StudioDTO(studio.companyName(), country.id());
-                    }).toList();
+                        return new StudioDTO(normalizedCompanyName, country.id());
+                    })
+                    .collect(Collectors.toList());
 
             Map<String, StudioReturnDTO> normalizedStudiosWithId = getStudiosIdByName.getStudiosByName(studiosDTO)
                     .stream().collect(Collectors.toMap(
-                            studio -> studio.name().toLowerCase().trim(),
+                            studio -> normalizeString(studio.name()),
                             studio -> studio
                     ));
 
+
             for (CompanyReturnDTO studioData : data.studios()) {
-                var normalizedName = studioData.companyName().toLowerCase().trim();
+                var normalizedName = normalizeString(studioData.companyName());
                 StudioReturnDTO studio;
 
                 if (normalizedStudiosWithId.containsKey(normalizedName)) {
@@ -215,5 +226,41 @@ public class CreateFullFameAdmin {
         }
 
         return capitalizedString.toString().trim();
+    }
+
+    public static String normalizeString(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        normalized = normalized.replaceAll("[^\\p{ASCII}]", "");
+
+        normalized = normalized.replace("'", "");
+
+        normalized = normalized.toLowerCase().trim();
+
+        return normalized;
+    }
+
+    public static List<String> convertConsoles(List<String> consoles) {
+        List<String> normalizedConsoles = new ArrayList<>();
+
+        for (String console : consoles) {
+            String normalizedConsole = normalizeString(console);
+
+            if (normalizedConsole.startsWith("pc")) {
+                normalizedConsole = "pc";
+            }
+
+            if (normalizedConsole.equals("xbox series x|s")) {
+                normalizedConsoles.add("Xbox Series X");
+                normalizedConsoles.add("Xbox Series S");
+            } else {
+                normalizedConsoles.add(normalizedConsole);
+            }
+        }
+
+        return normalizedConsoles;
     }
 }

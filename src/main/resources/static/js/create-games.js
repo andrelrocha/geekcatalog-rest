@@ -151,7 +151,6 @@ function getSelections() {
 }
 
 async function sendGameData(gameData) {
-    console.log("gameData:", gameData);
     try {
         const response = await fetch('http://localhost:8080/utils/admin/igdb/creategame', {
             method: 'POST',
