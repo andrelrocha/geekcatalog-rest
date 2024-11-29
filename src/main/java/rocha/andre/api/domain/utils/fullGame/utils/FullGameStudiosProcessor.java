@@ -33,52 +33,19 @@ public class FullGameStudiosProcessor {
     private static final Logger logger = LoggerFactory.getLogger(FullGameStudiosProcessor.class);
 
     public ArrayList<StudioReturnFullGameInfo> processFullGameStudios(List<CompanyReturnDTO> studios, String gameId) {
-        var newGameStudios = new ArrayList<StudioReturnFullGameInfo>();
-
         var normalizedCountriesWithId = processCountryInfo(studios);
+        var studiosDTO = mapStudiosToDTO(studios, normalizedCountriesWithId);
 
-        List<StudioDTO> studiosDTO = studios.stream()
-                .map(studio -> {
-                    var normalizedCompanyName = normalizeString(studio.companyName());
+        var normalizedStudiosWithId = fetchStudiosWithId(studiosDTO);
 
-                    var normalizedCountryName = normalizeString(studio.countryInfo().name().common());
-
-                    var country = normalizedCountriesWithId.get(normalizedCountryName);
-
-                    if (country == null) {
-                        throw new IllegalArgumentException("País não encontrado no sistema: " + studio.countryInfo().name().common());
-                    }
-
-                    return new StudioDTO(normalizedCompanyName, country.id());
-                })
-                .collect(Collectors.toList());
-
-        Map<String, StudioReturnDTO> normalizedStudiosWithId = studioService.getStudiosByName(studiosDTO)
-                .stream().collect(Collectors.toMap(
-                        studio -> normalizeString(studio.name()),
-                        studio -> studio
-                ));
-
+        var newGameStudios = new ArrayList<StudioReturnFullGameInfo>();
 
         for (CompanyReturnDTO studioData : studios) {
             var normalizedName = normalizeString(studioData.companyName());
-            StudioReturnDTO studio;
 
-            if (normalizedStudiosWithId.containsKey(normalizedName)) {
-                studio = normalizedStudiosWithId.get(normalizedName);
-            } else {
-                var studioCountry = studioData.countryInfo().name().common().toLowerCase().trim();
-                var country = normalizedCountriesWithId.get(studioCountry);
-                var studioCountryId = country.id();
-                var newStudio = new StudioDTO(capitalizeEachWord(normalizedName), studioCountryId);
-                studio = studioService.createStudio(newStudio);
-            }
+            var studio = handleStudioCreationOrFetch(normalizedName, studioData, gameId, normalizedCountriesWithId, normalizedStudiosWithId);
 
-            logger.info("Associando estúdio '{}' ao jogo ID: {}", studio.name(), gameId);
-            var gameStudioDTO = new GameStudioDTO(gameId, studio.id().toString());
-            gameStudioService.createGameStudio(gameStudioDTO);
-
-            newGameStudios.add(new StudioReturnFullGameInfo(studio.id(), studio.name()));
+            addGameStudio(newGameStudios, gameId, studio);
         }
 
         return newGameStudios;
@@ -92,8 +59,58 @@ public class FullGameStudiosProcessor {
         List<CountryReturnDTO> countries = countryService.getCountriesByName(countryNames);
 
         return countries.stream().collect(Collectors.toMap(
-                        country -> normalizeString(country.name()),
-                        country -> country
+                country -> normalizeString(country.name()),
+                country -> country
+        ));
+    }
+
+    private List<StudioDTO> mapStudiosToDTO(List<CompanyReturnDTO> studios, Map<String, CountryReturnDTO> normalizedCountriesWithId) {
+        return studios.stream()
+                .map(studio -> {
+                    var normalizedCompanyName = normalizeString(studio.companyName());
+                    var normalizedCountryName = normalizeString(studio.countryInfo().name().common());
+                    var country = normalizedCountriesWithId.get(normalizedCountryName);
+                    if (country == null) {
+                        throw new IllegalArgumentException("País não encontrado no sistema: " + studio.countryInfo().name().common());
+                    }
+                    return new StudioDTO(normalizedCompanyName, country.id());
+                })
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, StudioReturnDTO> fetchStudiosWithId(List<StudioDTO> studiosDTO) {
+        return studioService.getStudiosByName(studiosDTO)
+                .stream()
+                .collect(Collectors.toMap(
+                        studio -> normalizeString(studio.name()),
+                        studio -> studio
                 ));
+    }
+
+    private StudioReturnDTO handleStudioCreationOrFetch(String normalizedName, CompanyReturnDTO studioData,
+                                                        String gameId,
+                                                        Map<String, CountryReturnDTO> normalizedCountriesWithId,
+                                                        Map<String, StudioReturnDTO> normalizedStudiosWithId) {
+
+        StudioReturnDTO studio = normalizedStudiosWithId.get(normalizedName);
+        if (studio != null) {
+            logger.info("Estúdio '{}' já existe. Associando ao jogo ID: {}", studio.name(), gameId);
+            return studio;
+        }
+
+        logger.info("Criando novo estúdio '{}'", capitalizeEachWord(normalizedName));
+
+        var studioCountry = normalizeString(studioData.countryInfo().name().common());
+        CountryReturnDTO country = normalizedCountriesWithId.get(studioCountry);
+
+        StudioDTO newStudio = new StudioDTO(capitalizeEachWord(normalizedName), country.id());
+
+        return studioService.createStudio(newStudio);
+    }
+
+    private void addGameStudio(List<StudioReturnFullGameInfo> newGameStudios, String gameId, StudioReturnDTO studio) {
+        var gameStudioDTO = new GameStudioDTO(gameId, studio.id().toString());
+        var gameStudioCreated = gameStudioService.createGameStudio(gameStudioDTO);
+        newGameStudios.add(new StudioReturnFullGameInfo(gameStudioCreated.id(), gameStudioCreated.studioName()));
     }
 }

@@ -29,35 +29,21 @@ public class FullGameConsolesProcessor {
     private static final Logger logger = LoggerFactory.getLogger(FullGameConsolesProcessor.class);
 
     public ArrayList<ConsoleReturnDTO> processFullGameConsoles(List<String> consoles, String gameId) {
-        var newGameConsoles = new ArrayList<ConsoleReturnDTO>();
-
-        List <String> consolesWithSystemNomenclature = convertConsoles(consoles);
-        List<String> normalizedConsoles = consolesWithSystemNomenclature.stream()
+        var consolesWithSystemNomenclature = convertConsoles(consoles);
+        var normalizedConsoles = consolesWithSystemNomenclature.stream()
                 .map(StringFormatter::normalizeString)
                 .toList();
 
-        Map<String, ConsoleReturnDTO> normalizedConsolesWithId = consoleService.getConsolesByName(
-                new ArrayList<>(normalizedConsoles.stream()
-                        .map(ConsoleDTO::new)
-                        .toList())
-        ).stream().collect(Collectors.toMap(
-                console -> console.name().toLowerCase().trim(),
-                console -> console
-        ));
+        var normalizedConsolesWithId = fetchConsolesWithId(normalizedConsoles);
+
+        var newGameConsoles = new ArrayList<ConsoleReturnDTO>();
+
         for (String consoleName : normalizedConsoles) {
             ConsoleReturnDTO console = normalizedConsolesWithId.getOrDefault(consoleName, null);
 
-            if (console == null) {
-                logger.info("Criando novo console '{}'", capitalizeEachWord(consoleName));
-                console = consoleService.createConsole(new ConsoleDTO(capitalizeEachWord(consoleName)));
-            } else {
-                logger.info("Console '{}' já existe. Associando ao jogo ID: {}", console.name(), gameId);
-            }
+            console = handleConsoleCreationOrFetch(consoleName, console, gameId);
 
-            var gameConsoleDTO = new GameConsoleDTO(gameId, console.id().toString());
-            var gameConsoleCreated = gameConsoleService.createGameConsole(gameConsoleDTO);
-
-            newGameConsoles.add(new ConsoleReturnDTO(gameConsoleCreated.consoleId(), gameConsoleCreated.consoleName()));
+            addGameConsole(newGameConsoles, gameId, console);
         }
 
         return newGameConsoles;
@@ -83,4 +69,33 @@ public class FullGameConsolesProcessor {
 
         return normalizedConsoles;
     }
+
+    private Map<String, ConsoleReturnDTO> fetchConsolesWithId(List<String> normalizedConsoles) {
+        ArrayList<ConsoleDTO> consoleDTOs = (ArrayList<ConsoleDTO>) normalizedConsoles.stream()
+                .map(ConsoleDTO::new)
+                .collect(Collectors.toList());
+
+        return consoleService.getConsolesByName(consoleDTOs).stream()
+                .collect(Collectors.toMap(
+                        console -> normalizeString(console.name()),
+                        console -> console
+                ));
+    }
+
+    private ConsoleReturnDTO handleConsoleCreationOrFetch(String consoleName, ConsoleReturnDTO console, String gameId) {
+        if (console == null) {
+            logger.info("Criando novo console '{}'", capitalizeEachWord(consoleName));
+            console = consoleService.createConsole(new ConsoleDTO(capitalizeEachWord(consoleName)));
+        } else {
+            logger.info("Console '{}' já existe. Associando ao jogo ID: {}", console.name(), gameId);
+        }
+        return console;
+    }
+
+    private void addGameConsole(List<ConsoleReturnDTO> newGameConsoles, String gameId, ConsoleReturnDTO console) {
+        var gameConsoleDTO = new GameConsoleDTO(gameId, console.id().toString());
+        var gameConsoleCreated = gameConsoleService.createGameConsole(gameConsoleDTO);
+        newGameConsoles.add(new ConsoleReturnDTO(gameConsoleCreated.consoleId(), gameConsoleCreated.consoleName()));
+    }
+
 }

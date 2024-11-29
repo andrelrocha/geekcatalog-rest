@@ -29,36 +29,21 @@ public class FullGameGenresProcessor {
     private static final Logger logger = LoggerFactory.getLogger(FullGameGenresProcessor.class);
 
     public ArrayList<GenreReturnDTO> processFullGameGenres(List<String> genres, String gameId) {
+        var genresWithSystemNomenclature = convertGenres(genres);
+        var normalizedGenres = genresWithSystemNomenclature.stream()
+                .map(StringFormatter::normalizeString)
+                .collect(Collectors.toList());
+
+        var genresWithId = fetchGenresWithId(normalizedGenres);
+
         var newGameGenres = new ArrayList<GenreReturnDTO>();
 
-        List <String> genresWithSystemNomenclature = convertGenres(genres);
-        List<String> normalizedGenres = genresWithSystemNomenclature.stream()
-                .map(StringFormatter::normalizeString)
-                .toList();
-
-        Map<String, GenreReturnDTO> normalizedGenresWithId = genreService.getGenresByName(
-                new ArrayList<>(normalizedGenres.stream()
-                        .map(GenreDTO::new)
-                        .toList())
-        ).stream().collect(Collectors.toMap(
-                genre -> genre.name().toLowerCase().trim(),
-                genre -> genre
-        ));
-
         for (String genreName : normalizedGenres) {
-            GenreReturnDTO genre = normalizedGenresWithId.getOrDefault(genreName, null);
+            GenreReturnDTO genre = genresWithId.getOrDefault(genreName, null);
 
-            if (genre == null) {
-                logger.info("Criando novo gênero '{}'", capitalizeEachWord(genreName));
-                genre = genreService.createGenre(new GenreDTO(capitalizeEachWord(genreName)));
-            } else {
-                logger.info("Gênero '{}' já existe. Associando ao jogo ID: {}", genre.name(), gameId);
-            }
+            genre = handleGenreCreationOrFetch(genreName, genre, gameId);
 
-            var gameGenreDTO = new GameGenreDTO(gameId, genre.id().toString());
-            var gameGenreCreated = gameGenreService.createGameGenre(gameGenreDTO);
-
-            newGameGenres.add(new GenreReturnDTO(gameGenreCreated.genreId(), gameGenreCreated.genreName()));
+            addGameGenre(newGameGenres, gameId, genre);
         }
 
         return newGameGenres;
@@ -88,5 +73,33 @@ public class FullGameGenresProcessor {
         }
 
         return normalizedGenres;
+    }
+
+    private Map<String, GenreReturnDTO> fetchGenresWithId(List<String> normalizedGenres) {
+        ArrayList<GenreDTO> genreDTOs = (ArrayList<GenreDTO>) normalizedGenres.stream()
+                .map(GenreDTO::new)
+                .collect(Collectors.toList());
+
+        return genreService.getGenresByName(genreDTOs).stream()
+                .collect(Collectors.toMap(
+                        genre -> genre.name().toLowerCase().trim(),
+                        genre -> genre
+                ));
+    }
+
+    private GenreReturnDTO handleGenreCreationOrFetch(String genreName, GenreReturnDTO genre, String gameId) {
+        if (genre == null) {
+            logger.info("Criando novo gênero '{}'", capitalizeEachWord(genreName));
+            genre = genreService.createGenre(new GenreDTO(capitalizeEachWord(genreName)));
+        } else {
+            logger.info("Gênero '{}' já existe. Associando ao jogo ID: {}", genre.name(), gameId);
+        }
+        return genre;
+    }
+
+    private void addGameGenre(List<GenreReturnDTO> newGameGenres, String gameId, GenreReturnDTO genre) {
+        var gameGenreDTO = new GameGenreDTO(gameId, genre.id().toString());
+        var gameGenreCreated = gameGenreService.createGameGenre(gameGenreDTO);
+        newGameGenres.add(new GenreReturnDTO(gameGenreCreated.genreId(), gameGenreCreated.genreName()));
     }
 }
