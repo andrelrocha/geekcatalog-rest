@@ -7,13 +7,13 @@ import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBQueryInfoDTO;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBResponseFullInfoDTO;
 import rocha.andre.api.domain.utils.fullGame.DTO.CreateFullGameDTO;
 import rocha.andre.api.domain.utils.fullGame.DTO.FullGameReturnDTO;
-import rocha.andre.api.domain.utils.fullGame.useCase.CreateFullFameAdmin;
+import rocha.andre.api.domain.utils.fullGame.useCase.CreateFullGameAdmin;
 import rocha.andre.api.service.IGDBService;
 
 @Service
 public class IGDBServiceImpl implements IGDBService {
     @Autowired
-    private CreateFullFameAdmin createFullFameAdmin;
+    private CreateFullGameAdmin createFullGameAdmin;
     @Autowired
     private GetGameInfoOnIGDB getGameInfoOnIGDB;
     @Override
@@ -23,6 +23,6 @@ public class IGDBServiceImpl implements IGDBService {
 
     @Override
     public FullGameReturnDTO createGameFromIGDBInfo(CreateFullGameDTO data) {
-        return createFullFameAdmin.createGameFromIGDBInfo(data);
+        return createFullGameAdmin.createGameFromIGDBInfo(data);
     }
 }
