@@ -67,7 +67,8 @@ public class CreateFullFameAdmin {
             var newGameStudios = new ArrayList<StudioReturnFullGameInfo>();
 
             logger.info("Processando gêneros...");
-            List<String> normalizedGenres = data.genres().stream()
+            List <String> genresWithSystemNomenclature = convertGenres(data.genres());
+            List<String> normalizedGenres = genresWithSystemNomenclature.stream()
                     .map(StringFormatter::normalizeString)
                     .toList();
 
@@ -216,5 +217,30 @@ public class CreateFullFameAdmin {
         return normalizedConsoles;
     }
 
-    //falta fazer o convert genres, por exemplo, vem rpg (...) deve alterar para rpg
+    public static List<String> convertGenres(List<String> genres) {
+        List<String> normalizedGenres = new ArrayList<>();
+
+        for (String genre : genres) {
+            var normalizedGenre = normalizeString(genre);
+
+            if (normalizedGenre.startsWith("real time strategy")) {
+                normalizedGenres.add("Real Time Strategy");
+            } else if (normalizedGenre.startsWith("role-playing")) {
+                normalizedGenres.add("RPG");
+            } else if (normalizedGenre.startsWith("turn-based strategy")) {
+                normalizedGenres.add("Turn-based Strategy");
+            } else if (normalizedGenre.startsWith("hack and slash/beat 'em up")) {
+                normalizedGenres.add("Hack and Slash");
+                normalizedGenres.add("Beat 'em Up");
+            } else {
+                if (normalizedGenre.contains("(")) {
+                    normalizedGenre = normalizedGenre.replaceAll("\\s*\\(.*?\\)", "").trim();
+                }
+                normalizedGenres.add(normalizedGenre);
+            }
+        }
+
+        return normalizedGenres;
+    }
+
 }
