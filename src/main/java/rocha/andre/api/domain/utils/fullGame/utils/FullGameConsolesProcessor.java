@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import rocha.andre.api.domain.consoles.DTO.ConsoleDTO;
 import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 import rocha.andre.api.domain.gameConsole.DTO.GameConsoleDTO;
-import rocha.andre.api.infra.utils.stringFormatter.StringFormatter;
+import rocha.andre.api.domain.utils.API.IGDB.utils.ConsoleNameFormatterFromIGDB;
 import rocha.andre.api.service.ConsoleService;
 import rocha.andre.api.service.GameConsoleService;
 
@@ -24,22 +24,21 @@ public class FullGameConsolesProcessor {
     @Autowired
     private ConsoleService consoleService;
     @Autowired
+    private ConsoleNameFormatterFromIGDB consoleConverter;
+    @Autowired
     private GameConsoleService gameConsoleService;
 
     private static final Logger logger = LoggerFactory.getLogger(FullGameConsolesProcessor.class);
 
     public ArrayList<ConsoleReturnDTO> processFullGameConsoles(List<String> consoles, String gameId) {
-        var consolesWithSystemNomenclature = convertConsoles(consoles);
-        var normalizedConsoles = consolesWithSystemNomenclature.stream()
-                .map(StringFormatter::normalizeString)
-                .toList();
+        var normalizedConsolesWithSystemNomenclature = consoleConverter.normalizeAndConvertNames(consoles);
 
-        var normalizedConsolesWithId = fetchConsolesWithId(normalizedConsoles);
+        var consolesMapWithId = fetchConsolesWithId(normalizedConsolesWithSystemNomenclature);
 
         var newGameConsoles = new ArrayList<ConsoleReturnDTO>();
 
-        for (String consoleName : normalizedConsoles) {
-            ConsoleReturnDTO console = normalizedConsolesWithId.getOrDefault(consoleName, null);
+        for (String consoleName : normalizedConsolesWithSystemNomenclature) {
+            ConsoleReturnDTO console = consolesMapWithId.getOrDefault(consoleName, null);
 
             console = handleConsoleCreationOrFetch(consoleName, console, gameId);
 
@@ -47,27 +46,6 @@ public class FullGameConsolesProcessor {
         }
 
         return newGameConsoles;
-    }
-
-    private List<String> convertConsoles(List<String> consoles) {
-        List<String> normalizedConsoles = new ArrayList<>();
-
-        for (String console : consoles) {
-            var normalizedConsole = normalizeString(console);
-
-            if (normalizedConsole.startsWith("pc")) {
-                normalizedConsole = "pc";
-            }
-
-            if (normalizedConsole.equals("xbox series x|s")) {
-                normalizedConsoles.add("Xbox Series X");
-                normalizedConsoles.add("Xbox Series S");
-            } else {
-                normalizedConsoles.add(normalizedConsole);
-            }
-        }
-
-        return normalizedConsoles;
     }
 
     private Map<String, ConsoleReturnDTO> fetchConsolesWithId(List<String> normalizedConsoles) {
@@ -97,5 +75,4 @@ public class FullGameConsolesProcessor {
         var gameConsoleCreated = gameConsoleService.createGameConsole(gameConsoleDTO);
         newGameConsoles.add(new ConsoleReturnDTO(gameConsoleCreated.consoleId(), gameConsoleCreated.consoleName()));
     }
-
 }
