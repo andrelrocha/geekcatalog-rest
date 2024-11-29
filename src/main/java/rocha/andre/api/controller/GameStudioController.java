@@ -7,13 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rocha.andre.api.domain.gameGenre.DTO.GameGenreDTO;
-import rocha.andre.api.domain.gameGenre.DTO.GameGenreReturnDTO;
-import rocha.andre.api.domain.gameGenre.DTO.UpdateGameGenreDTO;
 import rocha.andre.api.domain.gameStudio.DTO.GameStudioDTO;
 import rocha.andre.api.domain.gameStudio.DTO.GameStudioReturnDTO;
 import rocha.andre.api.domain.gameStudio.DTO.UpdateGameStudioDTO;
-import rocha.andre.api.service.GameGenreService;
 import rocha.andre.api.service.GameStudioService;
 
 @RestController
@@ -34,7 +30,7 @@ public class GameStudioController {
 
     @PostMapping("/create")
     public ResponseEntity<GameStudioReturnDTO> createGameGenre(@RequestBody GameStudioDTO data) {
-        var newGameStudio = service.createGameStudios(data);
+        var newGameStudio = service.createGameStudio(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(newGameStudio);
     }
 

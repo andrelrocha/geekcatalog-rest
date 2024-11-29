@@ -5,27 +5,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import rocha.andre.api.domain.consoles.DTO.ConsoleDTO;
 import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
-import rocha.andre.api.domain.consoles.useCase.CreateConsole;
-import rocha.andre.api.domain.consoles.useCase.GetConsolesIdByName;
 import rocha.andre.api.domain.country.DTO.CountryReturnDTO;
-import rocha.andre.api.domain.country.useCase.GetCountriesByName;
 import rocha.andre.api.domain.game.DTO.GameDTO;
-import rocha.andre.api.domain.game.useCase.CreateGame;
 import rocha.andre.api.domain.gameConsole.DTO.GameConsoleDTO;
-import rocha.andre.api.domain.gameConsole.useCase.CreateGameConsole;
 import rocha.andre.api.domain.gameGenre.DTO.GameGenreDTO;
-import rocha.andre.api.domain.gameGenre.useCase.CreateGameGenre;
 import rocha.andre.api.domain.gameStudio.DTO.GameStudioDTO;
-import rocha.andre.api.domain.gameStudio.useCase.CreateGameStudio;
 import rocha.andre.api.domain.genres.DTO.GenreDTO;
 import rocha.andre.api.domain.genres.DTO.GenreReturnDTO;
-import rocha.andre.api.domain.genres.useCase.CreateGenre;
-import rocha.andre.api.domain.genres.useCase.GetGenresIdByName;
 import rocha.andre.api.domain.studios.DTO.StudioDTO;
 import rocha.andre.api.domain.studios.DTO.StudioReturnDTO;
 import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
-import rocha.andre.api.domain.studios.useCase.CreateStudio;
-import rocha.andre.api.domain.studios.useCase.GetStudiosIdByName;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.CompanyReturnDTO;
 import rocha.andre.api.domain.utils.fullGame.DTO.CreateFullGameDTO;
 import rocha.andre.api.domain.utils.fullGame.DTO.FullGameReturnDTO;
@@ -33,38 +22,36 @@ import rocha.andre.api.infra.exceptions.ValidationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rocha.andre.api.infra.utils.stringFormatter.StringFormatter;
+import rocha.andre.api.service.*;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static rocha.andre.api.infra.utils.stringFormatter.StringFormatter.capitalizeEachWord;
+import static rocha.andre.api.infra.utils.stringFormatter.StringFormatter.normalizeString;
+
 @Component
 public class CreateFullFameAdmin {
     @Autowired
-    private CreateGame createGame;
+    private GameService gameService;
     @Autowired
-    private CreateStudio createStudio;
+    private GameGenreService gameGenreService;
     @Autowired
-    private CreateConsole createConsole;
+    private GameStudioService gameStudioService;
     @Autowired
-    private CreateGenre createGenre;
-    @Autowired
-    private CreateGameGenre createGameGenre;
-    @Autowired
-    private CreateGameStudio createGameStudio;
-    @Autowired
-    private CreateGameConsole createGameConsole;
+    private GameConsoleService gameConsoleService;
 
     @Autowired
-    private GetConsolesIdByName getConsolesIdByName;
+    private ConsoleService consoleService;
     @Autowired
-    private GetCountriesByName getCountriesByName;
+    private CountryService countryService;
     @Autowired
-    private GetGenresIdByName getGenresIdByName;
+    private GenreService genreService;
     @Autowired
-    private GetStudiosIdByName getStudiosIdByName;
+    private StudioService studioService;
 
     private static final Logger logger = LoggerFactory.getLogger(CreateFullFameAdmin.class);
 
@@ -72,7 +59,7 @@ public class CreateFullFameAdmin {
     public FullGameReturnDTO createGameFromIGDBInfo(CreateFullGameDTO data) {
         try {
             var gameDTO = new GameDTO(capitalizeEachWord(normalizeString(data.name())), data.metacritic(), data.yearOfRelease());
-            var newGame = createGame.createGame(gameDTO);
+            var newGame = gameService.createGame(gameDTO);
             logger.info("Jogo criado com ID: {}", newGame.id());
 
             var newGameGenres = new ArrayList<GenreReturnDTO>();
@@ -81,10 +68,10 @@ public class CreateFullFameAdmin {
 
             logger.info("Processando gêneros...");
             List<String> normalizedGenres = data.genres().stream()
-                    .map(CreateFullFameAdmin::normalizeString)
+                    .map(StringFormatter::normalizeString)
                     .toList();
 
-            Map<String, GenreReturnDTO> normalizedGenresWithId = getGenresIdByName.getGenresByName(
+            Map<String, GenreReturnDTO> normalizedGenresWithId = genreService.getGenresByName(
                     new ArrayList<>(normalizedGenres.stream()
                             .map(GenreDTO::new)
                             .toList())
@@ -98,13 +85,13 @@ public class CreateFullFameAdmin {
 
                 if (genre == null) {
                     logger.info("Criando novo gênero '{}'", capitalizeEachWord(genreName));
-                    genre = createGenre.createGenre(new GenreDTO(capitalizeEachWord(genreName)));
+                    genre = genreService.createGenre(new GenreDTO(capitalizeEachWord(genreName)));
                 } else {
                     logger.info("Gênero '{}' já existe. Associando ao jogo ID: {}", genre.name(), newGame.id());
                 }
 
                 var gameGenreDTO = new GameGenreDTO(newGame.id().toString(), genre.id().toString());
-                var gameGenreCreated = createGameGenre.createGameGenre(gameGenreDTO);
+                var gameGenreCreated = gameGenreService.createGameGenre(gameGenreDTO);
 
                 newGameGenres.add(new GenreReturnDTO(gameGenreCreated.genreId(), gameGenreCreated.genreName()));
             }
@@ -112,10 +99,10 @@ public class CreateFullFameAdmin {
             logger.info("Processando consoles...");
             List <String> consolesWithSystemNomenclature = convertConsoles(data.consoles());
             List<String> normalizedConsoles = consolesWithSystemNomenclature.stream()
-                    .map(CreateFullFameAdmin::normalizeString)
+                    .map(StringFormatter::normalizeString)
                     .toList();
 
-            Map<String, ConsoleReturnDTO> normalizedConsolesWithId = getConsolesIdByName.getConsolesByName(
+            Map<String, ConsoleReturnDTO> normalizedConsolesWithId = consoleService.getConsolesByName(
                     new ArrayList<>(normalizedConsoles.stream()
                             .map(ConsoleDTO::new)
                             .toList())
@@ -128,13 +115,13 @@ public class CreateFullFameAdmin {
 
                 if (console == null) {
                     logger.info("Criando novo console '{}'", capitalizeEachWord(consoleName));
-                    console = createConsole.createConsole(new ConsoleDTO(capitalizeEachWord(consoleName)));
+                    console = consoleService.createConsole(new ConsoleDTO(capitalizeEachWord(consoleName)));
                 } else {
                     logger.info("Console '{}' já existe. Associando ao jogo ID: {}", console.name(), newGame.id());
                 }
 
                 var gameConsoleDTO = new GameConsoleDTO(newGame.id().toString(), console.id().toString());
-                var gameConsoleCreated = createGameConsole.createGameConsole(gameConsoleDTO);
+                var gameConsoleCreated = gameConsoleService.createGameConsole(gameConsoleDTO);
 
                 newGameConsoles.add(new ConsoleReturnDTO(gameConsoleCreated.consoleId(), gameConsoleCreated.consoleName()));
             }
@@ -144,7 +131,7 @@ public class CreateFullFameAdmin {
                     .map(studio -> studio.countryInfo().name().common())
                     .toList();
 
-            List<CountryReturnDTO> countries = getCountriesByName.getCountriesByName(countryNames);
+            List<CountryReturnDTO> countries = countryService.getCountriesByName(countryNames);
 
             Map<String, CountryReturnDTO> normalizedCountriesWithId = countries.stream()
                     .collect(Collectors.toMap(
@@ -153,7 +140,6 @@ public class CreateFullFameAdmin {
                     ));
 
             logger.info("Processando estúdios...");
-
             List<StudioDTO> studiosDTO = data.studios().stream()
                     .map(studio -> {
                         var normalizedCompanyName = normalizeString(studio.companyName());
@@ -170,7 +156,7 @@ public class CreateFullFameAdmin {
                     })
                     .collect(Collectors.toList());
 
-            Map<String, StudioReturnDTO> normalizedStudiosWithId = getStudiosIdByName.getStudiosByName(studiosDTO)
+            Map<String, StudioReturnDTO> normalizedStudiosWithId = studioService    .getStudiosByName(studiosDTO)
                     .stream().collect(Collectors.toMap(
                             studio -> normalizeString(studio.name()),
                             studio -> studio
@@ -188,12 +174,12 @@ public class CreateFullFameAdmin {
                     var country = normalizedCountriesWithId.get(studioCountry);
                     var studioCountryId = country.id();
                     var newStudio = new StudioDTO(capitalizeEachWord(normalizedName), studioCountryId);
-                    studio = createStudio.createStudio(newStudio);
+                    studio = studioService.createStudio(newStudio);
                 }
 
                 logger.info("Associando estúdio '{}' ao jogo ID: {}", studio.name(), newGame.id());
                 var gameStudioDTO = new GameStudioDTO(newGame.id().toString(), studio.id().toString());
-                createGameStudio.createGameStudio(gameStudioDTO);
+                gameStudioService.createGameStudio(gameStudioDTO);
 
                 newGameStudios.add(new StudioReturnFullGameInfo(studio.id(), studio.name()));
             }
@@ -209,45 +195,11 @@ public class CreateFullFameAdmin {
         }
     }
 
-    public static String capitalizeEachWord(String input) {
-        if (input == null || input.isEmpty()) {
-            return input;
-        }
-
-        String[] words = input.split("\\s+");
-        var capitalizedString = new StringBuilder();
-
-        for (String word : words) {
-            if (!word.isEmpty()) {
-                capitalizedString.append(word.substring(0, 1).toUpperCase())
-                        .append(word.substring(1).toLowerCase())
-                        .append(" ");
-            }
-        }
-
-        return capitalizedString.toString().trim();
-    }
-
-    public static String normalizeString(String input) {
-        if (input == null || input.isEmpty()) {
-            return input;
-        }
-
-        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
-        normalized = normalized.replaceAll("[^\\p{ASCII}]", "");
-
-        normalized = normalized.replace("'", "");
-
-        normalized = normalized.toLowerCase().trim();
-
-        return normalized;
-    }
-
     public static List<String> convertConsoles(List<String> consoles) {
         List<String> normalizedConsoles = new ArrayList<>();
 
         for (String console : consoles) {
-            String normalizedConsole = normalizeString(console);
+            var normalizedConsole = normalizeString(console);
 
             if (normalizedConsole.startsWith("pc")) {
                 normalizedConsole = "pc";
@@ -263,4 +215,6 @@ public class CreateFullFameAdmin {
 
         return normalizedConsoles;
     }
+
+    //falta fazer o convert genres, por exemplo, vem rpg (...) deve alterar para rpg
 }

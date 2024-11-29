@@ -28,7 +28,7 @@ public class GameStudioServiceImpl implements GameStudioService {
     }
 
     @Override
-    public GameStudioReturnDTO createGameStudios(GameStudioDTO data) {
+    public GameStudioReturnDTO createGameStudio(GameStudioDTO data) {
         var newGameStudio = createGameStudio.createGameStudio(data);
         return newGameStudio;
     }

@@ -8,6 +8,6 @@ import rocha.andre.api.domain.gameStudio.DTO.UpdateGameStudioDTO;
 
 public interface GameStudioService {
     Page<GameStudioReturnDTO> getAllGameStudiosByGameId(String gameId, Pageable pageable);
-    GameStudioReturnDTO createGameStudios(GameStudioDTO data);
+    GameStudioReturnDTO createGameStudio(GameStudioDTO data);
     Page<GameStudioReturnDTO> updateGameStudios(UpdateGameStudioDTO data, String gameId);
 }
