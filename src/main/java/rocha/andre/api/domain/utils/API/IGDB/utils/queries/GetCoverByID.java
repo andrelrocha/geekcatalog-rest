@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.utils.API.IGDB.utils;
+package rocha.andre.api.domain.utils.API.IGDB.utils.queries;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -8,11 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.CoverInfo;
-import rocha.andre.api.domain.utils.API.IGDB.DTO.ReleaseDateInfo;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Component
