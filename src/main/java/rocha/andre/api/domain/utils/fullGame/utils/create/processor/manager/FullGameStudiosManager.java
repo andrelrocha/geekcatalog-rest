@@ -1,20 +1,20 @@
-package rocha.andre.api.domain.utils.fullGame.utils;
+package rocha.andre.api.domain.utils.fullGame.utils.create.processor.manager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.CompanyReturnDTO;
-import rocha.andre.api.domain.utils.fullGame.utils.processor.StudioProcessor;
+import rocha.andre.api.domain.utils.fullGame.utils.create.processor.StudioProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class FullGameStudiosProcessor {
+public class FullGameStudiosManager {
     @Autowired
     public StudioProcessor studioProcessor;
 
-    public ArrayList<StudioReturnFullGameInfo> processFullGameStudios(List<CompanyReturnDTO> studios, String gameId) {
+    public ArrayList<StudioReturnFullGameInfo> manageFullGameStudios(List<CompanyReturnDTO> studios, String gameId) {
         var normalizedCountriesWithId = studioProcessor.buildNormalizedStudiosCountryMap(studios);
         var studiosDTO = studioProcessor.mapStudiosToDTO(studios, normalizedCountriesWithId);
         var studiosMapWithId = studioProcessor.fetchStudiosWithId(studiosDTO);

@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.utils.fullGame.utils;
+package rocha.andre.api.domain.utils.fullGame.utils.create.processor.manager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,11 +11,11 @@ import static rocha.andre.api.infra.utils.stringFormatter.StringFormatter.capita
 import static rocha.andre.api.infra.utils.stringFormatter.StringFormatter.normalizeString;
 
 @Component
-public class FullGameCreateEntityProcessor {
+public class FullGameCreateEntityManager {
     @Autowired
     private GameService gameService;
 
-    public GameReturnDTO processCreateGameEntity(CreateFullGameDTO data) {
+    public GameReturnDTO manageCreateGameEntity(CreateFullGameDTO data) {
         var gameDTO = new GameDTO(capitalizeEachWord(normalizeString(data.name())), data.metacritic(), data.yearOfRelease());
         return gameService.createGame(gameDTO);
     }

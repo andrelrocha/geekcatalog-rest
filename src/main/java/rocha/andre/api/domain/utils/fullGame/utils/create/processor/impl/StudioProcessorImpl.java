@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.utils.fullGame.utils.processor.impl;
+package rocha.andre.api.domain.utils.fullGame.utils.create.processor.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ import rocha.andre.api.domain.studios.DTO.StudioReturnFullGameInfo;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.CompanyReturnDTO;
 import rocha.andre.api.domain.utils.API.IGDB.utils.StudioCountryMapperFromIGDB;
 import rocha.andre.api.domain.utils.API.IGDB.utils.StudioDTOFormatterFromIGDB;
-import rocha.andre.api.domain.utils.fullGame.utils.processor.StudioProcessor;
+import rocha.andre.api.domain.utils.fullGame.utils.create.processor.StudioProcessor;
 import rocha.andre.api.service.GameStudioService;
 import rocha.andre.api.service.StudioService;
 

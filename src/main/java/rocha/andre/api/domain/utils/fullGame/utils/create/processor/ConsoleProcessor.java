@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.utils.fullGame.utils.processor;
+package rocha.andre.api.domain.utils.fullGame.utils.create.processor;
 
 import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 

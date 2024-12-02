@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.utils.fullGame.utils.processor.impl;
+package rocha.andre.api.domain.utils.fullGame.utils.create.processor.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,7 @@ import rocha.andre.api.domain.consoles.DTO.ConsoleDTO;
 import rocha.andre.api.domain.consoles.DTO.ConsoleReturnDTO;
 import rocha.andre.api.domain.gameConsole.DTO.GameConsoleDTO;
 import rocha.andre.api.domain.utils.API.IGDB.utils.ConsoleNameFormatterFromIGDB;
-import rocha.andre.api.domain.utils.fullGame.utils.processor.ConsoleProcessor;
+import rocha.andre.api.domain.utils.fullGame.utils.create.processor.ConsoleProcessor;
 import rocha.andre.api.service.ConsoleService;
 import rocha.andre.api.service.GameConsoleService;
 

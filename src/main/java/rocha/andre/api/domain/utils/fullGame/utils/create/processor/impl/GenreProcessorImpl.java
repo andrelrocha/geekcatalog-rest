@@ -1,4 +1,4 @@
-package rocha.andre.api.domain.utils.fullGame.utils.processor.impl;
+package rocha.andre.api.domain.utils.fullGame.utils.create.processor.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,7 @@ import rocha.andre.api.domain.gameGenre.DTO.GameGenreDTO;
 import rocha.andre.api.domain.genres.DTO.GenreDTO;
 import rocha.andre.api.domain.genres.DTO.GenreReturnDTO;
 import rocha.andre.api.domain.utils.API.IGDB.utils.GenreNameFormatterFromIGDB;
-import rocha.andre.api.domain.utils.fullGame.utils.processor.GenreProcessor;
+import rocha.andre.api.domain.utils.fullGame.utils.create.processor.GenreProcessor;
 import rocha.andre.api.service.GameGenreService;
 import rocha.andre.api.service.GenreService;
 
