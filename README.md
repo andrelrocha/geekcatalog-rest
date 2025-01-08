@@ -44,6 +44,7 @@ Replace your-project-name.jar with the actual name of your generated JAR file.
 - [x] Security schema implemented in the backend for requests in different layers
 - [x] Vulnerability Protection through HTTP Cookies, Rate Limiting Filters, and IP Blocking
 - [x] SSL/TLS support for secure communication, ensuring data integrity and encryption for all requests between the client and server
+- [x] ChatGPT Queries to smooth the Client Experience consuming the API
 ---
 
 ## 🛠 Technologies
@@ -63,3 +64,4 @@ The following technologies were used in the development of the REST API project:
 - **[Bucket4j](https://bucket4j.com/)**
 - **[IGDB-API](https://www.igdb.com/api)**
 - **[ThymeLeaf](https://www.thymeleaf.org/)**
+- **[ChatGPT](https://openai.com/index/openai-api/)**

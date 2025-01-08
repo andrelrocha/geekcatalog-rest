@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rocha.andre.api.domain.utils.API.IGDB.DTO.IGDBQueryRequestDTO;
+import rocha.andre.api.domain.utils.API.OpenAI.DTO.GameNameDTO;
 import rocha.andre.api.domain.utils.API.Twitch.TwitchAuth;
 import rocha.andre.api.domain.utils.fullGame.DTO.CreateFullGameDTO;
+import rocha.andre.api.service.ChatGPTService;
 import rocha.andre.api.service.IGDBService;
 import rocha.andre.api.service.SpreadsheetService;
 
@@ -22,6 +24,8 @@ import java.io.IOException;
 @RequestMapping("/utils")
 @Tag(name = "Utils Routes Mapped on Controller")
 public class UtilsController {
+    @Autowired
+    private ChatGPTService chatGPTService;
     @Autowired
     private SpreadsheetService spreadsheetService;
     @Autowired
@@ -87,5 +91,13 @@ public class UtilsController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(resource);
+    }
+
+
+    //falta ajeitar aqui para ser um GET e formatar criando o DTO
+    @PostMapping("/admin/chatgpt/gameinfo")
+    public ResponseEntity getGameInfoFromGPT(@RequestBody GameNameDTO dto) {
+        var response = chatGPTService.getGameInfo(dto);
+        return ResponseEntity.ok(response);
     }
 }
