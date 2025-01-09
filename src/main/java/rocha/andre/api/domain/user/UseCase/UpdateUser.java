@@ -34,7 +34,7 @@ public class UpdateUser {
         var user = repository.findByIdToHandle(uuid);
 
         if (user == null) {
-            throw new ValidationException("Não existem registros de usuário para o id informado");
+            throw new ValidationException("No User was found for the provided ID.");
         }
 
         Country country = null;
@@ -42,7 +42,7 @@ public class UpdateUser {
             var countryUuid = UUID.fromString(dto.countryId());
 
             country = countryRepository.findById(countryUuid)
-                    .orElseThrow(() -> new ValidationException("Não foi encontrado país com o id informado no update de user"));
+                    .orElseThrow(() -> new ValidationException("No country was found fot the informed ID, during user update."));
         }
 
         LocalDate formattedBirthday = null;

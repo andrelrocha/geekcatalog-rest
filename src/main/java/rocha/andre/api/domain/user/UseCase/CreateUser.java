@@ -30,7 +30,7 @@ public class CreateUser {
         }
 
         var country = countryRepository.findById(data.countryId())
-                .orElseThrow(() -> new ValidationException("Não foi encontrado país com o id informado"));
+                .orElseThrow(() -> new ValidationException("No country was found fot the informed ID, during sign up."));
 
         var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         var formattedBirthday = LocalDate.parse(data.birthday().format(formatter));

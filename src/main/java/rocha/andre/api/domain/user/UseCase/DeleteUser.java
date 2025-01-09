@@ -38,7 +38,7 @@ public class DeleteUser {
     public void deleteUser(String tokenJWT) {
         var userDTO = getUserByTokenJWT.getUserByID(tokenJWT);
         var user = userRepository.findById(UUID.fromString(userDTO.id()))
-                .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado"));
+                .orElseThrow(() -> new ValidationException("No User was found for the provided ID."));
 
         transactionTemplate.execute(status -> {
             try {
@@ -71,7 +71,7 @@ public class DeleteUser {
                 userRepository.delete(user);
             } catch (Exception e) {
                 status.setRollbackOnly();
-                throw new RuntimeException("Ocorreu um erro na transação de delete do jogo e de suas entidades relacionadas", e);
+                throw new RuntimeException("An error occurred during the delete transaction of the game and its related entities", e);
             }
             return null;
         });

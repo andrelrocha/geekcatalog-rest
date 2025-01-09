@@ -23,7 +23,7 @@ public class GetUserByTokenJWT {
         var uuid = UUID.fromString(userId);
 
         var user = repository.findById(uuid)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado"));
+                .orElseThrow(() -> new ValidationException("No user was foud for the provided ID."));
 
         return new UserReturnDTO(user);
     }

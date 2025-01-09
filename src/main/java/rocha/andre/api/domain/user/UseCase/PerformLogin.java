@@ -12,6 +12,7 @@ import rocha.andre.api.domain.auditLog.LoginStatus;
 import rocha.andre.api.domain.auditLog.useCase.RegisterAuditLog;
 import rocha.andre.api.domain.user.DTO.UserLoginDTO;
 import rocha.andre.api.domain.user.User;
+import rocha.andre.api.infra.exceptions.ValidationException;
 import rocha.andre.api.infra.security.AuthTokensDTO;
 import rocha.andre.api.infra.security.TokenService;
 
@@ -32,7 +33,7 @@ public class PerformLogin {
     @Transactional
     public AuthTokensDTO performLogin(UserLoginDTO data, HttpServletRequest request) {
         if (data.login().isEmpty() || data.password().isEmpty()) {
-            throw new IllegalArgumentException("Login e senha não podem ser vazios.");
+            throw new ValidationException("Login and password can't be empty.");
         }
 
         var authenticationToken = new UsernamePasswordAuthenticationToken(data.login(), data.password());
@@ -61,7 +62,7 @@ public class PerformLogin {
             return new AuthTokensDTO(accessToken, refreshToken);
         } catch (BadCredentialsException e) {
             handleFailedLogin(data.login(), request);
-            throw new BadCredentialsException("Login ou senha errados.");
+            throw new BadCredentialsException("Wrong login or password.");
         }
     }
 

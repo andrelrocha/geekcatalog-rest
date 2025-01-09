@@ -30,7 +30,7 @@ public class UpdateUserFailedLogin {
         User user = userRepository.findByLoginToHandle(login);
 
         if (user == null) {
-            throw new ValidationException("Usuário não encontrado para o login: " + login);
+            throw new ValidationException("No user was found for the provided login: " + login);
         }
 
         int failedAttempts = user.getAccessFailedCount() + 1;
