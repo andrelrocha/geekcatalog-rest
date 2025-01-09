@@ -26,9 +26,9 @@ public class UpdateList {
         var userIdUUID = UUID.fromString(data.userId());
 
         var listApp = repository.findById(listIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrada lista com o id informado no processo de update da lista"));
+                .orElseThrow(() -> new ValidationException("No list was found with the provided ID during the update process."));
 
-        var errorMessagePermission = "O usuário que está tentando editar a lista não é o proprietário da mesma e nem tem permissão para a operação.";
+        var errorMessagePermission = "The user attempting to edit the list is neither the owner nor has the required permission for this operation.";
 
         if (!listApp.getUser().getId().equals(userIdUUID)) {
             var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, listApp.getId());

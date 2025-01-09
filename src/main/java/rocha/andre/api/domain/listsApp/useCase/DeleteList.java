@@ -31,12 +31,12 @@ public class DeleteList {
     public void deleteList(String listId, String tokenJWT) {
         var listIdUUID = UUID.fromString(listId);
         var listApp = repository.findById(listIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrada lista com o id informado no processo de delete da lista."));
+                .orElseThrow(() -> new ValidationException("No List was found for the provided id while deleting it."));
 
         var user = getUserByTokenJWT.getUserByID(tokenJWT);
         var userIdUUID = UUID.fromString(user.id());
 
-        var errorMessagePermission = "O usuário que está tentando apagar a lista não é o proprietário da mesma e nem tem permissão para a operação.";
+        var errorMessagePermission = "The user attempting to edit the list is neither the owner nor has the required permission for this operation.";
 
         if (!listApp.getUser().getId().equals(userIdUUID)) {
             var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, listApp.getId());
@@ -65,7 +65,7 @@ public class DeleteList {
                 repository.delete(listApp);
             } catch (Exception e) {
                 status.setRollbackOnly();
-                throw new RuntimeException("Ocorreu um erro na transação de delete da lista e de suas permissões", e);
+                throw new RuntimeException("An error occurred during the delete transaction of the list and its permissions: ", e);
             }
             return null;
         });

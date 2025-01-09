@@ -38,7 +38,7 @@ public class GetListWithReadPermissionPageable {
             var listsWithReadPermissionToUser = listsAppRepository.findAllListsAppById(listsAppID, pageable).map(ListAppReturnDTO::new);
             return listsWithReadPermissionToUser;
         } catch (Exception e) {
-            System.err.println("Erro ao obter listas com permissão de leitura: " + e.getMessage());
+            System.err.println("Error while getting lists with read permission: " + e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }

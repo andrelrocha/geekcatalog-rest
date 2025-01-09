@@ -16,7 +16,7 @@ public class GetListByID {
     public ListAppReturnDTO getList(String listId) {
         var listIUUID = UUID.fromString(listId);
         var list = repository.findById(listIUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrada lista com o id informado"));
+                .orElseThrow(() -> new ValidationException("No List was found for the provided ID."));
 
         return new ListAppReturnDTO(list);
     }

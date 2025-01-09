@@ -24,13 +24,13 @@ public class CreateList {
         var existsByNameAndUserId = listAppRepository.existsByName(data.name(), userIdUUID);
 
         if (existsByNameAndUserId) {
-            throw new ValidationException("Já existe uma lista com esse nome cadastrado");
+            throw new ValidationException("A list with this name already exists.");
         }
 
         var user = userRepository.findByIdToHandle(userIdUUID);
 
         if (user == null) {
-            throw new ValidationException("Não foi encontrado usuário com o id informado no processo de criação de lista");
+            throw new ValidationException("No user was found with the provided ID during the list creation process.");
         }
 
         var listCreateDTO = new ListAppCreateDTO(data.name(), data.description(), data.visibility(), user);

@@ -36,45 +36,45 @@ public class AddBulkListPermissionUser {
 
     public ArrayList<ListPermissionUserReturnDTO> addBulkPermissionToUserOnList(ListPermissionBulkAddDTO data) {
         if (data.participantLogin() == null || data.ownerId() == null || data.listId() == null || data.permissionsId().isEmpty()) {
-            throw new ValidationException("Todos os campos são obrigatórios no processo de adição de permissões a um usuário sobre uma lista.");
+            throw new ValidationException("All fields are required in the process of adding permissions to a user on a list.");
         }
 
         var participantInvited = userRepository.findByLoginToHandle(data.participantLogin());
         if (participantInvited == null) {
-            throw new ValidationException("Não foi encontrado usuário com o login informado como participant no processo de adição de permissões a um usuário sobre uma lista");
+            throw new ValidationException("No user was found with the provided login as participant in the process of adding permissions to a user on a list.");
         }
 
         var ownerIdUUID = UUID.fromString(data.ownerId());
         var ownerList = userRepository.findById(ownerIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado como owner no processo de adição de permissões a um usuário sobre uma lista"));
+                .orElseThrow(() -> new ValidationException("No user was found with the provided ID as the owner in the process of adding permissions to a user on a list."));
 
         var listAppIdUUID = UUID.fromString(data.listId());
         var listApp = listAppRepository.findById(listAppIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrada lista com o id informado no processo de adição de permissões a um usuário sobre uma lista"));
+                .orElseThrow(() -> new ValidationException("No list was found with the provided ID in the process of adding permissions to a user on a list."));
 
         var permissionsUUID = data.permissionsId().stream()
                 .map(UUID::fromString)
-                .collect(Collectors.toList());
+                .toList();
 
         var permissions = permissionsUUID.stream()
                 .map(id -> permissionRepository.findById(id)
-                        .orElseThrow(() -> new ValidationException("Não foi encontrada permissão com o id informado no processo de adição de permissões a um usuário sobre uma lista")))
-                .collect(Collectors.toList());
+                        .orElseThrow(() -> new ValidationException("No permission was found with the provided ID in the process of adding permissions to a user on a list.")))
+                .toList();
 
         var existingPermissions = listPermissionUserRepository.findAllByParticipantIdAndListId(participantInvited.getId(), listAppIdUUID);
 
         var newPermissions = permissions.stream()
                 .filter(permission -> existingPermissions.stream()
                         .noneMatch(existing -> existing.getPermission().getId().equals(permission.getId())))
-                .collect(Collectors.toList());
+                .toList();
 
         if (newPermissions.isEmpty()) {
-            throw new ValidationException("Já existem todas as permissões para a lista e o usuário informados");
+            throw new ValidationException("All permissions already exist for the specified list and user.");
         }
 
         var createDTOs = newPermissions.stream()
                 .map(permission -> new ListPermissionUserCreateDTO(listApp, permission, participantInvited, ownerList))
-                .collect(Collectors.toList());
+                .toList();
 
         var listPermissionUsers = createDTOs.stream()
                 .map(ListPermissionUser::new)
@@ -87,7 +87,7 @@ public class AddBulkListPermissionUser {
                 createReadPermissionIfNotExists(participantInvited, listApp, ownerList);
             } catch (Exception e) {
                 status.setRollbackOnly();
-                throw new RuntimeException("Ocorreu um erro na transação de adição de permissões para um usuário sobre uma lista", e);
+                throw new RuntimeException("An error occurred during the transaction of adding permissions to a user on a list", e);
             }
             return null;
         });

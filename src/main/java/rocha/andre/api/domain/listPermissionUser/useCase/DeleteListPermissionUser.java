@@ -26,7 +26,7 @@ public class DeleteListPermissionUser {
     public void deleteListPermission(ListPermissionUserDTO data) {
         var participantInvited = userRepository.findByLoginToHandle(data.participantLogin());
         if (participantInvited == null) {
-            throw new ValidationException("Não foi encontrado usuário com o login informado como participant no processo de adição de permissões a um usuário sobre uma lista");
+            throw new ValidationException("No user was found with the provided login as a participant in the process of adding (deleting) permissions for a user on a list.");
         }
 
         var listIdUUID = UUID.fromString(data.listId());
@@ -41,19 +41,19 @@ public class DeleteListPermissionUser {
                 return;
             }
         } catch (Exception e) {
-            throw new RuntimeException("Algo deu errado no processo de leitura de permissão no usecase de delete listPermission");
+            throw new RuntimeException("Something went wrong in the permission reading process during the delete listPermission use case.");
         }
 
         var ownerIdUUID = UUID.fromString(data.ownerId());
         var owner = userRepository.findById(ownerIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado como owner no processo de delete de uma permissao de lista"));
+                .orElseThrow(() -> new ValidationException("No user was found with the provided ID as the owner in the delete list permission process."));
 
         var listPermissionUser = repository.findByParticipantIdAndListIdAndPermissionId(participantInvited.getId(), listIdUUID, permissionIdUUID);
 
         if (listPermissionUser == null) {
-            throw new ValidationException("Não foram encontrados registros de permissão do usuário sobre a lista informada.");
+            throw new ValidationException("No permission records were found for the user on the specified list.");
         } else if (!listPermissionUser.getOwner().equals(owner)) {
-            throw new ValidationException("O usuário que está tentando apagar uma permissão não é o dono da lista e não tem permissão para a operação realizada.");
+            throw new ValidationException("The user trying to delete a permission is not the owner of the list and does not have permission for the operation.");
         }
 
         repository.delete(listPermissionUser);

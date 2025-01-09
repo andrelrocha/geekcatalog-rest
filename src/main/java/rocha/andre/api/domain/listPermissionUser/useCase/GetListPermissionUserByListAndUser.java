@@ -32,7 +32,7 @@ public class GetListPermissionUserByListAndUser {
         var participantIdUUID = UUID.fromString(participant.id());
         var listIdUUID = UUID.fromString(listId);
         var list = listAppRepository.findById(listIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrada lista para o id informado, na pesquisa de permissões"));
+                .orElseThrow(() -> new ValidationException("No list was found for the provided ID during the permissions search."));
 
         if (list.getUser().getId().equals(participantIdUUID)) {
             var listPermission = new ArrayList<ListPermissionUserReturnDTO>();
