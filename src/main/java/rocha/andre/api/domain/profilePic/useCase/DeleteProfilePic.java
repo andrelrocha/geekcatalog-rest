@@ -17,7 +17,7 @@ public class DeleteProfilePic {
         var userHasPhoto = repository.existsByUserId(userId);
 
         if (!userHasPhoto) {
-            throw new RuntimeException("Não existe foto de perfil para o usuário informado");
+            throw new RuntimeException("No profile pic was found for the informed User ID.");
         }
 
         repository.deleteByUserId(userId);

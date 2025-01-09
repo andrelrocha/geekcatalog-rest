@@ -22,7 +22,6 @@ import rocha.andre.api.service.UserService;
 @RequestMapping("/user")
 @Tag(name = "User Routes Mapped on Controller")
 public class UserController {
-
     @Autowired
     private UserService userService;
     @Autowired

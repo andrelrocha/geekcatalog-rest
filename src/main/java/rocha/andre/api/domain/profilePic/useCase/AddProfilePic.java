@@ -14,6 +14,7 @@ import rocha.andre.api.infra.utils.imageCompress.ImageUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class AddProfilePic {
@@ -24,7 +25,7 @@ public class AddProfilePic {
 
     public ProfilePicReturnDTO addProfilePic(ProfilePicDTO dto) throws IOException {
         var user = userRepository.findById(dto.userId())
-                .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado."));
+                .orElseThrow(() -> new ValidationException("No user was found for the provided ID."));
 
         var existsByUserId = profilePicRepository.existsByUserId(user.getId());
 
@@ -59,8 +60,8 @@ public class AddProfilePic {
 
         byte[] compressedImageBytes = ImageUtils.compressImage(imageFile.getBytes());
 
-        if (compressedImageBytes == null) {
-            throw new ValidationException("Erro ao comprimir a imagem. O resultado do método compressImage é nulo.");
+        if (compressedImageBytes.length == 0) {
+            throw new ValidationException("The compressed image is empty.");
         }
 
         return compressedImageBytes;
@@ -70,14 +71,14 @@ public class AddProfilePic {
         try {
             BufferedImage image = ImageIO.read(imageFile.getInputStream());
             if (image == null) {
-                throw new ValidationException("A imagem não pôde ser lida ou não é um formato de imagem suportado.");
+                throw new ValidationException("The image could not be read or is not a supported image format.");
             }
 
-            if (!"jpg".equalsIgnoreCase(imageFile.getContentType().substring(imageFile.getContentType().lastIndexOf("/") + 1)) && !"jpeg".equalsIgnoreCase(imageFile.getContentType().substring(imageFile.getContentType().lastIndexOf("/") + 1))) {
-                throw new ValidationException("O formato da imagem deve ser JPG ou JPEG.");
+            if (!"jpg".equalsIgnoreCase(Objects.requireNonNull(imageFile.getContentType()).substring(imageFile.getContentType().lastIndexOf("/") + 1)) && !"jpeg".equalsIgnoreCase(imageFile.getContentType().substring(imageFile.getContentType().lastIndexOf("/") + 1))) {
+                throw new ValidationException("The image format must be JPG or JPEG.");
             }
         } catch (IOException e) {
-            throw new ValidationException("Erro ao validar o formato da imagem.");
+            throw new ValidationException("Error validating the image format.");
         }
     }
 }

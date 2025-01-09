@@ -17,7 +17,7 @@ public class ReturnProfilePic {
         var profilePic = repository.findProfilePicByUserId(userId);
 
         if (profilePic == null) {
-            throw new ValidationException("Não foi encontrada imagem para o id de usuário informado");
+            throw new RuntimeException("No profile pic was found for the informed User ID.");
         }
 
         var compressedImage = profilePic.getImage();

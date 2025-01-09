@@ -22,11 +22,11 @@ public class CreateStudio {
         var studioExists = repository.existsByNameAndCountry(data.name(), data.countryId());
 
         if (studioExists) {
-            throw new ValidationException("Já existe um studio com o nome e país informados");
+            throw new ValidationException("A studio with the given name and country already exists");
         }
 
         var country = countryRepository.findById(data.countryId())
-                .orElseThrow(() -> new ValidationException("Não foi encontrado país com o id informado na criação de studio"));
+                .orElseThrow(() -> new ValidationException("No country found with the provided ID during studio creation"));
 
         var createDTO = new CreateStudioDTO(data.name(), country);
 
