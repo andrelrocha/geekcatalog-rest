@@ -30,15 +30,15 @@ public class DeleteGameList {
     public void deleteGameList(DeleteGameListDTO data) {
         var gameListUUID = UUID.fromString(data.gameListId());
         var gameList = gameListRepository.findById(gameListUUID)
-                .orElseThrow(()-> new ValidationException("Não foi encontrado jogo em uma lista com o id informado na deleção de game list"));
+                .orElseThrow(()-> new ValidationException("No game in a list was found for the provided id when attempting to delete the game list."));
 
         var list = listAppRepository.findById(gameList.getList().getId())
-                .orElseThrow(()-> new ValidationException("Não foi encontrada lista com o id informado na deleção de game list"));
+                .orElseThrow(()-> new ValidationException("No list was found for the provided id when attempting to delete the game list."));
 
         var user = getUserByTokenJWT.getUserByID(data.tokenJWT());
         var userIdUUID = UUID.fromString(user.id());
 
-        var errorMessagePermission = "O usuário que está tentando remover jogos não é o dono da lista ou não tem permissão para tanto";
+        var errorMessagePermission = "The user trying to remove games is not the owner of the list or does not have permission to do so.";
         if (!userIdUUID.equals(list.getUser().getId())) {
             var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, list.getId());
             if (!listsPermission.isEmpty()) {

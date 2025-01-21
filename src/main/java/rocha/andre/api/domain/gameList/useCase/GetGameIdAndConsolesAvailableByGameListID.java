@@ -22,15 +22,15 @@ public class GetGameIdAndConsolesAvailableByGameListID {
     public GameListGameAndConsolesDTO getGameInfoByGameListID(String gameListId) {
         var gameListIdUUID = UUID.fromString(gameListId);
         var gameList = gameListRepository.findById(gameListIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado game list para o id informado"));
+                .orElseThrow(() -> new ValidationException("No game list was found for the provided id."));
 
         var game = gameRepository.findById(gameList.getGame().getId())
-                .orElseThrow(() -> new ValidationException("Não foi encontrado game para o id informado"));
+                .orElseThrow(() -> new ValidationException("No game was found for the provided id."));
 
         var consolesAvailable = getAllConsolesByGameId.getAllConsolesByGameId(null, String.valueOf(game.getId()));
 
         if (consolesAvailable.isEmpty()) {
-            throw new RuntimeException("Não foram encontrados consoles disponíveis para o jogo informado");
+            throw new RuntimeException("No available consoles were found for the provided game.");
         }
 
         return new GameListGameAndConsolesDTO(game.getId(), consolesAvailable.getContent());

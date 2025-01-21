@@ -29,14 +29,14 @@ public class CreateGameConsole {
         var entityAlreadyCreated = repository.existsByGameIdAndConsoleId(gameIdUUID, consoleIdUUID);
 
         if (entityAlreadyCreated) {
-            throw new ValidationException("Já existe registro com o game id e o console id informado");
+            throw new ValidationException("A record with the provided game ID and console ID already exists.");
         }
 
         var game = gameRepository.findById(gameIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado jogo com o id informado ao tentar criar gameconsole"));
+                .orElseThrow(() -> new ValidationException("No game found with the provided ID when attempting to create a gameconsole."));
 
         var console = consoleRepository.findById(consoleIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado console com o id informado ao tentar criar gameconsole"));
+                .orElseThrow(() -> new ValidationException("No console found with the provided ID when attempting to create a gameconsole."));
 
         var createDTO = new CreateGameConsoleDTO(game, console);
 

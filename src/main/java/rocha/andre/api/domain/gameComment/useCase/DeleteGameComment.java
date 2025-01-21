@@ -22,15 +22,15 @@ public class DeleteGameComment {
     public void deleteGameComment(String tokenJWT, String commentId) {
         var user = getUserIdByJWT.getUserByJWT(tokenJWT);
         if (user == null) {
-            throw new RuntimeException("Não foi encontrado usuário no processo de deletar um game comment.");
+            throw new RuntimeException("User not found during the process of deleting a game comment.");
         }
 
         var commentIdUUID = UUID.fromString(commentId);
         var comment = gameCommentRepository.findById(commentIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado comentário com o id informado."));
+                .orElseThrow(() -> new ValidationException("Comment with the provided ID was not found."));
 
         if (!comment.getUser().getId().equals(UUID.fromString(user.userId()))) {
-            throw new BadCredentialsException("O usuário que está tentando apagar o comentário não é o criador do mesmo.");
+            throw new BadCredentialsException("The user attempting to delete the comment is not its creator.");
         }
 
         gameCommentRepository.deleteById(comment.getId());

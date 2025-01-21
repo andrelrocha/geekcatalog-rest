@@ -39,7 +39,7 @@ public class DeleteGame {
     public void deleteGame(String gameId) {
         var gameIdUUID = UUID.fromString(gameId);
         var game = gameRepository.findById(gameIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado jogo com o id informado no processo de delete do jogo."));
+                .orElseThrow(() -> new ValidationException("No game was found with the provided ID in the game deletion process."));
 
         transactionTemplate.execute(status -> {
             try {
@@ -72,7 +72,7 @@ public class DeleteGame {
                 gameRepository.delete(game);
             } catch (Exception e) {
                 status.setRollbackOnly();
-                throw new RuntimeException("Ocorreu um erro na transação de delete do jogo e de suas entidades relacionadas", e);
+                throw new RuntimeException("An error occurred during the transaction to delete the game and its related entities.", e);
             }
             return null;
         });

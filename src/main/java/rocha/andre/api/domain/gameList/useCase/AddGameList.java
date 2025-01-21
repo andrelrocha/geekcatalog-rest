@@ -40,13 +40,13 @@ public class AddGameList {
     public GameListFullReturnDTO addGameList(GameListDTO data) {
         var userIdUUID = UUID.fromString(data.userId());
         var user = userRepository.findById(userIdUUID)
-                .orElseThrow(()-> new ValidationException("Não foi encontrado usuário com o id informado na adição de game list"));
+                .orElseThrow(()-> new ValidationException("No user was found with the provided id when adding the game list."));
 
         var listIdUUID = UUID.fromString(data.listId());
         var list = listAppRepository.findById(listIdUUID)
-                .orElseThrow(()-> new ValidationException("Não foi encontrada lista com o id informado na adição de game list"));
+                .orElseThrow(()-> new ValidationException("No list was found with the provided id when adding the game list."));
 
-        var errorMessagePermission = "O usuário que está tentando adicionar jogos não é o dono da lista ou não tem permissão para tanto";
+        var errorMessagePermission = "The user trying to add games is not the owner of the list or does not have permission to do so.";
 
         if (!user.getId().equals(list.getUser().getId())) {
             var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, list.getId());
@@ -68,22 +68,22 @@ public class AddGameList {
 
         var gameIdUUID = UUID.fromString(data.gameId());
         var game = gameRepository.findById(gameIdUUID)
-                .orElseThrow(()-> new ValidationException("Não foi encontrado jogo com o id informado na adição de game list"));
+                .orElseThrow(()-> new ValidationException("No game was found with the provided id when adding the game list."));
 
         var gameAlreadyExists = gameListRepository.existsByGameIdAndListId(game.getId(), list.getId());
         if (gameAlreadyExists) {
-            throw new ValidationException("Este jogo já foi adicionado na lista");
+            throw new ValidationException("This game has already been added to the list.");
         }
 
         var consoleIdUUID = UUID.fromString(data.consoleId());
         var console = consoleRepository.findById(consoleIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado console com o id informado na adição de game list"));
+                .orElseThrow(() -> new ValidationException("No console was found with the provided id when adding the game list."));
 
         var gameConsoles = getAllConsolesByGameId.getAllConsolesByGameId(null, data.gameId());
         var consoleIds = gameConsoles.getContent().stream().map(ConsoleReturnDTO::id).toList();
 
         if (!consoleIds.contains(console.getId())) {
-            throw new ValidationException("O console selecionado não está associado ao jogo.");
+            throw new ValidationException("The selected console is not associated with the game.");
         }
 
         var gameListCreateDTO = new GameListCreateDTO(user, game, list, console, data.note());

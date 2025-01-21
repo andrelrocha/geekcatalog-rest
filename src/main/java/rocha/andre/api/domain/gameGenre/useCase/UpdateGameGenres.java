@@ -43,7 +43,7 @@ public class UpdateGameGenres {
         }
 
         var game = gameRepository.findById(gameIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado id do jogo no update game genre"));
+                .orElseThrow(() -> new ValidationException("No game ID found during the update of the gamegenre."));
 
         if (new HashSet<>(genres).containsAll(genresIdDataUUID) && new HashSet<>(genresIdDataUUID).containsAll(genres)) {
             return null;
@@ -55,7 +55,7 @@ public class UpdateGameGenres {
                         continue;
                     }
                     var genre = genreRepository.findById(genreIdUUID)
-                            .orElseThrow(() -> new ValidationException("Não foi encontrado id do genre no update game genre"));
+                            .orElseThrow(() -> new ValidationException("No genre ID found during the update of the game genre."));
 
                     var gameGenreDTO = new CreateGameGenreDTO(game, genre);
                     var gameGenre = new GameGenre(gameGenreDTO);

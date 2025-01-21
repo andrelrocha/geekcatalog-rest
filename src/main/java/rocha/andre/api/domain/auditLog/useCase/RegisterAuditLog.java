@@ -27,7 +27,7 @@ public class RegisterAuditLog {
         AuditLog auditLog = new AuditLog();
 
         var authenticationType = authenticationTypeRepository.findById(authenticationTypeId)
-                        .orElseThrow(() -> new ValidationException("Não foi encontrado tipo de autenticação com o id informado"));
+                .orElseThrow(() -> new ValidationException("No authentication type found with the provided ID"));
 
         auditLog.setUserName(userName);
         auditLog.setLoginTime(LocalDateTime.now());

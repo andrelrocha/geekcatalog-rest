@@ -28,7 +28,7 @@ public class DeleteImageGame {
         var imageGame = repository.findImageGameByGameID(gameIdUUID);
 
         if (imageGame == null) {
-            throw new RuntimeException("Não existe image game para o id de jogo informado");
+            throw new RuntimeException("There is no image game for the provided game ID");
         }
 
         try {
@@ -43,7 +43,7 @@ public class DeleteImageGame {
 
             repository.deleteById(imageGame.getId());
         } catch (Exception e) {
-            throw new RuntimeException("Ocorreu um erro ao deletar a imagem de um jogo: "+e.getMessage());
+            throw new RuntimeException("An error occurred while deleting the image of a game: " + e.getMessage());
         }
     }
 }

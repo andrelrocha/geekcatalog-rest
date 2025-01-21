@@ -35,7 +35,7 @@ public class AddImageGame {
 
     public ImageGameReturnDTO addImageGame(MultipartFile file, UUID gameId) throws IOException {
         var game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado jogo com o id informado."));
+                .orElseThrow(() -> new ValidationException("No game found with the provided ID."));
 
         var s3Client = dependencyFactory.s3Client();
 

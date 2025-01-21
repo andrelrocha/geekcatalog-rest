@@ -18,7 +18,7 @@ public class UpdateGame {
         var gameIdUUID = UUID.fromString(gameId);
 
         var game = repository.findById(gameIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado jogo para o id informado"));
+                .orElseThrow(() -> new ValidationException("No game was found for the provided ID."));
 
         game.updateGame(data);
 

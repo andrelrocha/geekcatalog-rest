@@ -21,7 +21,7 @@ public class GetAverageRatingByUserJWT {
         var user = getUserByTokenJWT.getUserByID(tokenJWT);
 
         if (user == null) {
-            throw new ValidationException("Não foi encontrado usuário para o id informado");
+            throw new ValidationException("No user was found for the provided ID.");
         }
 
         var userIdUUID = UUID.fromString(user.id());

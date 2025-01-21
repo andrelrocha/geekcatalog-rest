@@ -31,14 +31,14 @@ public class CreateGameGenre {
         var entityAlreadyCreated = repository.existsByGameIdAndGenreId(gameIdUUID, genreIdUUID);
 
         if (entityAlreadyCreated) {
-            throw new ValidationException("Já existe registro com o game id e o genre id informado");
+            throw new ValidationException("A record with the provided game id and genre id already exists.");
         }
 
         var game = gameRepository.findById(gameIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado jogo com o id informado ao tentar criar gamegenre"));
+                .orElseThrow(() -> new ValidationException("No game was found with the provided id when trying to create a gamegenre."));
 
         var genre = genreRepository.findById(genreIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado genre com o id informado ao tentar criar gamegenre"));
+                .orElseThrow(() -> new ValidationException("No genre was found with the provided id when trying to create a gamegenre."));
 
         var createDTO = new CreateGameGenreDTO(game, genre);
 

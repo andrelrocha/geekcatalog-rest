@@ -31,14 +31,14 @@ public class CreateGameStudio {
         var entityAlreadyCreated = repository.existsByGameIdAndStudioId(gameIdUUID, studioIdUUID);
 
         if (entityAlreadyCreated) {
-            throw new ValidationException("Já existe registro com o game id e o studio id informado");
+            throw new ValidationException("A record with the provided game ID and studio ID already exists");
         }
 
         var game = gameRepository.findById(gameIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado jogo com o id informado ao tentar criar gamestudio"));
+                .orElseThrow(() -> new ValidationException("No game found with the provided ID when attempting to create GameStudio"));
 
         var studio = studioRepository.findById(studioIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado studio com o id informado ao tentar criar gamestudio"));
+                .orElseThrow(() -> new ValidationException("No studio found with the provided ID when attempting to create GameStudio"));
 
         var createDTO = new CreateGameStudioDTO(game, studio);
 

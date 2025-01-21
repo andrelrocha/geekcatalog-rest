@@ -28,7 +28,7 @@ public class AddGameComment {
     public GameCommentReturnDTO addGameComment(CreateGameCommentDTO data, String tokenJWT) {
         var user = getUserIdByJWT.getUserByJWT(tokenJWT);
         if (user == null) {
-            throw new RuntimeException("Não foi encontrado usuário no processo de add game comment.");
+            throw new RuntimeException("User not found during the process of adding a game comment.");
         }
 
         var userEntity = userRepository.findByIdToHandle(UUID.fromString(user.userId()));
@@ -36,11 +36,11 @@ public class AddGameComment {
         var commentExists = gameCommentRepository.gameCommentExists(userEntity.getId(), UUID.fromString(data.gameId()), data.comment());
 
         if (commentExists) {
-            throw new ValidationException("O usuário já fez esse mesmo comentário neste jogo.");
+            throw new ValidationException("The user has already made this same comment on this game.");
         }
 
         var game = gameRepository.findById(UUID.fromString(data.gameId()))
-                .orElseThrow(() -> new RuntimeException("Não foi encontrado jogo com o id informado"));
+                .orElseThrow(() -> new RuntimeException("Game with the provided ID was not found."));
 
         var dto = new GameCommentDTO(userEntity, game, data.comment());
 

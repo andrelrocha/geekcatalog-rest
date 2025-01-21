@@ -21,7 +21,7 @@ public class GetImageGameByGameID {
         var imageGame = repository.findImageGameByGameID(gameIdUUID);
 
         if (imageGame == null) {
-            throw new ValidationException("Não foi encontrada imagem para o game id informado");
+            throw new ValidationException("No image was found for the game ID.");
         }
         return new ImageGameReturnDTO(imageGame);
     }

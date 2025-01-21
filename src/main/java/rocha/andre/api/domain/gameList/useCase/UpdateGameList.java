@@ -30,11 +30,11 @@ public class UpdateGameList {
     public GameListFullReturnDTO updateGameList(GameListUpdateRequestDTO data, String gameListId) {
         var gameListIdUUID = UUID.fromString(gameListId);
         var gameList = gameListRepository.findById(gameListIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado jogo na lista, com o id informado"));
+                .orElseThrow(() -> new ValidationException("No game found in the list with the provided id."));
 
         var userIdUUID = UUID.fromString(data.userId());
 
-        var errorMessagePermission = "O usuário que está tentando atualizar infos dos jogos não é o dono da lista ou não tem permissão para tanto";
+        var errorMessagePermission = "The user trying to update game information is not the owner of the list or does not have permission to do so.";
         if (!userIdUUID.equals(gameList.getList().getUser().getId())) {
             var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, gameList.getList().getId());
             if (!listsPermission.isEmpty()) {
@@ -56,7 +56,7 @@ public class UpdateGameList {
 
         var consoleIdUUID = UUID.fromString(data.consoleId());
         var console = consoleRepository.findById(consoleIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado console com o id informado, no update game list"));
+                .orElseThrow(() -> new ValidationException("No console found with the provided id, in the update game list."));
 
         var updateDTO = new GameListUpdateDTO(console, data.note());
 

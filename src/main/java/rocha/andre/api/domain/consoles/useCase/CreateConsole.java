@@ -17,7 +17,7 @@ public class CreateConsole {
         var console = consoleRepository.findByName(data.name());
 
         if (console != null) {
-            throw new ValidationException("Já existe console com o nome informado");
+            throw new ValidationException("A console with the provided name already exists");
         }
 
         var newConsole = new Console(data);

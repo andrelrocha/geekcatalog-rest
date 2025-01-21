@@ -38,13 +38,13 @@ public class AddBulkGameList {
     public ArrayList<GameListBulkReturnDTO> addBulkGamesToList(GameListBulkCreateDTO data) {
         var userIdUUID = UUID.fromString(data.userId());
         var user = userRepository.findById(userIdUUID)
-                .orElseThrow(()-> new ValidationException("Não foi encontrado usuário com o id informado na adição de bulk game list"));
+                .orElseThrow(()-> new ValidationException("No user was found with the provided id when adding games to the bulk game list."));
 
         var listIdUUID = UUID.fromString(data.listId());
         var list = listAppRepository.findById(listIdUUID)
-                .orElseThrow(()-> new ValidationException("Não foi encontrada lista com o id informado na adição de bulk game list"));
+                .orElseThrow(()-> new ValidationException("No list was found with the provided id when adding games to the bulk game list"));
 
-        var errorMessagePermission = "O usuário que está tentando adicionar jogos não é o dono da lista ou não tem permissão para tanto";
+        var errorMessagePermission = "The user attempting to add games is not the owner of the list or does not have permission to do so.";
 
         if (!user.getId().equals(list.getUser().getId())) {
             var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, list.getId());
@@ -68,7 +68,7 @@ public class AddBulkGameList {
         for (String gameId : data.gamesId()) {
             var gameIdUUID = UUID.fromString(gameId);
             var game = gameRepository.findById(gameIdUUID)
-                    .orElseThrow(()-> new ValidationException("Não foi encontrado jogo com o id informado na adição de bulk game list"));
+                    .orElseThrow(()-> new ValidationException("No game was found with the provided id when adding games to the bulk game list."));
 
             var gameAlreadyExists = gameListRepository.existsByGameIdAndListId(game.getId(), list.getId());
 

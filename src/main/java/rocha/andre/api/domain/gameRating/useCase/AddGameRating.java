@@ -25,11 +25,11 @@ public class AddGameRating {
     public GameRatingReturnDTO addGameRating(GameRatingDTO data) {
         var gameIdUUID = UUID.fromString(data.gameId());
         var game = gameRepository.findById(gameIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado jogo com o id informado, no processo de add rating"));
+                .orElseThrow(() -> new ValidationException("No game found with the provided ID during the process of adding a rating"));
 
         var userIdUUID = UUID.fromString(data.userId());
         var user = userRepository.findById(userIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado usuário com o id informado, no processo de add rating"));
+                .orElseThrow(() -> new ValidationException("No user found with the provided ID during the process of adding a rating"));
 
         var ratingExists = gameRatingRepository.existsByGameIdAndUserId(gameIdUUID, userIdUUID);
 

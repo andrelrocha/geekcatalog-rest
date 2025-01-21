@@ -22,7 +22,7 @@ public class GetGameListByID {
         var gameListIdUUID = UUID.fromString(gameListId);
 
         var gameList = repository.findById(gameListIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado um jogo em uma lista com o id informado"));
+                .orElseThrow(() -> new ValidationException("No game was found in a list with the provided id."));
 
         var gameRatingDTO = new GameRatingByGameAndUserDTO((gameList.getGame().getId()).toString(), (gameList.getUser().getId()).toString());
         var userRating = getRatingByGameAndUserID.getRatingByGameAndUser(gameRatingDTO);

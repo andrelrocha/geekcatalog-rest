@@ -42,7 +42,7 @@ public class UpdateGameStudios {
         }
 
         var game = gameRepository.findById(gameIdUUID)
-                .orElseThrow(() -> new ValidationException("Não foi encontrado id do jogo no update game studio"));
+                .orElseThrow(() -> new ValidationException("Game ID not found during game studio update"));
 
         if (new HashSet<>(studios).containsAll(studiosIdDataUUID) && new HashSet<>(studiosIdDataUUID).containsAll(studios)) {
             return null;
@@ -54,7 +54,7 @@ public class UpdateGameStudios {
                         continue;
                     }
                     var studio = studioRepository.findById(studioIdUUID)
-                            .orElseThrow(() -> new ValidationException("Não foi encontrado id do studio no update game studio"));
+                            .orElseThrow(() -> new ValidationException("Studio ID not found during game studio update"));
 
                     var gameStudioDTO = new CreateGameStudioDTO(game, studio);
                     var gameStudio = new GameStudio(gameStudioDTO);

@@ -17,7 +17,7 @@ public class CreateGame {
         var existsByName = repository.existsByName(data.name());
 
         if (existsByName) {
-            throw new ValidationException("Já existe jogo com o nome informado");
+            throw new ValidationException("There's already a game with the provided name.");
         }
 
         var game = new Game(data);

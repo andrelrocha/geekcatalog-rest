@@ -17,7 +17,7 @@ public class CreateGenre {
         var genreAlreadyOnDB = genreRepository.findByName(data.name());
 
         if (genreAlreadyOnDB != null) {
-            throw new ValidationException("Já existe genero com o nome informado");
+            throw new ValidationException("A genre with the provided name already exists");
         }
 
         var newGenre = new Genre(data.name());
