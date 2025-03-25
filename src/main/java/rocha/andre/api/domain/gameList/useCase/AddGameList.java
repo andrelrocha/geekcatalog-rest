@@ -9,6 +9,7 @@ import rocha.andre.api.domain.game.GameRepository;
 import rocha.andre.api.domain.gameList.DTO.*;
 import rocha.andre.api.domain.gameList.GameList;
 import rocha.andre.api.domain.gameList.GameListRepository;
+import rocha.andre.api.domain.gameList.strategy.PermissionValidationFactory;
 import rocha.andre.api.domain.gameList.strategy.PermissionValidationStrategy;
 import rocha.andre.api.domain.gameList.strategy.OwnerPermissionValidation;
 import rocha.andre.api.domain.gameList.strategy.ParticipantPermissionValidation;
@@ -39,7 +40,7 @@ public class AddGameList {
     @Autowired
     private GetPermissionByNameENUM getPermissionByNameENUM;
     @Autowired
-    private ParticipantPermissionValidation participantPermissionValidation;
+    private PermissionValidationFactory permissionValidationFactory;
 
     public GameListFullReturnDTO addGameList(GameListDTO data) {
         var userIdUUID = UUID.fromString(data.userId());
@@ -50,9 +51,7 @@ public class AddGameList {
         var list = listAppRepository.findById(listIdUUID)
                 .orElseThrow(() -> new ValidationException("No list was found with the provided id when adding the game list."));
 
-        PermissionValidationStrategy strategy = user.getId().equals(list.getUser().getId()) ?
-                new OwnerPermissionValidation() :
-                participantPermissionValidation;
+        PermissionValidationStrategy strategy = permissionValidationFactory.getStrategy(user, list);
 
         strategy.validate(user, list, userIdUUID);
 
