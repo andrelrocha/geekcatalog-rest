@@ -9,9 +9,11 @@ import rocha.andre.api.domain.game.GameRepository;
 import rocha.andre.api.domain.gameList.DTO.*;
 import rocha.andre.api.domain.gameList.GameList;
 import rocha.andre.api.domain.gameList.GameListRepository;
+import rocha.andre.api.domain.gameList.strategy.PermissionValidationStrategy;
+import rocha.andre.api.domain.gameList.strategy.OwnerPermissionValidation;
+import rocha.andre.api.domain.gameList.strategy.ParticipantPermissionValidation;
 import rocha.andre.api.domain.listPermissionUser.ListPermissionUserRepository;
 import rocha.andre.api.domain.listsApp.ListAppRepository;
-import rocha.andre.api.domain.permission.PermissionEnum;
 import rocha.andre.api.domain.permission.useCase.GetPermissionByNameENUM;
 import rocha.andre.api.domain.user.UserRepository;
 import rocha.andre.api.infra.exceptions.ValidationException;
@@ -36,35 +38,23 @@ public class AddGameList {
     private GetAllConsolesByGameId getAllConsolesByGameId;
     @Autowired
     private GetPermissionByNameENUM getPermissionByNameENUM;
+    @Autowired
+    private ParticipantPermissionValidation participantPermissionValidation;
 
     public GameListFullReturnDTO addGameList(GameListDTO data) {
         var userIdUUID = UUID.fromString(data.userId());
         var user = userRepository.findById(userIdUUID)
-                .orElseThrow(()-> new ValidationException("No user was found with the provided id when adding the game list."));
+                .orElseThrow(() -> new ValidationException("No user was found with the provided id when adding the game list."));
 
         var listIdUUID = UUID.fromString(data.listId());
         var list = listAppRepository.findById(listIdUUID)
-                .orElseThrow(()-> new ValidationException("No list was found with the provided id when adding the game list."));
+                .orElseThrow(() -> new ValidationException("No list was found with the provided id when adding the game list."));
 
-        var errorMessagePermission = "The user trying to add games is not the owner of the list or does not have permission to do so.";
+        PermissionValidationStrategy strategy = user.getId().equals(list.getUser().getId()) ?
+                new OwnerPermissionValidation() :
+                participantPermissionValidation;
 
-        if (!user.getId().equals(list.getUser().getId())) {
-            var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, list.getId());
-            if (!listsPermission.isEmpty()) {
-                var addGameEnum = PermissionEnum.ADD_GAME;
-                var permission = getPermissionByNameENUM.getPermissionByNameOnENUM(addGameEnum);
-                var userPermissionList = listPermissionUserRepository.findByParticipantIdAndListIdAndPermissionId(user.getId(), list.getId(), permission.id());
-
-                if (userPermissionList == null) {
-                    throw new ValidationException(errorMessagePermission);
-                }
-                if (!list.getUser().getId().equals(userPermissionList.getOwner().getId())) {
-                    throw new ValidationException(errorMessagePermission);
-                }
-            } else {
-                throw new ValidationException(errorMessagePermission);
-            }
-        }
+        strategy.validate(user, list, userIdUUID);
 
         var gameIdUUID = UUID.fromString(data.gameId());
         var game = gameRepository.findById(gameIdUUID)
