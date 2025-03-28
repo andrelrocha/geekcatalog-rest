@@ -11,11 +11,11 @@ import rocha.andre.api.domain.gameList.GameList;
 import rocha.andre.api.domain.gameList.GameListRepository;
 import rocha.andre.api.domain.gameList.strategy.PermissionValidationFactory;
 import rocha.andre.api.domain.gameList.strategy.PermissionValidationStrategy;
-import rocha.andre.api.domain.gameList.strategy.OwnerPermissionValidation;
-import rocha.andre.api.domain.gameList.strategy.ParticipantPermissionValidation;
 import rocha.andre.api.domain.listPermissionUser.ListPermissionUserRepository;
 import rocha.andre.api.domain.listsApp.ListAppRepository;
+import rocha.andre.api.domain.permission.PermissionEnum;
 import rocha.andre.api.domain.permission.useCase.GetPermissionByNameENUM;
+import rocha.andre.api.domain.user.DTO.UserReturnDTO;
 import rocha.andre.api.domain.user.UserRepository;
 import rocha.andre.api.infra.exceptions.ValidationException;
 
@@ -51,9 +51,8 @@ public class AddGameList {
         var list = listAppRepository.findById(listIdUUID)
                 .orElseThrow(() -> new ValidationException("No list was found with the provided id when adding the game list."));
 
-        PermissionValidationStrategy strategy = permissionValidationFactory.getStrategy(user, list);
-
-        strategy.validate(user, list, userIdUUID);
+        PermissionValidationStrategy strategy = permissionValidationFactory.getStrategy(new UserReturnDTO(user), list, PermissionEnum.ADD_GAME);
+        strategy.validate(new UserReturnDTO(user), list);
 
         var gameIdUUID = UUID.fromString(data.gameId());
         var game = gameRepository.findById(gameIdUUID)
