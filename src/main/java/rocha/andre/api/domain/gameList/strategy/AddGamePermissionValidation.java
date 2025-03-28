@@ -7,7 +7,6 @@ import rocha.andre.api.domain.listsApp.ListApp;
 import rocha.andre.api.domain.permission.PermissionEnum;
 import rocha.andre.api.domain.permission.useCase.GetPermissionByNameENUM;
 import rocha.andre.api.domain.user.DTO.UserReturnDTO;
-import rocha.andre.api.domain.user.User;
 import rocha.andre.api.infra.exceptions.ValidationException;
 
 import java.util.UUID;
@@ -21,15 +20,18 @@ public class AddGamePermissionValidation implements PermissionValidationStrategy
 
     @Override
     public void validate(UserReturnDTO user, ListApp list) {
-        var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(UUID.fromString(user.id()), list.getId());
+        var userIdUUID = UUID.fromString(user.id());
+
+        if (userIdUUID.equals(list.getUser().getId())) {
+            return;
+        }
+
+        var listsPermission = listPermissionUserRepository.findAllByParticipantIdAndListId(userIdUUID, list.getId());
         if (listsPermission.isEmpty()) {
             throw new ValidationException("The user does not have permission to add games.");
         }
 
-        var permissionEnum = PermissionEnum.ADD_GAME;
-        var permission = getPermissionByNameENUM.getPermissionByNameOnENUM(permissionEnum);
-
-        var userIdUUID = UUID.fromString(user.id());
+        var permission = getPermissionByNameENUM.getPermissionByNameOnENUM(PermissionEnum.ADD_GAME);
         var userPermissionList = listPermissionUserRepository.findByParticipantIdAndListIdAndPermissionId(userIdUUID, list.getId(), permission.id());
 
         if (userPermissionList == null || !list.getUser().getId().equals(userPermissionList.getOwner().getId())) {
